@@ -5,7 +5,8 @@ packages:
     dependency: transitive
     description:
       name: _flutterfire_internals
-      sha256: e4f2a7ef31b0ab2c89d2bde35ef3e6e6aff1dce5e66069c6540b0e9cfe33ee6b
+
+      sha256: "27899c95f9e7ec06c8310e6e0eac967707714b9f1450c4a58fa00ca011a4a8ae"
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.3.50"
@@ -117,7 +118,11 @@ packages:
     dependency: "direct main"
     description:
       name: cloud_firestore
+<<<<<<< HEAD
       sha256: "9ba2379f319906567f7078ebf086951c4e333c71620455084c18258f267f0636"
+=======
+      sha256: a5c28d51ab20ce65db9d9dbeed4a1a825730c2a91a31eb6a6c97dc5d82c6cfd9
+>>>>>>> main
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "5.6.2"
@@ -125,7 +130,11 @@ packages:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
+<<<<<<< HEAD
       sha256: c3a2987addea08273c582a91f5fb173ca81916ef6d7f8e1a6760c3a8a3a53fc7
+=======
+      sha256: "6ea302a856373674ce090f97d99a265202a75cb8e3125c6076a782ed586e6f64"
+>>>>>>> main
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "6.6.2"
@@ -133,7 +142,11 @@ packages:
     dependency: transitive
     description:
       name: cloud_firestore_web
+<<<<<<< HEAD
       sha256: "4c1bc404d825c68153660b12fd937b90b75cf3aa622cc077da5308ccaec17a9e"
+=======
+      sha256: eae5ffd1a96eab6013d1c3bf33280ca254ddc179b30a12f1dbe9f7a7c6ba7af1
+>>>>>>> main
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.4.2"
@@ -161,6 +174,7 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.6"
+<<<<<<< HEAD
   csslib:
     dependency: transitive
     description:
@@ -169,6 +183,8 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.17.3"
+=======
+>>>>>>> main
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -253,7 +269,11 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_core
+<<<<<<< HEAD
       sha256: d851c1ca98fd5a4c07c747f8c65dacc2edd84a4d9ac055d32a5f0342529069f5
+=======
+      sha256: "0307c1fde82e2b8b97e0be2dab93612aff9a72f31ebe9bfac66ed8b37ef7c568"
+>>>>>>> main
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.10.1"
@@ -277,7 +297,11 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_messaging
+<<<<<<< HEAD
       sha256: e20ea2a0ecf9b0971575ab3ab42a6e285a94e50092c555b090c1a588a81b4d54
+=======
+      sha256: "48a8a59197c1c5174060ba9aa1e0036e9b5a0d28a0cc22d19c1fcabc67fafe3c"
+>>>>>>> main
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "15.2.1"
@@ -285,7 +309,11 @@ packages:
     dependency: transitive
     description:
       name: firebase_messaging_platform_interface
+<<<<<<< HEAD
       sha256: c57a92b5ae1857ef4fe4ae2e73452b44d32e984e15ab8b53415ea1bb514bdabd
+=======
+      sha256: "9770a8e91f54296829dcaa61ce9b7c2f9ae9abbf99976dd3103a60470d5264dd"
+>>>>>>> main
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.6.1"
@@ -293,7 +321,11 @@ packages:
     dependency: transitive
     description:
       name: firebase_messaging_web
+<<<<<<< HEAD
       sha256: "83694a990d8525d6b01039240b97757298369622ca0253ad0ebcfed221bf8ee0"
+=======
+      sha256: "329ca4ef45ec616abe6f1d5e58feed0934a50840a65aa327052354ad3c64ed77"
+>>>>>>> main
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.10.1"
@@ -318,6 +350,7 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.4.1"
+<<<<<<< HEAD
   flutter_html:
     dependency: "direct main"
     description:
@@ -334,6 +367,8 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.6"
+=======
+>>>>>>> main
   flutter_lints:
     dependency: "direct main"
     description:
@@ -408,6 +443,7 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.1"
+<<<<<<< HEAD
   html:
     dependency: transitive
     description:
@@ -416,6 +452,8 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.15.4"
+=======
+>>>>>>> main
   http:
     dependency: transitive
     description:
@@ -444,10 +482,14 @@ packages:
     dependency: "direct main"
     description:
       name: image_picker
+<<<<<<< HEAD
       sha256: b6951e25b795d053a6ba03af5f710069c99349de9341af95155d52665cb4607c
+=======
+      sha256: "021834d9c0c3de46bf0fe40341fa07168407f694d9b2bb18d532dc1261867f7a"
+>>>>>>> main
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.8.9"
+    version: "1.1.2"
   image_picker_android:
     dependency: transitive
     description:

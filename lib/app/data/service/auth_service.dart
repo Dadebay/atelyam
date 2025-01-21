@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, require_trailing_commas, avoid_void_async, avoid_bool_literals_in_conditional_expressions, depend_on_referenced_packages
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
@@ -30,6 +31,7 @@ class Auth {
   }
 
   Future<String?> getToken() async {
+    log(storage.read('AccessToken'));
     return storage.read('AccessToken');
   }
 
@@ -79,7 +81,8 @@ class SignInService {
     );
   }
 
-  Future<int?> register({required String phoneNumber, required String name}) async {
+  Future<int?> register(
+      {required String phoneNumber, required String name}) async {
     final result = await _handleApiRequest(
       '/mobile/signup/',
       body: <String, dynamic>{
@@ -126,7 +129,9 @@ class SignInService {
       late http.BaseRequest request;
       if (isForm) {
         request = http.MultipartRequest(method, uri);
-        (request as http.MultipartRequest).fields.addAll(body.cast<String, String>());
+        (request as http.MultipartRequest)
+            .fields
+            .addAll(body.cast<String, String>());
       } else {
         request = http.Request(method, uri);
         if (body.isNotEmpty) {
@@ -136,7 +141,8 @@ class SignInService {
 
       request.headers.addAll(<String, String>{
         HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
-        if (requiresToken && token != null) HttpHeaders.authorizationHeader: 'Bearer $token',
+        if (requiresToken && token != null)
+          HttpHeaders.authorizationHeader: 'Bearer $token',
       });
 
       final response = await request.send();
@@ -148,7 +154,8 @@ class SignInService {
         }
         return response.statusCode;
       } else {
-        _handleApiError(response.statusCode, responseJson['message']?.toString() ?? 'API Error Occurred');
+        _handleApiError(response.statusCode,
+            responseJson['message']?.toString() ?? 'API Error Occurred');
         return response.statusCode;
       }
     } on SocketException {

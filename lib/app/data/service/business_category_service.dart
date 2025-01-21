@@ -18,16 +18,20 @@ class BusinessCategoryService {
       final response = await http.get(
         uri,
         headers: {
-          HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8', //Setting header explicitly
+          HttpHeaders.contentTypeHeader:
+              'application/json; charset=UTF-8', //Setting header explicitly
         },
       );
       if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes); // Force UTF-8 decoding
+        final responseBody =
+            utf8.decode(response.bodyBytes); // Force UTF-8 decoding
         final List<dynamic> responseData = json.decode(responseBody);
-        final List<BusinessCategoryModel> categories = responseData.map((json) => BusinessCategoryModel.fromJson(json)).toList();
+        final List<BusinessCategoryModel> categories = responseData
+            .map((json) => BusinessCategoryModel.fromJson(json))
+            .toList();
         return categories;
       } else {
-        _handleApiError(response.statusCode, response.body);
+        handleApiError(response.statusCode, response.body);
 
         return null;
       }
@@ -39,25 +43,25 @@ class BusinessCategoryService {
       return null;
     }
   }
+}
 
-  void _handleApiError(int statusCode, String message) {
-    String errorMessage = 'An error occurred';
-    switch (statusCode) {
-      case 400:
-        errorMessage = 'Bad Request: $message';
-        break;
-      case 401:
-        errorMessage = 'Unauthorized: $message';
-        break;
-      case 404:
-        errorMessage = 'Not Found: $message';
-        break;
-      case 500:
-        errorMessage = 'Server Error: $message';
-        break;
-      default:
-        errorMessage = 'Error Status $statusCode: $message';
-    }
-    showSnackBar('API Error', errorMessage, Colors.red);
+void handleApiError(int statusCode, String message) {
+  String errorMessage = 'An error occurred';
+  switch (statusCode) {
+    case 400:
+      errorMessage = 'Bad Request: $message';
+      break;
+    case 401:
+      errorMessage = 'Unauthorized: $message';
+      break;
+    case 404:
+      errorMessage = 'Not Found: $message';
+      break;
+    case 500:
+      errorMessage = 'Server Error: $message';
+      break;
+    default:
+      errorMessage = 'Error Status $statusCode: $message';
   }
+  showSnackBar('API Error', errorMessage, Colors.red);
 }

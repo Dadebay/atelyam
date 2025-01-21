@@ -1,8 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:animate_do/animate_do.dart';
-import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
+import 'package:atelyam/app/modules/discovery_view/views/getPopular_screen.dart';
+import 'package:atelyam/app/modules/discovery_view/views/getUsers_screen.dart';
 import 'package:atelyam/app/modules/search_view/views/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -15,16 +16,26 @@ class DiscoveryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          BackgroundPattern(),
-          // CustomScrollView(
-          //   slivers: <Widget>[
-          //     _buildAppBar(),
-          //     _buildGridView(),
-          //   ],
-          // ),
-        ],
+      backgroundColor: AppColors.whiteMainColor,
+      body: SafeArea(
+        child: Column(
+          children: [
+            ListTile(
+              onTap: () {
+                Get.to(() => GetPopularScreen());
+              },
+              title: Text('Get Popular'),
+              trailing: Icon(Icons.arrow_forward_ios_rounded),
+            ),
+            ListTile(
+              onTap: () {
+                Get.to(() => GetUsersScreen());
+              },
+              title: Text('Get Users'),
+              trailing: Icon(Icons.arrow_forward_ios_rounded),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -37,7 +48,11 @@ class DiscoveryView extends StatelessWidget {
           expandedHeight: 110,
           floating: false,
           pinned: true,
-          titleTextStyle: TextStyle(color: AppColors.whiteMainColor, fontSize: AppFontSizes.fontSize30, fontWeight: FontWeight.bold),
+          titleTextStyle: TextStyle(
+            color: AppColors.whiteMainColor,
+            fontSize: AppFontSizes.fontSize30,
+            fontWeight: FontWeight.bold,
+          ),
           actions: [
             scrolled
                 ? const SizedBox.shrink()
@@ -52,7 +67,9 @@ class DiscoveryView extends StatelessWidget {
                     ),
                   ),
           ],
-          backgroundColor: scrolled ? Colors.transparent.withOpacity(0.6) : Colors.transparent,
+          backgroundColor: scrolled
+              ? Colors.transparent.withOpacity(0.6)
+              : Colors.transparent,
           title: scrolled
               ? null
               : Text(
