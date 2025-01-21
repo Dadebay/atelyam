@@ -25,6 +25,7 @@ dependencies:
   path_provider:
   animate_do: ^3.3.4
   font_awesome_flutter: 
+  change_app_package_name:
   url_launcher:
   photo_view:
   dio:
