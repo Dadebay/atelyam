@@ -1,0 +1,60 @@
+// ignore_for_file: file_names, must_be_immutable
+
+import 'package:atelyam/app/core/theme/theme.dart';
+import 'package:atelyam/app/modules/home_view/controllers/home_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class AgreeButton extends StatelessWidget {
+  final Function() onTap;
+  final String text;
+
+  AgreeButton({required this.onTap, required this.text, super.key});
+
+  final HomeController homeController = Get.put(HomeController());
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Obx(() => _buildAnimatedContainer()),
+    );
+  }
+
+  Widget _buildAnimatedContainer() {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 800),
+      width: homeController.agreeButton.value ? 60 : Get.size.width,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(
+        vertical: 15,
+        horizontal: homeController.agreeButton.value ? 0 : 10,
+      ),
+      decoration: const BoxDecoration(
+        color: AppColors.kSecondaryColor,
+        borderRadius: BorderRadii.borderRadius20,
+      ),
+      child: _buildContent(),
+    );
+  }
+
+  Widget _buildContent() {
+    if (homeController.agreeButton.value) {
+      return const Center(
+        child: SizedBox(
+          width: 34,
+          height: 29,
+          child: CircularProgressIndicator(color: Colors.white),
+        ),
+      );
+    } else {
+      return Text(
+        text.tr,
+        textAlign: TextAlign.center,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(color: Colors.white, fontSize: AppFontSizes.fontSize20, fontWeight: FontWeight.bold),
+      );
+    }
+  }
+}
