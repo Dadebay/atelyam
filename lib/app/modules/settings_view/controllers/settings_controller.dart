@@ -1,12 +1,25 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:atelyam/app/core/custom_widgets/dialogs.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class NewSettingsPageController extends GetxController {
   RxInt selectedAvatarIndex = 0.obs;
+  final Rx<Map<String, dynamic>?> selectedCategory =
+      Rx<Map<String, dynamic>?>(null);
+  final Rx<Map<String, dynamic>?> selectedBusinessCategory =
+      Rx<Map<String, dynamic>?>(null);
+  final Rx<Map<String, dynamic>?> selectedHasTag =
+      Rx<Map<String, dynamic>?>(null);
+  final ImagePicker _picker = ImagePicker();
+  var selectedImage = Rx<File?>(null);
+
   final _box = GetStorage();
   final Dialogs dialogs = Dialogs();
   RxBool isLoginView = false.obs;
@@ -33,7 +46,8 @@ class NewSettingsPageController extends GetxController {
     loadUserData(); // Load user data when the controller initializes
   }
 
-  final List<String> avatars = List.generate(12, (index) => 'assets/icons/user${index + 1}.png');
+  final List<String> avatars =
+      List.generate(12, (index) => 'assets/icons/user${index + 1}.png');
 
   Future<void> saveSelectedAvatar(int index) async {
     selectedAvatarIndex.value = index;
@@ -54,12 +68,14 @@ class NewSettingsPageController extends GetxController {
   void loadFavoriteProducts() {
     final List<dynamic>? storedFavorites = _box.read('favoriteProducts');
     if (storedFavorites != null) {
-      favoriteProducts.value = storedFavorites.map((json) => ProductModel.fromJson(json)).toList();
+      favoriteProducts.value =
+          storedFavorites.map((json) => ProductModel.fromJson(json)).toList();
     }
   }
 
   void _saveFavoriteProducts() {
-    final List<Map<String, dynamic>> favoritesJson = favoriteProducts.map((product) => product.toJson()).toList();
+    final List<Map<String, dynamic>> favoritesJson =
+        favoriteProducts.map((product) => product.toJson()).toList();
     _box.write('favoriteProducts', favoritesJson);
   }
 
@@ -113,5 +129,45 @@ class NewSettingsPageController extends GetxController {
     phoneNumber.value = '';
     await _box.remove('username');
     await _box.remove('phoneNumber');
+  }
+
+  //selecting title id
+  void selectingCategory({value}) {
+    selectedCategory.value = value;
+    log(selectedCategory.value.toString());
+  }
+
+  //selecting busCategory id
+  void selectingBusinessCategory({value}) {
+    selectedBusinessCategory.value = value;
+    log(selectedBusinessCategory.value.toString());
+  }
+
+  //selecting hashtag id
+  void selectingHashtag({value}) {
+    selectedHasTag.value = value;
+    log(selectedBusinessCategory.value.toString());
+  }
+
+  //  to pick multiple images
+  Future<void> pickImage() async {
+    try {
+      final XFile? pickedFile =
+          await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        selectedImage.value = File(pickedFile.path);
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to pick image: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
+  //  to remove the selected image
+  void removeImage() {
+    selectedImage.value = null;
   }
 }

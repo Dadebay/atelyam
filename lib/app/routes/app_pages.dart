@@ -1,3 +1,5 @@
+import 'package:atelyam/app/modules/settings_view/views/add_product_view.dart';
+import 'package:atelyam/app/modules/settings_view/views/create_business_accaunt_view.dart';
 import 'package:get/get.dart';
 
 import '../modules/auth_view/bindings/auth_binding.dart';
@@ -49,6 +51,10 @@ class AppPages {
     GetPage(
       name: _Paths.FAVORITES,
       page: () => FavoritesView(),
+    ),
+    GetPage(
+      name: _Paths.ADD_PRODUCT,
+      page: () => AddProductView(),
     ),
     GetPage(
       name: _Paths.SEARCH,
