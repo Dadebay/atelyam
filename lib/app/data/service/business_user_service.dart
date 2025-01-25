@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
+import 'package:atelyam/app/data/service/auth_service.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,6 +42,20 @@ class BusinessUserService {
     }
   }
 
+  Future<BusinessUserModel> fetchBusinessAccountByID(int id) async {
+    final url = Uri.parse('${authController.ipAddress}/mobile/GetUserId/$id/');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        return BusinessUserModel.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to fetch categories. Status Code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch categories: $e');
+    }
+  }
+
   Future<List<BusinessUserModel>?> fetchPopularUsers() async {
     try {
       final uri = Uri.parse('${authController.ipAddress}/mobile/getPopular/');
@@ -50,8 +65,34 @@ class BusinessUserService {
           HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8', //Setting header explicitly
         },
       );
-      print(response.body);
-      print(response.statusCode);
+      if (response.statusCode == 200) {
+        final responseBody = utf8.decode(response.bodyBytes); // Force UTF-8 decoding
+        final List<dynamic> responseData = json.decode(responseBody);
+        final List<BusinessUserModel> categories = responseData.map((json) => BusinessUserModel.fromJson(json)).toList();
+        return categories;
+      } else {
+        return null;
+      }
+    } on SocketException {
+      showSnackBar('Network Error', 'No internet connection', Colors.red);
+      return null;
+    } catch (e) {
+      showSnackBar('Unknown Error', 'An error occurred', Colors.red);
+      return null;
+    }
+  }
+
+  Future<List<BusinessUserModel>?> getMyBusinessAccounts() async {
+    final token = await Auth().getToken();
+    try {
+      final uri = Uri.parse('${authController.ipAddress}/mobile/getMyStatus/');
+      final response = await http.get(
+        uri,
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8', //Setting header explicitly
+          HttpHeaders.authorizationHeader: 'Bearer $token',
+        },
+      );
       if (response.statusCode == 200) {
         final responseBody = utf8.decode(response.bodyBytes); // Force UTF-8 decoding
         final List<dynamic> responseData = json.decode(responseBody);

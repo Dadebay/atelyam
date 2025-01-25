@@ -9,7 +9,10 @@ class BackButtonMine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => Get.back(),
+      onPressed: () {
+        print('Asdadad');
+        Get.back();
+      },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.transparent,
         padding: EdgeInsets.zero,

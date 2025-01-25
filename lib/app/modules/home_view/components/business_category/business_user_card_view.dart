@@ -19,7 +19,7 @@ class BusinessUsersCardView extends StatelessWidget {
       onTap: () {
         Get.to(
           () => BrandsProfile(
-            businessUserModel: category,
+            businessUserModelFromOutside: category,
             categoryID: categoryID,
           ),
         );

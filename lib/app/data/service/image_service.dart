@@ -40,15 +40,12 @@ class ImageService {
     await FirebaseMessaging.instance.getToken().then((token) {
       deviceToken = token;
     });
-    print(deviceToken);
-    print('${authController.ipAddress}/mobile/product/$productId?device=$deviceToken');
 
     try {
       final response = await _client.get(
         Uri.parse('${authController.ipAddress}/mobile/product/$productId?device=$deviceToken'),
       );
       if (response.statusCode == 200) {
-        print(ProductModel.fromJson(json.decode(response.body)).viewCount);
         return ProductModel.fromJson(json.decode(response.body));
       } else {
         showSnackBar('error', 'errorFetchImage', Colors.red);

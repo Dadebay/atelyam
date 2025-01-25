@@ -17,6 +17,9 @@ class ProductService {
       final response = await _client.get(
         Uri.parse('${authController.ipAddress}/mobile/products/$categoryId/$userId/'),
       );
+      print('${authController.ipAddress}/mobile/products/$categoryId/$userId/');
+      print(response.body);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         final responseBody = utf8.decode(response.bodyBytes); // Force UTF-8 decoding
 
@@ -30,6 +33,24 @@ class ProductService {
     } catch (e) {
       showSnackBar('Hata', 'Bir hata oluştu: $e', Colors.red);
 
+      return null;
+    }
+  }
+
+  Future<List<ProductModel>?> fetchPopularProducts({int page = 1, int size = 10}) async {
+    try {
+      final response = await _client.get(Uri.parse('${authController.ipAddress}/mobile/getProductsPopular/?page=$page&size=$size'));
+      if (response.statusCode == 200) {
+        final responseBody = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = json.decode(responseBody);
+        final List<dynamic> results = data['results'];
+        return results.map((json) => ProductModel.fromJson(json)).toList();
+      } else {
+        showSnackBar('Hata', 'Bir hata oluştu: ${response.statusCode}', Colors.red);
+        return null;
+      }
+    } catch (e) {
+      showSnackBar('Hata', 'Bir hata oluştu: $e', Colors.red);
       return null;
     }
   }

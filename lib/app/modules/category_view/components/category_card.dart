@@ -27,7 +27,7 @@ class CategoryCard extends StatelessWidget {
         height: 220,
         decoration: BoxDecoration(
           borderRadius: BorderRadii.borderRadius40,
-          color: Colors.amber,
+          color: Colors.transparent,
           boxShadow: [
             BoxShadow(
               color: AppColors.kThirdColor.withOpacity(0.4),

@@ -7,14 +7,17 @@ import 'package:atelyam/app/modules/settings_view/components/fav_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconly/iconly.dart';
 
 class DiscoveryCard extends StatelessWidget {
   final ProductModel productModel;
   final bool homePageStyle;
+  final bool? showViewCount;
 
   DiscoveryCard({
     required this.productModel,
     required this.homePageStyle,
+    this.showViewCount,
     super.key,
   });
   final AuthController authController = Get.find();
@@ -53,6 +56,34 @@ class DiscoveryCard extends StatelessWidget {
                   product: productModel,
                 ),
               ),
+              showViewCount == false
+                  ? SizedBox.shrink()
+                  : Positioned(
+                      top: 10,
+                      left: 10,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        margin: EdgeInsets.only(right: 10),
+                        decoration: BoxDecoration(
+                          color: AppColors.whiteMainColor.withOpacity(.8),
+                          border: Border.all(color: AppColors.kPrimaryColor.withOpacity(.6), width: 1),
+                          borderRadius: BorderRadii.borderRadius15,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: Icon(IconlyLight.show, color: AppColors.kPrimaryColor, size: AppFontSizes.fontSize16),
+                            ),
+                            Text(
+                              productModel.viewCount.toString(),
+                              style: TextStyle(color: AppColors.kPrimaryColor, fontWeight: FontWeight.bold, fontSize: AppFontSizes.fontSize16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
               homePageStyle
                   ? Positioned(
                       bottom: 0,

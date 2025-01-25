@@ -7,6 +7,7 @@ import 'package:atelyam/app/data/models/business_user_model.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/data/service/business_user_service.dart';
 import 'package:atelyam/app/data/service/image_service.dart';
+import 'package:atelyam/app/modules/home_view/components/business_users/business_user_profile_view.dart';
 import 'package:atelyam/app/modules/product_profil_view/controllers/product_profil_controller.dart';
 import 'package:atelyam/app/modules/product_profil_view/views/photo_view_page.dart';
 import 'package:atelyam/app/modules/settings_view/components/fav_button.dart';
@@ -30,7 +31,6 @@ class _ProductProfilViewState extends State<ProductProfilView> {
   @override
   void initState() {
     super.initState();
-    controller.requestStoragePermission();
     controller.fetchImages(widget.productModel.id, widget.productModel.img);
     getViewCount();
   }
@@ -161,9 +161,28 @@ class _ProductProfilViewState extends State<ProductProfilView> {
 
   Widget brendData(BusinessUserModel businessUserModel) {
     return GestureDetector(
-      onTap: () {},
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+      onTap: () {
+        Get.to(
+          () => BrandsProfile(
+            categoryID: widget.productModel.category,
+            businessUserModelFromOutside: businessUserModel,
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.whiteMainColor,
+          borderRadius: BorderRadii.borderRadius25,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.kThirdColor.withOpacity(0.4),
+              blurRadius: 5,
+              spreadRadius: 1,
+            ),
+          ],
+          border: Border.all(color: AppColors.kPrimaryColor.withOpacity(.2)),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
         child: Row(
           children: [
             Container(
@@ -264,8 +283,7 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                 size: AppFontSizes.fontSize24,
               ),
               onPressed: () {
-                controller.checkPermission(context);
-                controller.downloadImage(context, controller.productImages[controller.selectedImageIndex.value]);
+                controller.checkPermissionAndDownloadImage(controller.productImages[controller.selectedImageIndex.value]);
               },
             ),
           ),

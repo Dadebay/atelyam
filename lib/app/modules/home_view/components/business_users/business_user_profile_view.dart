@@ -5,6 +5,7 @@ import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
+import 'package:atelyam/app/data/service/business_user_service.dart';
 import 'package:atelyam/app/data/service/product_service.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
 import 'package:atelyam/app/modules/discovery_view/components/discovery_card.dart';
@@ -17,9 +18,9 @@ import 'package:iconly/iconly.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BrandsProfile extends StatefulWidget {
-  final BusinessUserModel businessUserModel;
+  final BusinessUserModel businessUserModelFromOutside;
   final int categoryID;
-  const BrandsProfile({required this.businessUserModel, required this.categoryID, super.key});
+  const BrandsProfile({required this.businessUserModelFromOutside, required this.categoryID, super.key});
 
   @override
   State<BrandsProfile> createState() => _BrandsProfileState();
@@ -28,16 +29,35 @@ class BrandsProfile extends StatefulWidget {
 class _BrandsProfileState extends State<BrandsProfile> {
   final ProductService _productService = ProductService();
   late Future<List<ProductModel>?> productsFuture;
+  late BusinessUserModel _businessUser;
+  bool _isLoading = false;
   @override
   void initState() {
     super.initState();
-    _fetchProducts();
+    _businessUser = widget.businessUserModelFromOutside;
+    print(_businessUser.images!);
+    if (_businessUser.images!.isNotEmpty) {
+      _fetchBusinessUserData();
+    } else {
+      productsFuture = _productService.fetchProducts(widget.categoryID, widget.businessUserModelFromOutside.id);
+    }
+  }
+
+  Future<void> _fetchBusinessUserData() async {
+    print('asdasdasdas');
+
+    setState(() => _isLoading = true);
+    try {
+      final newData = await BusinessUserService().fetchBusinessAccountByID(_businessUser.id);
+      setState(() => _businessUser = newData);
+      productsFuture = _productService.fetchProducts(widget.categoryID, _businessUser.user);
+    } catch (e) {
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   final AuthController authController = Get.find<AuthController>();
-  Future<void> _fetchProducts() async {
-    productsFuture = _productService.fetchProducts(widget.categoryID, widget.businessUserModel.user);
-  }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(
@@ -57,60 +77,51 @@ class _BrandsProfileState extends State<BrandsProfile> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        bottomSheet: _buildBottomSheet(),
+        bottomSheet: FadeInUp(
+          duration: const Duration(milliseconds: 500),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: AgreeButton(
+              onTap: () {
+                _makePhoneCall('+${_businessUser.businessPhone}');
+              },
+              text: 'call',
+            ),
+          ),
+        ),
         backgroundColor: AppColors.whiteMainColor,
-        body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              _buildSliverAppBar(),
-            ];
-          },
-          body: _buildTabBarView(),
-        ),
+        body: _isLoading
+            ? EmptyStates().loadingData()
+            : NestedScrollView(
+                headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                  return <Widget>[
+                    _buildSliverAppBar(),
+                  ];
+                },
+                body: TabBarView(
+                  children: [
+                    _buildInfoTab(), // Bilgi tabı
+                    _buildImagesTab(), // Resimler tabı
+                    _buildVideosTab(), // Videolar tabı
+                  ],
+                ),
+              ),
       ),
     );
   }
 
-  // BottomSheet widget'ı
-  Widget _buildBottomSheet() {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 500),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: AgreeButton(
-          onTap: () {
-            _makePhoneCall('+${widget.businessUserModel.businessPhone}');
-          },
-          text: 'call',
-        ),
-      ),
-    );
-  }
-
-  // TabBarView'ı oluşturma
-  Widget _buildTabBarView() {
-    return TabBarView(
-      children: [
-        _buildInfoTab(), // Bilgi tabı
-        _buildImagesTab(), // Resimler tabı
-        _buildVideosTab(), // Videolar tabı
-      ],
-    );
-  }
-
-  // Bilgi sekmesini oluşturma
   Widget _buildInfoTab() {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.businessUserModel.instagram?.isNotEmpty == true)
-            _socialMediaIcons(onTap: () {}, name: 'Instagram', userName: widget.businessUserModel.instagram.toString(), icon: FontAwesomeIcons.instagram, maxline: 1, index: 3),
-          _socialMediaIcons(onTap: () {}, name: 'Youtube', userName: widget.businessUserModel.youtube.toString(), icon: FontAwesomeIcons.youtube, index: 4, maxline: 1),
-          _socialMediaIcons(onTap: () {}, name: 'TikTok', userName: widget.businessUserModel.tiktok.toString(), icon: FontAwesomeIcons.tiktok, index: 5, maxline: 1),
-          _socialMediaIcons(onTap: () {}, name: 'phone_number', userName: widget.businessUserModel.businessPhone.toString(), icon: IconlyBold.call, index: 6, maxline: 1),
-          _socialMediaIcons(onTap: () {}, name: 'location', userName: widget.businessUserModel.address.toString(), icon: IconlyBold.location, index: 6, maxline: 4),
+          if (_businessUser.instagram?.isNotEmpty == true)
+            _socialMediaIcons(onTap: () {}, name: 'Instagram', userName: _businessUser.instagram.toString(), icon: FontAwesomeIcons.instagram, maxline: 1, index: 3),
+          _socialMediaIcons(onTap: () {}, name: 'Youtube', userName: _businessUser.youtube.toString(), icon: FontAwesomeIcons.youtube, index: 4, maxline: 1),
+          _socialMediaIcons(onTap: () {}, name: 'TikTok', userName: _businessUser.tiktok.toString(), icon: FontAwesomeIcons.tiktok, index: 5, maxline: 1),
+          _socialMediaIcons(onTap: () {}, name: 'phone_number', userName: _businessUser.businessPhone.toString(), icon: IconlyBold.call, index: 6, maxline: 1),
+          _socialMediaIcons(onTap: () {}, name: 'location', userName: _businessUser.address.toString(), icon: IconlyBold.location, index: 6, maxline: 4),
         ],
       ),
     );
@@ -285,6 +296,7 @@ class _BrandsProfileState extends State<BrandsProfile> {
       pinned: true,
       floating: true,
       snap: true,
+      scrolledUnderElevation: 0.0,
       expandedHeight: 360.0,
       foregroundColor: AppColors.darkMainColor,
       actionsIconTheme: const IconThemeData(color: AppColors.darkMainColor),
@@ -368,7 +380,7 @@ class _BrandsProfileState extends State<BrandsProfile> {
                     borderRadius: BorderRadii.borderRadius30,
                     child: CachedNetworkImage(
                       fadeInCurve: Curves.ease,
-                      imageUrl: authController.ipAddress + widget.businessUserModel.backPhoto,
+                      imageUrl: authController.ipAddress + _businessUser.backPhoto,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadii.borderRadius10,
@@ -389,7 +401,7 @@ class _BrandsProfileState extends State<BrandsProfile> {
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Text(
-                    widget.businessUserModel.businessName.toString(),
+                    _businessUser.businessName.toString(),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -405,7 +417,7 @@ class _BrandsProfileState extends State<BrandsProfile> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20, bottom: 70),
                   child: Text(
-                    widget.businessUserModel.description,
+                    _businessUser.description,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,

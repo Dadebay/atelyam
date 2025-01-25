@@ -1,10 +1,12 @@
+import 'dart:io';
+
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/images_model.dart';
 import 'package:atelyam/app/data/service/image_service.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:gal/gal.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -37,38 +39,50 @@ class ProductProfilController extends GetxController {
     selectedImageIndex.value = index;
   }
 
-  Future<bool> requestStoragePermission() async {
-    final status = await Permission.storage.request();
+  void checkPermissionAndDownloadImage(String imageURL) async {
+    // İzinleri kontrol et
+    final Map<Permission, PermissionStatus> statues = await [
+      Permission.storage,
+      Permission.photos, // Android 13 ve üzeri için
+    ].request();
 
-    return status == PermissionStatus.granted;
-  }
-
-  void checkPermission(BuildContext context) async {
-    final Map<Permission, PermissionStatus> statues = await [Permission.camera, Permission.storage].request();
-    final PermissionStatus? statusCamera = statues[Permission.camera];
     final PermissionStatus? statusStorage = statues[Permission.storage];
-    final bool isPermanentlyDenied = statusCamera == PermissionStatus.permanentlyDenied || statusStorage == PermissionStatus.permanentlyDenied;
+    final PermissionStatus? statusPhotos = statues[Permission.photos];
+
+    final bool isPermanentlyDenied = statusStorage == PermissionStatus.permanentlyDenied || statusPhotos == PermissionStatus.permanentlyDenied;
+
     if (isPermanentlyDenied) {
       showSnackBar('Uyarı', 'Depolama izni verilmedi. İndirme yapılamıyor.', AppColors.red1Color);
-    }
-  }
-
-  Future<void> downloadImage(BuildContext context, String imageURL) async {
-    try {
-      if (await requestStoragePermission()) {
+    } else {
+      try {
         showSnackBar('İndiriliyor', 'İndirme Başladı...', AppColors.systemGreenGraph);
-        final Dio dio = Dio();
-        final dir = await getExternalStorageDirectory();
-        final String fileName = imageURL.split('/').last;
-        final String savePath = '${dir!.path}/$fileName';
-        await dio.download(imageURL, savePath);
 
-        showSnackBar('Başarılı', 'Resim İndirildi.', AppColors.kSecondaryColor);
-      } else {
-        showSnackBar('Uyarı', 'Depolama izni verilmedi. İndirme yapılamıyor.', AppColors.red1Color);
+        final Dio dio = Dio();
+
+        // Genel depolama alanına kaydetmek için `Pictures` klasörünü kullan
+        final Directory? downloadsDir = await getExternalStorageDirectory();
+        final String savePath = '${downloadsDir!.path}/Pictures';
+
+        // Klasör yoksa oluştur
+        final Directory dir = Directory(savePath);
+        if (!dir.existsSync()) {
+          dir.createSync(recursive: true);
+        }
+
+        // Dosya adını dinamik olarak oluştur
+        final String fileName = 'Atelyam_${DateTime.now().toString().replaceAll(RegExp(r'[^\w]'), '_')}.webp';
+        final String fullPath = '$savePath/$fileName';
+
+        // Dosyayı indir
+        await dio.download(imageURL, fullPath);
+
+        // Dosyayı galeriye ekle
+        await Gal.putImage(fullPath);
+
+        showSnackBar('Başarılı', 'Resim İndirildi ve Galeriye Eklendi.', AppColors.kSecondaryColor);
+      } catch (e) {
+        showSnackBar('Hata', 'Resim indirilirken hata oluştu: $e', AppColors.red1Color);
       }
-    } catch (e) {
-      showSnackBar('Hata', 'Resim indirilirken hata oluştu.', AppColors.red1Color);
     }
   }
 }

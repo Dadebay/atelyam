@@ -8,8 +8,10 @@ import 'package:get/get.dart';
 class AgreeButton extends StatelessWidget {
   final Function() onTap;
   final String text;
+  final Color? color;
+  final Color? textColor;
 
-  AgreeButton({required this.onTap, required this.text, super.key});
+  AgreeButton({required this.onTap, required this.text, this.color, this.textColor, super.key});
 
   final HomeController homeController = Get.put(HomeController());
 
@@ -30,8 +32,8 @@ class AgreeButton extends StatelessWidget {
         vertical: 15,
         horizontal: homeController.agreeButton.value ? 0 : 10,
       ),
-      decoration: const BoxDecoration(
-        color: AppColors.kSecondaryColor,
+      decoration: BoxDecoration(
+        color: color ?? AppColors.kSecondaryColor,
         borderRadius: BorderRadii.borderRadius20,
       ),
       child: _buildContent(),
@@ -53,7 +55,7 @@ class AgreeButton extends StatelessWidget {
         textAlign: TextAlign.center,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: Colors.white, fontSize: AppFontSizes.fontSize20, fontWeight: FontWeight.bold),
+        style: TextStyle(color: textColor ?? Colors.white, fontSize: AppFontSizes.fontSize20, fontWeight: FontWeight.bold),
       );
     }
   }

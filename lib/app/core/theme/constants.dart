@@ -1,5 +1,7 @@
 import 'package:atelyam/app/modules/auth_view/views/auth_view.dart';
 import 'package:atelyam/app/modules/settings_view/views/about_us_view.dart';
+import 'package:atelyam/app/modules/settings_view/views/all_business_accounts.dart';
+import 'package:atelyam/app/modules/settings_view/views/create_product.view.dart';
 import 'package:atelyam/app/modules/settings_view/views/favorites_view.dart';
 import 'package:iconly/iconly.dart';
 
@@ -27,14 +29,14 @@ final List<Map<String, dynamic>> settingsViews = [
 ];
 final List<Map<String, dynamic>> loggedInSettingsViews = [
   {
-    'name': 'create_business_account',
-    'icon': IconlyLight.show,
-    'page': '', // Dil ayarları sayfası
+    'name': 'business_accounts',
+    'icon': IconlyLight.add_user,
+    'page': () => AllBusinessAccountsView(), // Dil ayarları sayfası
   },
   {
     'name': 'add_product',
-    'icon': IconlyLight.setting,
-    'page': '', // Dil ayarları sayfası
+    'icon': IconlyLight.paper_plus,
+    'page': () => UploadProductView(), // Dil ayarları sayfası
   },
   {
     'name': 'lang',

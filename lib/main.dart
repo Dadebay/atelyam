@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
       fallbackLocale: const Locale('en'), // Fallback locale
       locale: _getLocale(), // Set locale based on storage
       translations: MyTranslations(), // Your translations
-      defaultTransition: Transition.rightToLeftWithFade, // Default transition
+      defaultTransition: Transition.fadeIn, // Default transition
       home: const ConnectionCheckView(), // Initial screen
     );
   }

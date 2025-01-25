@@ -28,9 +28,9 @@ class EmptyStates {
     return Center(
       child: Text(
         'no_data_available'.tr,
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.kPrimaryColor,
-          fontSize: 16,
+          fontSize: AppFontSizes.fontSize20,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -40,6 +40,8 @@ class EmptyStates {
   Widget noDataAvailablePage() {
     return Center(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 20),

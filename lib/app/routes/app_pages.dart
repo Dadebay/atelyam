@@ -43,7 +43,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.DISCOVERY,
-      page: () => const DiscoveryView(),
+      page: () => DiscoveryView(),
       binding: DiscoveryBinding(),
     ),
     GetPage(

@@ -53,35 +53,7 @@ class _CategoryProductViewState extends State<CategoryProductView> {
             builder: (BuildContext context, BoxConstraints constraints) {
               return CustomScrollView(
                 slivers: <Widget>[
-                  SliverAppBar(
-                    floating: false,
-                    automaticallyImplyLeading: false,
-                    pinned: false,
-                    expandedHeight: constraints.maxHeight * 0.20,
-                    backgroundColor: Colors.transparent,
-                    leadingWidth: 70,
-                    leading: Padding(
-                      padding: const EdgeInsets.only(left: 15),
-                      child: ElevatedButton(
-                        onPressed: () => Get.back(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black38,
-                          padding: EdgeInsets.zero,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadii.borderRadius20,
-                            side: BorderSide(
-                              color: AppColors.whiteMainColor,
-                            ),
-                          ),
-                        ),
-                        child: const Icon(
-                          IconlyLight.arrow_left_2,
-                          size: 20,
-                          color: AppColors.warmWhiteColor,
-                        ),
-                      ),
-                    ),
-                  ),
+                  sliverAppBAr(constraints),
                   SliverFillRemaining(
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -93,12 +65,14 @@ class _CategoryProductViewState extends State<CategoryProductView> {
                         ),
                       ),
                       child: FutureBuilder<List<ProductModel>>(
-                        future: HashtagService().fetchProductsByHashtagId(widget.categoryModel.id),
+                        future: HashtagService().fetchProductsByHashtagId(hashtagId: widget.categoryModel.id),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState == ConnectionState.waiting) {
-                            return Center(child: EmptyStates().loadingData()); // Use Center instead of SliverToBoxAdapter
+                            return EmptyStates().loadingData(); // Use Center instead of SliverToBoxAdapter
                           } else if (snapshot.hasError) {
-                            return Center(child: EmptyStates().errorData(snapshot.hasError.toString())); // Use Center instead of SliverToBoxAdapter
+                            return EmptyStates().errorData(snapshot.hasError.toString()); // Use Center instead of SliverToBoxAdapter
+                          } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+                            return EmptyStates().noDataAvailable();
                           } else if (snapshot.hasData) {
                             return MasonryGridView.builder(
                               shrinkWrap: true,
@@ -135,6 +109,38 @@ class _CategoryProductViewState extends State<CategoryProductView> {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  SliverAppBar sliverAppBAr(BoxConstraints constraints) {
+    return SliverAppBar(
+      floating: false,
+      automaticallyImplyLeading: false,
+      pinned: false,
+      expandedHeight: constraints.maxHeight * 0.20,
+      backgroundColor: Colors.transparent,
+      leadingWidth: 70,
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 15),
+        child: ElevatedButton(
+          onPressed: () => Get.back(),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black38,
+            padding: EdgeInsets.zero,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadii.borderRadius20,
+              side: BorderSide(
+                color: AppColors.whiteMainColor,
+              ),
+            ),
+          ),
+          child: const Icon(
+            IconlyLight.arrow_left_2,
+            size: 20,
+            color: AppColors.warmWhiteColor,
+          ),
+        ),
       ),
     );
   }

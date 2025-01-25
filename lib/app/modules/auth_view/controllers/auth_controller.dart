@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
@@ -9,9 +11,10 @@ class AuthController extends GetxController {
   Future<void> fetchIpAddress() async {
     try {
       final DocumentSnapshot snapshot = await db.collection('server').doc('server_ip').get();
+      log(snapshot.data.toString());
       if (snapshot.exists && snapshot.data() != null) {
         final data = snapshot.data() as Map<String, dynamic>;
-        ipAddress.value = data['ip'] ?? ''; // Get IP address from "ip" field
+        ipAddress.value = data['ip'] ?? 'http://216.250.12.49:8000/'; // Get IP address from "ip" field
       } else {
         ipAddress.value = 'IP adresi bulunamadı.';
       }

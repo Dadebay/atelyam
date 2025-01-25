@@ -46,85 +46,83 @@ class AuthView extends StatelessWidget {
                 color: Colors.white,
                 height: Get.size.height / 1.9,
                 padding: EdgeInsets.only(bottom: 40, top: 80),
-                child: Obx(
-                  () => Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      FadeInUp(
-                        duration: const Duration(milliseconds: 800),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Text(
-                            'welcomeSubtitle'.tr,
-                            style: TextStyle(
-                              color: AppColors.kPrimaryColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: AppFontSizes.fontSize20 - 2,
-                            ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 800),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Text(
+                          'welcomeSubtitle'.tr,
+                          style: TextStyle(
+                            color: AppColors.kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: AppFontSizes.fontSize20 - 2,
                           ),
                         ),
                       ),
-                      FadeInUp(
-                        duration: const Duration(milliseconds: 800),
-                        child: CustomTextField(
-                          labelName: 'name',
-                          controller: usernameController,
-                          focusNode: usernameFocusNode,
-                          requestfocusNode: phoneFocusNode,
-                          borderRadius: true,
-                          customColor: AppColors.kPrimaryColor.withOpacity(.4),
-                          isNumber: false,
-                          prefixIcon: IconlyLight.profile,
-                          unFocus: false,
+                    ),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 800),
+                      child: CustomTextField(
+                        labelName: 'name',
+                        controller: usernameController,
+                        focusNode: usernameFocusNode,
+                        requestfocusNode: phoneFocusNode,
+                        borderRadius: true,
+                        customColor: AppColors.kPrimaryColor.withOpacity(.4),
+                        isNumber: false,
+                        prefixIcon: IconlyLight.profile,
+                        unFocus: false,
+                      ),
+                    ),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 900),
+                      child: CustomTextField(
+                        labelName: 'phone_number',
+                        controller: phoneController,
+                        borderRadius: true,
+                        prefixIcon: IconlyLight.call,
+                        focusNode: phoneFocusNode,
+                        customColor: AppColors.kPrimaryColor.withOpacity(.4),
+                        requestfocusNode: usernameFocusNode,
+                        isNumber: true,
+                        unFocus: false,
+                      ),
+                    ),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 1000),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: AgreeButton(
+                          onTap: () {
+                            SignInService().register(phoneNumber: phoneController.text, name: usernameController.text).then((value) {
+                              if (value.toString() == '200') {
+                                Get.to(() => OTPView(phoneNumber: phoneController.text, userName: usernameController.text));
+                              } else if (value.toString() == '409') {
+                                SignInService().login(phone: phoneController.text).then((value) {
+                                  if (value.toString() == '200') {
+                                    Get.to(
+                                      () => OTPView(
+                                        phoneNumber: phoneController.text,
+                                        userName: usernameController.text,
+                                      ),
+                                    );
+                                  } else {
+                                    showSnackBar('error', 'errorLogin', Colors.red);
+                                  }
+                                });
+                              } else {
+                                showSnackBar('error', 'errorRegister', Colors.red);
+                              }
+                            });
+                          },
+                          text: 'login',
                         ),
                       ),
-                      FadeInUp(
-                        duration: const Duration(milliseconds: 900),
-                        child: CustomTextField(
-                          labelName: 'phone_number',
-                          controller: phoneController,
-                          borderRadius: true,
-                          prefixIcon: IconlyLight.call,
-                          focusNode: phoneFocusNode,
-                          customColor: AppColors.kPrimaryColor.withOpacity(.4),
-                          requestfocusNode: usernameFocusNode,
-                          isNumber: true,
-                          unFocus: false,
-                        ),
-                      ),
-                      FadeInUp(
-                        duration: const Duration(milliseconds: 1000),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: AgreeButton(
-                            onTap: () {
-                              SignInService().register(phoneNumber: phoneController.text, name: usernameController.text).then((value) {
-                                if (value.toString() == '200') {
-                                  Get.to(() => OTPView(phoneNumber: phoneController.text, userName: usernameController.text));
-                                } else if (value.toString() == '409') {
-                                  SignInService().login(phone: phoneController.text).then((value) {
-                                    if (value.toString() == '200') {
-                                      Get.to(
-                                        () => OTPView(
-                                          phoneNumber: phoneController.text,
-                                          userName: usernameController.text,
-                                        ),
-                                      );
-                                    } else {
-                                      showSnackBar('error', 'errorLogin', Colors.red);
-                                    }
-                                  });
-                                } else {
-                                  showSnackBar('error', 'errorRegister', Colors.red);
-                                }
-                              });
-                            },
-                            text: 'login',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
