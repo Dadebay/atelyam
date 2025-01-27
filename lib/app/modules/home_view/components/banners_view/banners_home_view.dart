@@ -2,7 +2,7 @@
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/banner_model.dart';
-import 'package:atelyam/app/modules/home_view/components/banner/banner_card.dart';
+import 'package:atelyam/app/modules/home_view/components/banners_view/banner_card.dart';
 import 'package:atelyam/app/modules/home_view/controllers/home_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';

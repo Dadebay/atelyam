@@ -154,9 +154,6 @@ class _AllProductsViewState extends State<AllProductsView> {
         child: GestureDetector(
           onTap: () {
             _homeController.toggleFilterExpanded(); // Filtre durumunu değiştir
-            print(
-              _homeController.selectedFilter.value,
-            );
           },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),

@@ -1,42 +1,81 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:atelyam/app/modules/auth_view/views/auth_view.dart';
+import 'package:atelyam/app/modules/settings_view/views/about_us_view.dart';
+import 'package:atelyam/app/modules/settings_view/views/all_business_accounts.dart';
+import 'package:atelyam/app/modules/settings_view/views/favorites_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:iconly/iconly.dart';
 
 class Assets {
-  static const String noConnection = 'assets/lottie/noconnection.json';
-  static const String loading = 'assets/lottie/loadingNew.json';
-  static const String otp_loading = 'assets/lottie/otp_lottie.json';
-  static const String otp_loading2 = 'assets/lottie/otpp.json';
-  static const String more = 'assets/icons/more.svg';
+  static const String noConnection = 'assets/lottie/no_connection.json';
+  static const String loading = 'assets/lottie/loading.json';
+  static const String otp_loading = 'assets/lottie/otp_animation.json';
   static const String appName = 'Atelyam';
   static const String logoWhite = 'assets/image/logo_white.png';
   static const String logoBlack = 'assets/image/logo_black.png';
-  static const String share = 'assets/icons/share1.svg';
-  static const String settingsLang = 'assets/icons/lang_icon.svg';
-  static const String settingsAboutUs = 'assets/icons/about_us_icon.svg';
-  static const String settingsContactUs = 'assets/icons/contact_us_icon.svg';
-  static const String languageChina = 'assets/icons/lang_china.svg';
-  static const String languageEnglish = 'assets/icons/lang_eng.svg';
-  static const String languageFrench = 'assets/icons/lang_french.svg';
-  static const String languageGerman = 'assets/icons/lang_german.svg';
-  static const String selectedLangIcon = 'assets/icons/selected_lang.svg';
-  static const String unselectedLangIcon = 'assets/icons/unselected_lang.svg';
-  static const String backgorundPattern1 = 'assets/image/patterns/patterns_2.png';
-  static const String backgorundPattern = 'assets/image/patterns/patterns_2.png';
-  static const String loremImpsum =
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Why do we use it?It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).";
-}
-
-class LanguageIcons {
   static const String russianLangIcon = 'assets/image/flags/lang_ru.svg';
   static const String englishLangIcon = 'assets/image/flags/lang_en.svg';
   static const String chinaLangIcon = 'assets/image/flags/lang_ch.svg';
   static const String frenchLangIcon = 'assets/image/flags/lang_fr.svg';
   static const String turkLangIcon = 'assets/image/flags/lang_tr.svg';
   static const String turkmenLangIcon = 'assets/image/flags/lang_tm.svg';
+  static const String backgorundPattern1 = 'assets/image/patterns/pattern_1.png';
+  static const String backgorundPattern2 = 'assets/image/patterns/pattern_2.png';
+  static const String backgorundPattern3 = 'assets/image/patterns/pattern_3.png';
 }
+
+final List<Map<String, dynamic>> settingsViews = [
+  {
+    'name': 'lang',
+    'icon': IconlyLight.setting,
+    'page': '', // Dil ayarları sayfası
+  },
+  {
+    'name': 'favorites',
+    'icon': IconlyLight.heart,
+    'page': () => FavoritesView(), // Favoriler sayfası
+  },
+  {
+    'name': 'aboutUs',
+    'icon': IconlyLight.info_square,
+    'page': () => AboutUsView(), // Hakkında sayfası
+  },
+  {
+    'name': 'login',
+    'icon': IconlyLight.login,
+    'page': () => AuthView(), // Giriş sayfası
+  },
+];
+final List<Map<String, dynamic>> loggedInSettingsViews = [
+  {
+    'name': 'business_accounts',
+    'icon': IconlyLight.add_user,
+    'page': () => AllBusinessAccountsView(), // Dil ayarları sayfası
+  },
+  {
+    'name': 'lang',
+    'icon': IconlyLight.setting,
+    'page': '', // Dil ayarları sayfası
+  },
+  {
+    'name': 'favorites',
+    'icon': IconlyLight.heart,
+    'page': () => FavoritesView(), // Favoriler sayfası
+  },
+  {
+    'name': 'aboutUs',
+    'icon': IconlyLight.info_square,
+    'page': () => AboutUsView(), // Hakkında sayfası
+  },
+  {
+    'name': 'login',
+    'icon': IconlyLight.login,
+    'page': () => AuthView(), // Giriş sayfası
+  },
+];
 
 class Fonts {
   static const String plusJakartaSans = 'PlusJakartaSans';
@@ -62,40 +101,17 @@ class AppColors {
   static const Color kSecondaryColor = Color(0xff234d1e);
   static const Color kThirdColor = Color(0xffb6f1a7);
   static const Color darkMainColor = Color(0xFF111218);
-  static const Color buttonsBackColor = Color(0xff171920);
-  static const Color darkSecondaryColor = Color(0xFF1D1E27);
-  static const Color darkSecondaryButtonColor = Color(0xFF171920);
   static const Color whiteMainColor = Color(0xFFFDFEFF);
-  static const Color white1Color = Color(0xFFAFAFAF);
   static const Color warmWhiteColor = Color(0xFFFFEEDA);
-  static const Color textColorMain = Color(0xFF474747);
-  static const Color secondaryTextColor = Color(0xFF707070);
-  static const Color strokeColor = Color(0xFF2A2A2F);
-  static const Color mainButtonGradientStart = Color(0xFFFEA845);
-  static const Color mainButtonGradientEnd = Color(0xFFA1E87E);
-  static const Color brandYellow = Color(0xFFFEA845);
-  static const Color brandYellow1 = Color(0xFFFEA445);
-  static const Color systemGreenGraph = Color(0xFF05B124);
-  static const Color systemRedGraph = Color(0xFFD21B1E);
-  static const Color errorRed = Color(0xFF7A0007);
-  static const Color red1Color = Color(0xFFE95861);
-  static const Color green = Color(0xFF05B124);
-  static const Color languageBlueColor = Color(0xFF05B124);
-}
-
-class GradientsColors {
-  static LinearGradient brandYellowGradient = LinearGradient(
-    begin: Alignment.center,
-    end: Alignment.topCenter,
-    stops: const [0.4, 1.0],
-    colors: [
-      AppColors.darkMainColor.withOpacity(0.2),
-      AppColors.brandYellow.withOpacity(0.6),
-    ],
-  );
+  static const Color greenColor = Color(0xFF05B124);
+  static const Color redColor = Color(0xFFE95861);
 }
 
 class AppFontSizes {
+  static double getFontSize(double baseSize) {
+    return screenWidth * baseSize / 100;
+  }
+
   static double get screenWidth => Get.width;
   static double get screenHeight => Get.height;
   static double get fontSize12 => screenWidth * 0.031;

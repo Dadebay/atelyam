@@ -56,26 +56,30 @@ class _CategoryViewState extends State<CategoryView> {
                       return SliverToBoxAdapter(child: EmptyStates().errorData(snapshot.hasError.toString()));
                     } else if (snapshot.hasData) {
                       final categories = snapshot.data!;
+                      final int length = categories.length;
                       return SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
-                            return CategoryCard(
-                              categoryModel: categories[index],
-                              onTap: () {
-                                Get.to(
-                                  () => CategoryProductView(
-                                    categoryModel: categories[index],
-                                  ),
-                                );
-                              },
-                              scrollableState: Scrollable.of(context),
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: index == length - 1 ? 100 : 1),
+                              child: CategoryCard(
+                                categoryModel: categories[index],
+                                onTap: () {
+                                  Get.to(
+                                    () => CategoryProductView(
+                                      categoryModel: categories[index],
+                                    ),
+                                  );
+                                },
+                                scrollableState: Scrollable.of(context),
+                              ),
                             );
                           },
                           childCount: categories.length,
                         ),
                       );
                     } else {
-                      return const SliverToBoxAdapter(child: Text('No data'));
+                      return SliverToBoxAdapter(child: EmptyStates().noCategoriesAvailable());
                     }
                   },
                 ),

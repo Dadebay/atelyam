@@ -3,8 +3,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:atelyam/app/core/custom_widgets/dialogs.dart';
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
+import 'package:atelyam/app/modules/home_view/views/bottom_nav_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -148,42 +150,54 @@ class SignInService {
         }
         return response.statusCode;
       } else {
-        _handleApiError(response.statusCode, responseJson['message']?.toString() ?? 'API Error Occurred');
+        _handleApiError(response.statusCode, responseJson['message']?.toString() ?? 'anErrorOccurred'.tr);
         return response.statusCode;
       }
     } on SocketException {
-      showSnackBar('Network Error', 'No internet connection', Colors.red);
+      showSnackBar('networkError'.tr, 'noInternet'.tr, Colors.red);
       return null;
     } catch (e) {
-      showSnackBar('Unknown Error', 'An error occurred', Colors.red);
+      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, Colors.red);
       return null;
     }
   }
 
+  Future<void> checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result.first.rawAddress.isNotEmpty) {
+        await Future.delayed(const Duration(seconds: 3), () {
+          Get.offAll(() => BottomNavBar());
+        });
+      }
+    } on SocketException catch (_) {
+      Dialogs().showNoConnectionDialog(() {
+        checkConnection();
+      });
+    }
+  }
+
   void _handleApiError(int statusCode, String message) {
-    String errorMessage = 'An error occurred';
+    String errorMessage = 'anErrorOccurred'.tr;
     switch (statusCode) {
       case 400:
-        errorMessage = 'Nomer Yalnys';
+        errorMessage = 'invalidNumber'.tr;
         break;
       case 401:
-        errorMessage = 'Unauthorized: $message';
+        errorMessage = '${'unauthorized'.tr}: $message';
         break;
       case 404:
-        errorMessage = 'Not Found: $message';
+        errorMessage = '${'notFound'.tr}: $message';
         break;
       case 405:
-        errorMessage = 'Ulanyjy yok register etmedik';
-        break;
-      case 409:
-        errorMessage = 'Ulanyjy bar login bol';
+        errorMessage = 'userDoesNotExist'.tr;
         break;
       case 500:
-        errorMessage = 'Server Error: $message';
+        errorMessage = '${'serverError'.tr}: $message';
         break;
       default:
-        errorMessage = 'Error Status $statusCode: $message';
+        errorMessage = '${'errorStatus'.tr} $statusCode: $message';
     }
-    showSnackBar('API Error', errorMessage, Colors.red);
+    showSnackBar('apiError'.tr, errorMessage, Colors.red);
   }
 }

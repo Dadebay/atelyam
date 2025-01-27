@@ -1,26 +1,28 @@
 import 'dart:io';
 
 import 'package:atelyam/app/core/custom_widgets/custom_text_field.dart';
+import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_category_model.dart';
 import 'package:atelyam/app/data/models/hashtag_model.dart';
 import 'package:atelyam/app/data/service/auth_service.dart';
 import 'package:atelyam/app/data/service/business_category_service.dart';
 import 'package:atelyam/app/data/service/hashtag_service.dart';
-import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
-class UploadProductView extends StatefulWidget {
-  const UploadProductView({super.key});
+class UpdateProductView extends StatefulWidget {
+  final int productId; // Güncellenecek ürünün ID'si
+
+  const UpdateProductView({required this.productId, super.key});
 
   @override
-  State<UploadProductView> createState() => _UploadProductViewState();
+  State<UpdateProductView> createState() => _UpdateProductViewState();
 }
 
-class _UploadProductViewState extends State<UploadProductView> {
+class _UpdateProductViewState extends State<UpdateProductView> {
   final _formKey = GlobalKey<FormState>();
   final BusinessCategoryService _categoryService = BusinessCategoryService();
   final HashtagService _hashtagService = HashtagService();
@@ -35,6 +37,8 @@ class _UploadProductViewState extends State<UploadProductView> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+
+  bool _isLoading = false; // Yükleme durumu için bir flag
 
   @override
   void initState() {
@@ -62,23 +66,39 @@ class _UploadProductViewState extends State<UploadProductView> {
     }
   }
 
-  Future<void> _submitProduct() async {
-    if (selectedCategory == null || selectedHashtag == null || _selectedImage == null) {
-      Get.snackbar('Hata', 'Lütfen tüm alanları doldurun');
+  Future<void> _updateProduct() async {
+    if (selectedCategory == null || selectedHashtag == null) {
+      showSnackBar('Hata', 'Lütfen tüm alanları doldurun', AppColors.redColor);
       return;
     }
 
+    setState(() => _isLoading = true); // Yükleme başladı
+
+    // Loading dialog göster
+    await showDialog(
+      context: context,
+      barrierDismissible: false, // Kullanıcı dialog'u kapatamasın
+      builder: (context) => const AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 20),
+            Text('Ürün güncelleniyor, lütfen bekleyiniz...'),
+          ],
+        ),
+      ),
+    );
+
     final token = await Auth().getToken();
-    print(token);
     final headers = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'multipart/form-data',
     };
-    final AuthController authController = Get.find();
 
     final request = http.MultipartRequest(
       'POST',
-      Uri.parse('${authController.ipAddress}/mobile/uploadProducts/'),
+      Uri.parse('http://216.250.12.49:8000/mobile/productUpdate/${widget.productId}'),
     );
 
     request.fields.addAll({
@@ -89,9 +109,11 @@ class _UploadProductViewState extends State<UploadProductView> {
       'price': _priceController.text,
     });
 
-    request.files.add(
-      await http.MultipartFile.fromPath('file', _selectedImage!.path),
-    );
+    if (_selectedImage != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath('file', _selectedImage!.path),
+      );
+    }
 
     request.headers.addAll(headers);
 
@@ -99,17 +121,130 @@ class _UploadProductViewState extends State<UploadProductView> {
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
 
+      // Dialog'u kapat
+      Navigator.of(context).pop();
+
+      // Response status code ve body'yi konsola yazdır
       print('Status Code: ${response.statusCode}');
       print('Response Body: $responseBody');
 
-      if (response.statusCode == 201) {
-        Get.back();
-        Get.snackbar('Başarılı', 'Ürün başarıyla yüklendi');
+      if (response.statusCode == 200) {
+        // Başarılı durum
+        await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Başarılı'),
+            content: const Text('Ürün başarıyla güncellendi.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Get.back(); // Önceki sayfaya dön
+                },
+                child: const Text('Tamam'),
+              ),
+            ],
+          ),
+        );
       } else {
-        Get.snackbar('Hata', 'Ürün yüklenemedi: ${response.reasonPhrase}');
+        // Hata durumu
+        showSnackBar('Hata', 'Ürün güncellenemedi: ${response.reasonPhrase}', AppColors.redColor);
       }
     } catch (e) {
-      Get.snackbar('Hata', 'Bir hata oluştu: $e');
+      // Dialog'u kapat
+      Navigator.of(context).pop();
+      showSnackBar('Hata', 'Bir hata oluştu: $e', AppColors.redColor);
+    } finally {
+      setState(() => _isLoading = false); // Yükleme durumunu sıfırla
+    }
+  }
+
+  Future<void> _deleteProduct() async {
+    // Kullanıcıya silme işlemi için onay iste
+    final confirm = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Ürünü Sil'),
+        content: const Text('Bu ürünü silmek istediğinizden emin misiniz?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false), // İptal
+            child: const Text('İptal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true), // Onay
+            child: const Text('Sil'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      setState(() => _isLoading = true); // Yükleme başladı
+
+      // Loading dialog göster
+      await showDialog(
+        context: context,
+        barrierDismissible: false, // Kullanıcı dialog'u kapatamasın
+        builder: (context) => const AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 20),
+              Text('Ürün siliniyor, lütfen bekleyiniz...'),
+            ],
+          ),
+        ),
+      );
+
+      final token = await Auth().getToken();
+      final headers = {
+        'Authorization': 'Bearer $token',
+      };
+
+      try {
+        final response = await http.delete(
+          Uri.parse('http://216.250.12.49:8000/mobile/productDelete/${widget.productId}'),
+          headers: headers,
+        );
+
+        // Dialog'u kapat
+        Navigator.of(context).pop();
+
+        // Response status code ve body'yi konsola yazdır
+        print('Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+
+        if (response.statusCode == 200) {
+          // Başarılı durum
+          await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Başarılı'),
+              content: const Text('Ürün başarıyla silindi.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Get.back(); // Önceki sayfaya dön
+                  },
+                  child: const Text('Tamam'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          // Hata durumu
+          showSnackBar('Hata', 'Ürün silinemedi: ${response.reasonPhrase}', AppColors.redColor);
+        }
+      } catch (e) {
+        // Dialog'u kapat
+        Navigator.of(context).pop();
+        showSnackBar('Hata', 'Bir hata oluştu: $e', AppColors.redColor);
+      } finally {
+        setState(() => _isLoading = false); // Yükleme durumunu sıfırla
+      }
     }
   }
 
@@ -117,8 +252,14 @@ class _UploadProductViewState extends State<UploadProductView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Yeni Ürün Yükle'),
+        title: const Text('Ürünü Güncelle'),
         backgroundColor: AppColors.kSecondaryColor,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: _deleteProduct, // Silme butonu
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -197,21 +338,15 @@ class _UploadProductViewState extends State<UploadProductView> {
               CustomTextField(
                 labelName: 'Ürün Adı',
                 controller: _nameController,
-                maxline: 1,
                 focusNode: FocusNode(),
                 requestfocusNode: FocusNode(),
-                isNumber: false,
-                unFocus: false,
               ),
 
               CustomTextField(
                 labelName: 'Açıklama',
                 focusNode: FocusNode(),
                 requestfocusNode: FocusNode(),
-                isNumber: false,
-                unFocus: false,
                 controller: _descriptionController,
-                maxline: 3,
               ),
 
               CustomTextField(
@@ -219,15 +354,13 @@ class _UploadProductViewState extends State<UploadProductView> {
                 controller: _priceController,
                 focusNode: FocusNode(),
                 requestfocusNode: FocusNode(),
-                isNumber: false,
-                unFocus: false,
               ),
 
               const SizedBox(height: 30),
 
               // Gönder Butonu
               ElevatedButton(
-                onPressed: _submitProduct,
+                onPressed: _isLoading ? null : _updateProduct, // Yükleme sırasında buton devre dışı
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.kSecondaryColor,
                   padding: const EdgeInsets.symmetric(vertical: 15),
@@ -235,7 +368,9 @@ class _UploadProductViewState extends State<UploadProductView> {
                     borderRadius: BorderRadii.borderRadius20,
                   ),
                 ),
-                child: const Text('Ürünü Yükle', style: TextStyle(fontSize: 18)),
+                child: _isLoading
+                    ? const CircularProgressIndicator(color: Colors.white) // Yükleme animasyonu
+                    : const Text('Ürünü Güncelle', style: TextStyle(fontSize: 18)),
               ),
             ],
           ),

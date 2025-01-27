@@ -1,14 +1,14 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
-import 'package:atelyam/app/core/custom_widgets/listview_top_name_icon_part.dart';
+import 'package:atelyam/app/core/custom_widgets/listview_top_name_and_icon.dart';
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/hashtag_model.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/modules/discovery_view/components/discovery_card.dart';
 import 'package:atelyam/app/modules/home_view/components/all_products_view.dart';
-import 'package:atelyam/app/modules/home_view/components/banner/banners.dart';
-import 'package:atelyam/app/modules/home_view/components/business_category/business_category_view.dart';
+import 'package:atelyam/app/modules/home_view/components/banners_view/banners_home_view.dart';
+import 'package:atelyam/app/modules/home_view/components/business_category_view/business_category_view.dart';
 import 'package:atelyam/app/modules/home_view/components/business_users/business_users_home_view.dart';
 import 'package:atelyam/app/modules/home_view/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
@@ -75,9 +75,6 @@ class _HomeViewState extends State<HomeView> {
                               Container(
                                 height: screenHeight * 0.20,
                                 color: Colors.white,
-                                child: const Center(
-                                  child: Text('Asd'),
-                                ),
                               ),
                             ],
                           ),
@@ -149,7 +146,7 @@ class _HomeViewState extends State<HomeView> {
   Widget _buildProductList({required Size size, required HashtagModel hashtagModel}) {
     return Wrap(
       children: [
-        ListviewTopNameIconPart(
+        ListviewTopNameAndIcon(
           text: hashtagModel.name,
           icon: true,
           onTap: () {

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
-class ListviewTopNameIconPart extends StatelessWidget {
+class ListviewTopNameAndIcon extends StatelessWidget {
   final String text;
   final bool icon;
   final Function() onTap;
 
-  const ListviewTopNameIconPart({
+  const ListviewTopNameAndIcon({
     required this.text,
     required this.icon,
     required this.onTap,

@@ -3,7 +3,6 @@ import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
 import 'package:atelyam/app/core/custom_widgets/dialogs.dart';
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/constants.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/service/auth_service.dart';
 import 'package:atelyam/app/modules/home_view/views/bottom_nav_bar_view.dart';
@@ -32,7 +31,7 @@ class SettingsView extends StatelessWidget {
           titleTextStyle: TextStyle(color: AppColors.whiteMainColor, fontSize: AppFontSizes.fontSize24, fontWeight: FontWeight.w600),
           flexibleSpace: FlexibleSpaceBar(
             background: GestureDetector(
-              onTap: () => Dialogs().showAvatarDialog(context),
+              onTap: () => Dialogs().showAvatarDialog(),
               child: Obx(
                 () {
                   return Column(

@@ -25,7 +25,7 @@ class SettingsButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: ListTile(
         onTap: onTap,
-        tileColor: AppColors.white1Color,
+        tileColor: AppColors.whiteMainColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadii.borderRadius15,
         ),
@@ -59,22 +59,22 @@ class SettingsButton extends StatelessWidget {
     String iconPath;
     switch (Get.locale!.languageCode) {
       case 'tm':
-        iconPath = LanguageIcons.turkmenLangIcon;
+        iconPath = Assets.turkmenLangIcon;
         break;
       case 'ru':
-        iconPath = LanguageIcons.russianLangIcon;
+        iconPath = Assets.russianLangIcon;
         break;
       case 'en':
-        iconPath = LanguageIcons.englishLangIcon;
+        iconPath = Assets.englishLangIcon;
         break;
       case 'tr':
-        iconPath = LanguageIcons.turkLangIcon;
+        iconPath = Assets.turkLangIcon;
         break;
       case 'ch':
-        iconPath = LanguageIcons.chinaLangIcon;
+        iconPath = Assets.chinaLangIcon;
         break;
       default:
-        iconPath = LanguageIcons.englishLangIcon; // Varsayılan olarak İngilizce
+        iconPath = Assets.englishLangIcon; // Varsayılan olarak İngilizce
     }
 
     return Container(

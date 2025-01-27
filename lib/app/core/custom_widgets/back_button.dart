@@ -10,7 +10,6 @@ class BackButtonMine extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        print('Asdadad');
         Get.back();
       },
       style: ElevatedButton.styleFrom(
@@ -19,7 +18,7 @@ class BackButtonMine extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadii.borderRadius20,
           side: BorderSide(
-            color: AppColors.whiteMainColor.withOpacity(0.2),
+            color: AppColors.whiteMainColor,
           ),
         ),
       ),

@@ -1,6 +1,5 @@
 // lib/app/core/utils/dialogs.dart
-
-import 'package:atelyam/app/core/custom_widgets/agree_button_view.dart';
+import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/modules/settings_view/controllers/settings_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -11,11 +10,9 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
 class Dialogs {
-  void showNoConnectionDialog(BuildContext context, Function onRetry) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Dialog(
+  void showNoConnectionDialog(Function onRetry) {
+    Get.dialog(
+      Dialog(
         shape: const RoundedRectangleBorder(borderRadius: BorderRadii.borderRadius20),
         elevation: 0.0,
         backgroundColor: Colors.transparent,
@@ -32,7 +29,7 @@ class Dialogs {
                   children: <Widget>[
                     Text(
                       'noConnection1'.tr,
-                      style: const TextStyle(fontSize: 24.0, color: AppColors.brandYellow, fontFamily: Fonts.plusJakartaSans),
+                      style: const TextStyle(fontSize: 24.0, color: AppColors.kThirdColor, fontFamily: Fonts.plusJakartaSans),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -44,11 +41,11 @@ class Dialogs {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Get.back();
                         Future.delayed(const Duration(milliseconds: 1000), () => onRetry());
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.brandYellow,
+                        backgroundColor: AppColors.kThirdColor,
                         shape: const RoundedRectangleBorder(borderRadius: BorderRadii.borderRadius10),
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
                       ),
@@ -76,10 +73,11 @@ class Dialogs {
           ],
         ),
       ),
+      barrierDismissible: false,
     );
   }
 
-  void showAvatarDialog(BuildContext context) {
+  void showAvatarDialog() {
     final NewSettingsPageController settingsController = Get.find<NewSettingsPageController>();
 
     Widget _buildAvatarItem({required int index, required int pageViewIndex}) {

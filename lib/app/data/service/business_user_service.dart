@@ -1,3 +1,4 @@
+// lib/app/data/services/business_user_service.dart
 import 'dart:convert';
 import 'dart:io';
 
@@ -11,18 +12,20 @@ import 'package:http/http.dart' as http;
 
 class BusinessUserService {
   final AuthController authController = Get.find();
+  final Auth _auth = Auth();
 
-  Future<List<BusinessUserModel>> fetchUsers(int id) async {
-    final url = Uri.parse('${authController.ipAddress}/mobile/cats_id/$id/');
+  Future<List<BusinessUserModel>> getBusinessAccountsByCategory({required int categoryID}) async {
+    final url = Uri.parse('${authController.ipAddress}/mobile/cats_id/$categoryID/');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         dynamic decodedResponse;
         try {
-          final responseBody = utf8.decode(response.bodyBytes); // Force UTF-8 decoding
+          final responseBody = utf8.decode(response.bodyBytes);
           decodedResponse = json.decode(responseBody);
         } catch (e) {
-          throw Exception('Json decode error');
+          _handleApiError(500); // Json decode error will be a server side error
+          return [];
         }
 
         if (decodedResponse is List) {
@@ -30,83 +33,100 @@ class BusinessUserService {
           return responseData;
         } else if (decodedResponse is Map) {
           final BusinessUserModel responseData = BusinessUserModel.fromJson(decodedResponse as Map<String, dynamic>);
-          return [responseData]; // Eğer tek bir nesne dönüyorsa listeye çevir
+          return [responseData];
         } else {
-          throw Exception('Unexpected data type received in response.');
+          _handleApiError(500); //Unexpected data type
+          return [];
         }
       } else {
-        throw Exception('Failed to fetch categories. Status Code: ${response.statusCode}');
+        _handleApiError(response.statusCode);
+        return [];
       }
+    } on SocketException {
+      showSnackBar('networkError'.tr, 'noInternet'.tr, Colors.red);
+      return [];
     } catch (e) {
-      throw Exception('Failed to fetch categories: $e');
+      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, Colors.red);
+      return [];
     }
   }
 
-  Future<BusinessUserModel> fetchBusinessAccountByID(int id) async {
+  Future<BusinessUserModel?> fetchBusinessAccountByID(int id) async {
     final url = Uri.parse('${authController.ipAddress}/mobile/GetUserId/$id/');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         return BusinessUserModel.fromJson(json.decode(response.body));
       } else {
-        throw Exception('Failed to fetch categories. Status Code: ${response.statusCode}');
+        _handleApiError(response.statusCode);
+        return null;
       }
+    } on SocketException {
+      showSnackBar('networkError'.tr, 'noInternet'.tr, Colors.red);
+      return null;
     } catch (e) {
-      throw Exception('Failed to fetch categories: $e');
+      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, Colors.red);
+      return null;
     }
   }
 
-  Future<List<BusinessUserModel>?> fetchPopularUsers() async {
+  Future<List<BusinessUserModel>?> fetchPopularBusinessAccounts() async {
     try {
       final uri = Uri.parse('${authController.ipAddress}/mobile/getPopular/');
       final response = await http.get(
         uri,
         headers: {
-          HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8', //Setting header explicitly
+          HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
         },
       );
       if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes); // Force UTF-8 decoding
+        final responseBody = utf8.decode(response.bodyBytes);
         final List<dynamic> responseData = json.decode(responseBody);
         final List<BusinessUserModel> categories = responseData.map((json) => BusinessUserModel.fromJson(json)).toList();
         return categories;
       } else {
+        _handleApiError(response.statusCode);
         return null;
       }
     } on SocketException {
-      showSnackBar('Network Error', 'No internet connection', Colors.red);
+      showSnackBar('networkError'.tr, 'noInternet'.tr, Colors.red);
       return null;
     } catch (e) {
-      showSnackBar('Unknown Error', 'An error occurred', Colors.red);
+      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, Colors.red);
       return null;
     }
   }
 
   Future<List<BusinessUserModel>?> getMyBusinessAccounts() async {
-    final token = await Auth().getToken();
+    final token = await _auth.getToken();
     try {
       final uri = Uri.parse('${authController.ipAddress}/mobile/getMyStatus/');
       final response = await http.get(
         uri,
         headers: {
-          HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8', //Setting header explicitly
+          HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
           HttpHeaders.authorizationHeader: 'Bearer $token',
         },
       );
       if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes); // Force UTF-8 decoding
+        final responseBody = utf8.decode(response.bodyBytes);
         final List<dynamic> responseData = json.decode(responseBody);
         final List<BusinessUserModel> categories = responseData.map((json) => BusinessUserModel.fromJson(json)).toList();
         return categories;
       } else {
+        _handleApiError(response.statusCode);
         return null;
       }
     } on SocketException {
-      showSnackBar('Network Error', 'No internet connection', Colors.red);
+      showSnackBar('networkError'.tr, 'noInternet'.tr, Colors.red);
       return null;
     } catch (e) {
-      showSnackBar('Unknown Error', 'An error occurred', Colors.red);
+      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, Colors.red);
       return null;
     }
+  }
+
+  void _handleApiError(int statusCode) {
+    showSnackBar('apiError'.tr, 'anErrorOccurred'.tr, Colors.red);
   }
 }

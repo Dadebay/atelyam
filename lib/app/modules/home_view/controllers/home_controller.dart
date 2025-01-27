@@ -1,3 +1,5 @@
+import 'package:atelyam/app/core/custom_widgets/widgets.dart';
+import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/banner_model.dart';
 import 'package:atelyam/app/data/models/business_category_model.dart';
 import 'package:atelyam/app/data/models/hashtag_model.dart';
@@ -50,10 +52,8 @@ class HomeController extends GetxController {
       if (products.isNotEmpty) {
         allProducts.addAll(products);
       }
-      print(currentPage);
-      print(allProducts.length);
     } catch (e) {
-      Get.snackbar('error'.tr, 'Failed to load products: $e', colorText: Colors.red);
+      showSnackBar('Hata', 'Bir hata oluştu: $e', AppColors.redColor); // Hata mesajı göster
     } finally {
       isLoadingProducts.value = false;
 
@@ -85,6 +85,7 @@ class HomeController extends GetxController {
 
   RxInt selectedIndex = 0.obs;
   RxBool agreeButton = false.obs;
+
   final List<Widget> pages = [
     HomeView(),
     CategoryView(),

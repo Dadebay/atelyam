@@ -17,11 +17,11 @@ class NewSettingsPageController extends GetxController {
   final RxString phoneNumber = ''.obs;
 
   final List<Map<String, String>> appLanguages = [
-    {'name': 'Türkmen', 'code': 'tm', 'icon': LanguageIcons.turkmenLangIcon},
-    {'name': 'Русский', 'code': 'ru', 'icon': LanguageIcons.russianLangIcon},
-    {'name': 'English', 'code': 'en', 'icon': LanguageIcons.englishLangIcon},
-    {'name': 'Türkçe', 'code': 'tr', 'icon': LanguageIcons.turkLangIcon},
-    {'name': '中文', 'code': 'ch', 'icon': LanguageIcons.chinaLangIcon},
+    {'name': 'Türkmen', 'code': 'tm', 'icon': Assets.turkmenLangIcon},
+    {'name': 'Русский', 'code': 'ru', 'icon': Assets.russianLangIcon},
+    {'name': 'English', 'code': 'en', 'icon': Assets.englishLangIcon},
+    {'name': 'Türkçe', 'code': 'tr', 'icon': Assets.turkLangIcon},
+    {'name': '中文', 'code': 'ch', 'icon': Assets.chinaLangIcon},
   ];
 
   @override

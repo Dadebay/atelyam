@@ -1,5 +1,5 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:atelyam/app/core/custom_widgets/agree_button_view.dart';
+import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
@@ -62,7 +62,7 @@ class _ProductProfilViewState extends State<ProductProfilView> {
           SliverPadding(
             padding: const EdgeInsets.all(12),
             sliver: FutureBuilder<List<BusinessUserModel>>(
-              future: BusinessUserService().fetchUsers(widget.productModel.category),
+              future: BusinessUserService().getBusinessAccountsByCategory(categoryID: widget.productModel.category),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return SliverToBoxAdapter(child: EmptyStates().loadingData());
@@ -170,6 +170,7 @@ class _ProductProfilViewState extends State<ProductProfilView> {
         );
       },
       child: Container(
+        margin: EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
           color: AppColors.whiteMainColor,
           borderRadius: BorderRadii.borderRadius25,
@@ -211,7 +212,7 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                     businessUserModel.address.toString(),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: AppColors.darkSecondaryButtonColor.withOpacity(.6), fontWeight: FontWeight.w600, fontSize: AppFontSizes.fontSize14 - 2),
+                    style: TextStyle(color: AppColors.darkMainColor.withOpacity(.6), fontWeight: FontWeight.w600, fontSize: AppFontSizes.fontSize14 - 2),
                   ),
                 ],
               ),

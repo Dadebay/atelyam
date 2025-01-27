@@ -1,4 +1,6 @@
+// lib/app/data/services/image_service.dart
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
@@ -14,7 +16,7 @@ class ImageService {
   final AuthController authController = Get.find();
   final http.Client _client = http.Client();
 
-  Future<ImageModel?> fetchImages(int productId) async {
+  Future<ImageModel?> fetchImageByProductID(int productId) async {
     try {
       final response = await _client.get(
         Uri.parse('${authController.ipAddress}/mobile/images/$productId'),
@@ -26,11 +28,14 @@ class ImageService {
         }
         return null;
       } else {
-        showSnackBar('error', 'errorFetchImage', Colors.red);
+        _handleApiError(response.statusCode);
         return null;
       }
+    } on SocketException {
+      showSnackBar('networkError'.tr, 'noInternet'.tr, AppColors.redColor);
+      return null;
     } catch (e) {
-      Get.snackbar('Hata', 'Bir hata oluştu: $e', backgroundColor: AppColors.errorRed);
+      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, AppColors.redColor);
       return null;
     }
   }
@@ -40,7 +45,6 @@ class ImageService {
     await FirebaseMessaging.instance.getToken().then((token) {
       deviceToken = token;
     });
-
     try {
       final response = await _client.get(
         Uri.parse('${authController.ipAddress}/mobile/product/$productId?device=$deviceToken'),
@@ -48,12 +52,19 @@ class ImageService {
       if (response.statusCode == 200) {
         return ProductModel.fromJson(json.decode(response.body));
       } else {
-        showSnackBar('error', 'errorFetchImage', Colors.red);
+        _handleApiError(response.statusCode);
         return null;
       }
+    } on SocketException {
+      showSnackBar('networkError'.tr, 'noInternet'.tr, AppColors.redColor);
+      return null;
     } catch (e) {
-      Get.snackbar('Hata', 'Bir hata oluştu: $e', backgroundColor: AppColors.errorRed);
+      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, AppColors.redColor);
       return null;
     }
+  }
+
+  void _handleApiError(int statusCode) {
+    showSnackBar('apiError'.tr, 'anErrorOccurred'.tr, Colors.red);
   }
 }

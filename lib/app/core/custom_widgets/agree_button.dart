@@ -45,7 +45,7 @@ class AgreeButton extends StatelessWidget {
       return const Center(
         child: SizedBox(
           width: 34,
-          height: 29,
+          height: 31,
           child: CircularProgressIndicator(color: Colors.white),
         ),
       );

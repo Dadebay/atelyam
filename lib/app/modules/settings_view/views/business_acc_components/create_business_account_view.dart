@@ -6,6 +6,7 @@ import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_category_model.dart';
 import 'package:atelyam/app/data/service/auth_service.dart';
 import 'package:atelyam/app/data/service/business_category_service.dart';
+import 'package:atelyam/app/data/service/business_user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -44,6 +45,8 @@ class _CreateBusinessAccountViewState extends State<CreateBusinessAccountView> {
   final TextEditingController _youtubeController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
 
+  bool _isLoading = false; // Yükleme durumu için bir flag
+
   @override
   void initState() {
     super.initState();
@@ -76,16 +79,39 @@ class _CreateBusinessAccountViewState extends State<CreateBusinessAccountView> {
   }
 
   Future<void> _submitForm() async {
-    if (selectedCategory == null) {
-      Get.snackbar('Hata', 'Lütfen bir kategori seçin');
-      return;
-    }
-    final token = await Auth().getToken();
-    if (_selectedImage == null) {
-      Get.snackbar('Hata', 'Lütfen bir logo seçin');
+    if (!_formKey.currentState!.validate()) {
       return;
     }
 
+    if (selectedCategory == null) {
+      showSnackBar('Hata', 'Lütfen bir kategori seçin', AppColors.redColor);
+      return;
+    }
+
+    if (_selectedImage == null) {
+      showSnackBar('Hata', 'Lütfen bir LOGO seçin', AppColors.redColor);
+      return;
+    }
+
+    setState(() => _isLoading = true); // Yükleme başladı
+
+    // Loading dialog göster
+    await showDialog(
+      context: context,
+      barrierDismissible: false, // Kullanıcı dialog'u kapatamasın
+      builder: (context) => const AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 20),
+            Text('Bilgileriniz sunucuya gönderiliyor, lütfen bekleyiniz...'),
+          ],
+        ),
+      ),
+    );
+
+    final token = await Auth().getToken();
     final headers = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'multipart/form-data',
@@ -95,9 +121,7 @@ class _CreateBusinessAccountViewState extends State<CreateBusinessAccountView> {
       'POST',
       Uri.parse('http://216.250.12.49:8000/mobile/createUser/'),
     );
-// 201 done diymek 200 diyen yaly
-//400 so kategoriyada on business user ber
-//
+
     request.fields.addAll({
       'title_id': selectedCategory!.id.toString(),
       'businessName': _businessNameController.text,
@@ -118,23 +142,47 @@ class _CreateBusinessAccountViewState extends State<CreateBusinessAccountView> {
 
     try {
       final response = await request.send();
-      final responseBody = await response.stream.bytesToString(); // Body'yi oku
+      final responseBody = await response.stream.bytesToString();
 
-      print('Status Code: ${response.statusCode}');
-      print('Response Body: $responseBody');
+      // Dialog'u kapat
+      Navigator.of(context).pop();
 
       if (response.statusCode == 201) {
-        Get.back();
+        await BusinessUserService().getMyBusinessAccounts().then((value) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Başarılı'),
+              content: const Text('İşletme hesabı başarıyla oluşturuldu.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Get.back(); // Önceki sayfaya dön
+                  },
+                  child: const Text('Tamam'),
+                ),
+              ],
+            ),
+          );
+        });
       } else if (response.statusCode == 400) {
-        showSnackBar('Yalnys', 'Bu kategoriyada onem akk bar sizde', Colors.red);
+        // Hata durumu
+        showSnackBar('Hata', 'Bu kategoride zaten bir işletme hesabınız var.', AppColors.redColor);
       } else {
-        Get.snackbar(
+        // Diğer hatalar
+        showSnackBar(
           'Hata',
           'İşlem başarısız: ${response.reasonPhrase}\nDetay: $responseBody',
+          AppColors.redColor,
         );
       }
     } catch (e) {
-      Get.snackbar('Hata', 'Bir hata oluştu: $e');
+      // Dialog'u kapat
+      Navigator.of(context).pop();
+      showSnackBar('Hata', 'Bir hata oluştu: $e', AppColors.redColor);
+    } finally {
+      setState(() => _isLoading = false); // Yükleme durumunu sıfırla
     }
   }
 
@@ -204,8 +252,6 @@ class _CreateBusinessAccountViewState extends State<CreateBusinessAccountView> {
                 controller: _businessNameController,
                 focusNode: FocusNode(),
                 requestfocusNode: _descriptionFocusNode,
-                isNumber: false,
-                unFocus: false,
               ),
 
               CustomTextField(
@@ -213,8 +259,6 @@ class _CreateBusinessAccountViewState extends State<CreateBusinessAccountView> {
                 controller: _phoneController,
                 focusNode: FocusNode(),
                 requestfocusNode: FocusNode(),
-                isNumber: true,
-                unFocus: false,
               ),
 
               CustomTextField(
@@ -222,9 +266,6 @@ class _CreateBusinessAccountViewState extends State<CreateBusinessAccountView> {
                 controller: _addressController,
                 focusNode: FocusNode(),
                 requestfocusNode: _descriptionFocusNode,
-                isNumber: false,
-                unFocus: false,
-                maxline: 3,
               ),
 
               CustomTextField(
@@ -232,9 +273,6 @@ class _CreateBusinessAccountViewState extends State<CreateBusinessAccountView> {
                 controller: _descriptionController,
                 focusNode: _descriptionFocusNode,
                 requestfocusNode: _tiktokFocusNode,
-                isNumber: false,
-                unFocus: false,
-                maxline: 3,
               ),
 
               CustomTextField(
@@ -242,8 +280,6 @@ class _CreateBusinessAccountViewState extends State<CreateBusinessAccountView> {
                 controller: _tiktokController,
                 focusNode: _tiktokFocusNode,
                 requestfocusNode: _instagramFocusNode,
-                isNumber: false,
-                unFocus: false,
               ),
 
               CustomTextField(
@@ -251,8 +287,6 @@ class _CreateBusinessAccountViewState extends State<CreateBusinessAccountView> {
                 controller: _instagramController,
                 focusNode: _instagramFocusNode,
                 requestfocusNode: _youtubeFocusNode,
-                isNumber: false,
-                unFocus: false,
               ),
 
               CustomTextField(
@@ -260,8 +294,6 @@ class _CreateBusinessAccountViewState extends State<CreateBusinessAccountView> {
                 controller: _youtubeController,
                 focusNode: _youtubeFocusNode,
                 requestfocusNode: _websiteFocusNode,
-                isNumber: false,
-                unFocus: false,
               ),
 
               CustomTextField(
@@ -269,15 +301,13 @@ class _CreateBusinessAccountViewState extends State<CreateBusinessAccountView> {
                 controller: _websiteController,
                 focusNode: _websiteFocusNode,
                 requestfocusNode: _websiteFocusNode,
-                isNumber: false,
-                unFocus: true,
               ),
 
               const SizedBox(height: 30),
 
               // Gönder Butonu
               ElevatedButton(
-                onPressed: _submitForm,
+                onPressed: _isLoading ? null : _submitForm, // Yükleme sırasında buton devre dışı
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.kSecondaryColor,
                   padding: const EdgeInsets.symmetric(vertical: 15),
@@ -285,7 +315,9 @@ class _CreateBusinessAccountViewState extends State<CreateBusinessAccountView> {
                     borderRadius: BorderRadii.borderRadius20,
                   ),
                 ),
-                child: const Text('Hesabı Oluştur', style: TextStyle(fontSize: 18)),
+                child: _isLoading
+                    ? const CircularProgressIndicator(color: Colors.white) // Yükleme animasyonu
+                    : const Text('Hesabı Oluştur', style: TextStyle(fontSize: 18)),
               ),
             ],
           ),

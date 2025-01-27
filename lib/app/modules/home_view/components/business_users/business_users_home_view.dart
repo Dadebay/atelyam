@@ -1,4 +1,4 @@
-import 'package:atelyam/app/core/custom_widgets/listview_top_name_icon_part.dart';
+import 'package:atelyam/app/core/custom_widgets/listview_top_name_and_icon.dart';
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
 import 'package:atelyam/app/data/service/business_user_service.dart';
@@ -13,7 +13,7 @@ class BusinessUsersHomeView extends StatelessWidget {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       children: [
-        ListviewTopNameIconPart(
+        ListviewTopNameAndIcon(
           text: 'most_popular_users',
           icon: false,
           onTap: () {},
@@ -21,7 +21,7 @@ class BusinessUsersHomeView extends StatelessWidget {
         SizedBox(
           height: screenHeight * 0.40, // Dinamik yükseklik
           child: FutureBuilder<List<BusinessUserModel>?>(
-            future: BusinessUserService().fetchPopularUsers(),
+            future: BusinessUserService().fetchPopularBusinessAccounts(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return EmptyStates().loadingData();

@@ -1,12 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, deprecated_member_use
 
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 
-import 'package:atelyam/app/core/custom_widgets/dialogs.dart';
+import 'package:atelyam/app/core/theme/theme.dart';
+import 'package:atelyam/app/data/service/auth_service.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
-import 'package:atelyam/app/modules/home_view/views/bottom_nav_bar_view.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -34,8 +33,7 @@ class _ConnectionCheckViewState extends State<ConnectionCheckView> {
     final startIndex = random.nextInt(itemCount);
     extendedItemList = List.generate(itemCount * 2, (index) => (index + startIndex) % itemCount + 1);
     startAutoScroll();
-    checkConnection();
-
+    SignInService().checkConnection();
     authController.fetchIpAddress();
   }
 
@@ -44,21 +42,6 @@ class _ConnectionCheckViewState extends State<ConnectionCheckView> {
     _scrollController.dispose();
     _scrollTimer.cancel();
     super.dispose();
-  }
-
-  Future<void> checkConnection() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result.first.rawAddress.isNotEmpty) {
-        await Future.delayed(const Duration(seconds: 3), () {
-          Get.offAll(() => BottomNavBar());
-        });
-      }
-    } on SocketException catch (_) {
-      Dialogs().showNoConnectionDialog(context, () {
-        checkConnection();
-      });
-    }
   }
 
   void startAutoScroll() {
@@ -138,8 +121,8 @@ class _ConnectionCheckViewState extends State<ConnectionCheckView> {
               ),
               child: Column(
                 children: [
-                  const Text(
-                    'Atelyam',
+                  Text(
+                    Assets.appName,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,

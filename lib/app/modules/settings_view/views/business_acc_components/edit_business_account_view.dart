@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:atelyam/app/core/custom_widgets/custom_text_field.dart';
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_category_model.dart';
@@ -13,8 +14,8 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class EditBusinessAccountView extends StatefulWidget {
-  final String businessId;
-  const EditBusinessAccountView({required this.businessId, super.key});
+  final BusinessUserModel businessUser;
+  const EditBusinessAccountView({required this.businessUser, super.key});
 
   @override
   State<EditBusinessAccountView> createState() => _EditBusinessAccountViewState();
@@ -53,13 +54,14 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
 
   Future<void> _loadCategories() async {
     final result = await _categoryService.fetchCategories();
+    selectedCategory = result?.firstWhere((category) => category.id == widget.businessUser.title);
     if (result != null) {
       setState(() => categories = result);
     }
   }
 
   Future<void> _loadBusinessUser() async {
-    final user = await _businessUserService.fetchBusinessAccountByID(int.parse(widget.businessId.toString()));
+    final user = await _businessUserService.fetchBusinessAccountByID(int.parse(widget.businessUser.id.toString()));
     _businessUser = user;
     _populateFormFields();
     setState(() {});
@@ -85,19 +87,19 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
 
   Future<void> _submitForm() async {
     if (selectedCategory == null) {
-      Get.snackbar('Hata', 'Lütfen bir kategori seçin');
+      showSnackBar('Hata', 'Lütfen bir kategori seçin', AppColors.redColor);
       return;
     }
 
-    final token = await Auth().getToken();
+    final token = await Auth().getToken(); // Token'ı al
     final headers = {
-      'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer $token', // Bearer Token ekle
       'Content-Type': 'multipart/form-data',
     };
 
     final request = http.MultipartRequest(
-      'PUT',
-      Uri.parse('http://216.250.12.49:8000/mobile/businessUsers/${widget.businessId}/'),
+      'POST',
+      Uri.parse('http://216.250.12.49:8000/mobile/updateBusiness/${widget.businessUser.id}/'),
     );
 
     request.fields.addAll({
@@ -118,19 +120,24 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
       );
     }
 
-    request.headers.addAll(headers);
+    request.headers.addAll(headers); // Headers'ı ekle
 
     try {
       final response = await request.send();
+      final responseBody = await response.stream.bytesToString(); // Response body'yi oku
+      print(selectedCategory!.id.toString());
+      // Response durumunu ve body'sini yazdır
+      print('Status Code: ${response.statusCode}');
+      print('Response Body: $responseBody');
 
       if (response.statusCode == 200) {
         Get.back(result: true); // Refresh list
-        Get.snackbar('Başarılı', 'Hesap başarıyla güncellendi');
+        showSnackBar('Başarılı', 'Hesap başarıyla güncellendi', AppColors.greenColor);
       } else {
-        Get.snackbar('Hata', 'Güncelleme başarısız: ${response.reasonPhrase}');
+        showSnackBar('Hata', 'Güncelleme başarısız: ${response.reasonPhrase}', AppColors.redColor);
       }
     } catch (e) {
-      Get.snackbar('Hata', 'Bir hata oluştu: $e');
+      showSnackBar('Hata', 'Bir hata oluştu: $e', AppColors.redColor);
     }
   }
 
@@ -151,19 +158,20 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
         ],
       ),
     );
-
     if (confirm == true) {
       final token = await Auth().getToken();
+      print(token);
       final response = await http.delete(
-        Uri.parse('http://216.250.12.49:8000/mobile/businessUsers/${widget.businessId}/'),
+        Uri.parse('http://216.250.12.49:8000/mobile/deleteBusiness/${widget.businessUser.id}/'),
         headers: {'Authorization': 'Bearer $token'},
       );
-
+      print(response.body);
+      print(response.statusCode);
       if (response.statusCode == 204) {
         Get.back();
-        Get.snackbar('Başarılı', 'Hesap başarıyla silindi');
+        showSnackBar('Başarılı', 'Hesap başarıyla silindi', AppColors.greenColor);
       } else {
-        Get.snackbar('Hata', 'Silme işlemi başarısız');
+        showSnackBar('Hata', 'Güncelleme başarısız: ${response.reasonPhrase}', AppColors.redColor);
       }
     }
   }
@@ -224,9 +232,62 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                         child: _selectedImage != null ? Image.file(_selectedImage!, fit: BoxFit.cover) : WidgetsMine().customCachedImage(_businessUser!.backPhoto),
                       ),
                     ),
+                    // Form Alanları
+                    CustomTextField(
+                      labelName: 'İşletme Adı',
+                      controller: _businessNameController,
+                      focusNode: FocusNode(),
+                      requestfocusNode: FocusNode(),
+                    ),
 
-                    // Diğer form alanları (CreateBusinessAccountView'den aynen alınabilir)
-                    // ... (Create sayfasındaki CustomTextField'lar buraya eklenecek)
+                    CustomTextField(
+                      labelName: 'Telefon',
+                      controller: _phoneController,
+                      focusNode: FocusNode(),
+                      requestfocusNode: FocusNode(),
+                    ),
+
+                    CustomTextField(
+                      labelName: 'Adres',
+                      controller: _addressController,
+                      focusNode: FocusNode(),
+                      requestfocusNode: FocusNode(),
+                    ),
+
+                    CustomTextField(
+                      labelName: 'Açıklama',
+                      controller: _descriptionController,
+                      focusNode: FocusNode(),
+                      requestfocusNode: FocusNode(),
+                    ),
+
+                    CustomTextField(
+                      labelName: 'TikTok',
+                      controller: _tiktokController,
+                      focusNode: FocusNode(),
+                      requestfocusNode: FocusNode(),
+                    ),
+
+                    CustomTextField(
+                      labelName: 'Instagram',
+                      controller: _instagramController,
+                      focusNode: FocusNode(),
+                      requestfocusNode: FocusNode(),
+                    ),
+
+                    CustomTextField(
+                      labelName: 'YouTube',
+                      controller: _youtubeController,
+                      focusNode: FocusNode(),
+                      requestfocusNode: FocusNode(),
+                    ),
+
+                    CustomTextField(
+                      labelName: 'Web Sitesi',
+                      controller: _websiteController,
+                      focusNode: FocusNode(),
+                      requestfocusNode: FocusNode(),
+                    ),
 
                     const SizedBox(height: 30),
 

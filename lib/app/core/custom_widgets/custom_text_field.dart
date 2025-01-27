@@ -1,5 +1,3 @@
-// ignore_for_file: file_names, must_be_immutable, use_key_in_widget_constructors
-
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,117 +5,80 @@ import 'package:get/get.dart';
 
 class CustomTextField extends StatelessWidget {
   final String labelName;
-  final int? maxline;
   final TextEditingController controller;
   final FocusNode focusNode;
   final FocusNode requestfocusNode;
-  final bool isNumber;
-  final bool unFocus;
   final bool? borderRadius;
-  final bool? disabled;
-  final bool? isLabel;
   final IconData? prefixIcon;
   final Color? customColor;
-  final bool style;
 
-  /// Creates a [CustomTextField].
   const CustomTextField({
     required this.labelName,
     required this.controller,
     required this.focusNode,
     required this.requestfocusNode,
-    required this.isNumber,
-    required this.unFocus,
-    this.isLabel = false,
-    this.maxline,
     this.borderRadius,
-    this.disabled,
     this.prefixIcon,
     this.customColor,
-    this.style = false,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Color defaultColor = customColor ?? AppColors.whiteMainColor;
-
     return Padding(
       padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
       child: TextFormField(
-        enabled: disabled ?? true,
-        style: TextStyle(color: Colors.black, fontSize: isNumber ? 18 : null, fontWeight: FontWeight.w600),
-        cursorColor: isNumber ? Colors.black : defaultColor,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: AppFontSizes.getFontSize(4.5),
+          fontWeight: FontWeight.w600,
+        ),
+        cursorColor: defaultColor,
         controller: controller,
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'errorEmpty'.tr;
           }
-          if (isNumber && value.length != 8) {
-            return 'errorPhoneCount'.tr;
-          }
           return null;
         },
         onEditingComplete: () {
-          unFocus ? FocusScope.of(context).unfocus() : requestfocusNode.requestFocus();
+          requestfocusNode.requestFocus();
         },
-        keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-        inputFormatters: isNumber
-            ? [
-                LengthLimitingTextInputFormatter(8),
-                FilteringTextInputFormatter.digitsOnly,
-              ]
-            : null,
-        maxLines: maxline ?? 1,
+        keyboardType: TextInputType.text,
+        maxLines: 1,
         focusNode: focusNode,
-        textInputAction: isNumber ? TextInputAction.next : TextInputAction.done,
+        textInputAction: TextInputAction.done,
         enableSuggestions: false,
         autocorrect: false,
         decoration: InputDecoration(
-          prefixIcon: isNumber
-              ? Padding(
-                  padding: const EdgeInsets.only(
-                    left: 15,
-                  ),
-                  child: Text(
-                    '+ 993',
-                    style: TextStyle(color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w400),
-                  ),
+          prefixIcon: prefixIcon != null
+              ? Icon(
+                  prefixIcon,
+                  color: AppColors.kSecondaryColor,
+                  size: AppFontSizes.getFontSize(7),
                 )
-              : prefixIcon != null
-                  ? Icon(
-                      prefixIcon,
-                      color: defaultColor,
-                      size: 30,
-                    )
-                  : null,
-          errorMaxLines: 2,
-          errorStyle: const TextStyle(fontFamily: Fonts.plusJakartaSans),
-          hintMaxLines: 5,
-          helperMaxLines: 5,
-          hintText: isLabel!
-              ? labelName.tr
-              : isNumber
-                  ? '65 656565 '
-                  : '',
-          hintStyle: TextStyle(color: defaultColor, fontFamily: Fonts.plusJakartaSans),
-          prefixIconConstraints: isNumber ? const BoxConstraints(minWidth: 80) : null,
-          label: isNumber
-              ? null
-              : isLabel!
-                  ? null
-                  : Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Text(
-                        labelName.tr,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: defaultColor, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-          contentPadding: const EdgeInsets.only(left: 30, top: 20, bottom: 20, right: 10),
+              : null,
+          hintText: labelName.tr,
+          hintStyle: TextStyle(
+            color: defaultColor,
+            fontSize: AppFontSizes.getFontSize(4.5),
+            fontWeight: FontWeight.w600,
+          ),
+          //  Padding(
+          //   padding: const EdgeInsets.only(bottom: 18),
+          //   child: Text(
+          //     labelName.tr,
+          //     overflow: TextOverflow.ellipsis,
+          //     style: TextStyle(
+          //       color: defaultColor,
+          //       fontSize: AppFontSizes.getFontSize(4.5),
+          //       fontWeight: FontWeight.w600,
+          //     ),
+          //   ),
+          // ),
+          contentPadding: EdgeInsets.only(left: 30, top: 18, bottom: 15, right: 10),
           isDense: true,
-          filled: style,
-          fillColor: style ? Colors.grey.shade100 : null, // if style is true background color will be grey.shade100, otherwise null.
           alignLabelWithHint: true,
           border: _buildOutlineInputBorder(borderColor: defaultColor),
           enabledBorder: _buildOutlineInputBorder(borderColor: defaultColor),
@@ -129,9 +90,7 @@ class CustomTextField extends StatelessWidget {
     );
   }
 
-  /// Helper function to create the OutlineInputBorder with configurable border radius and border color
   OutlineInputBorder _buildOutlineInputBorder({Color? borderColor}) {
-    final Color defaultBorderColor = borderColor ?? Colors.grey;
     final borderRadiusValue = borderRadius == null
         ? BorderRadii.borderRadius5
         : borderRadius == false
@@ -139,7 +98,92 @@ class CustomTextField extends StatelessWidget {
             : BorderRadii.borderRadius20;
     return OutlineInputBorder(
       borderRadius: borderRadiusValue,
-      borderSide: BorderSide(color: defaultBorderColor, width: 2),
+      borderSide: BorderSide(color: borderColor ?? Colors.grey, width: 2),
+    );
+  }
+}
+
+class PhoneNumberTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final FocusNode requestfocusNode;
+
+  const PhoneNumberTextField({
+    required this.controller,
+    required this.focusNode,
+    required this.requestfocusNode,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+      child: TextFormField(
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: AppFontSizes.getFontSize(4.5),
+          fontWeight: FontWeight.w600,
+        ),
+        cursorColor: Colors.black,
+        controller: controller,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'errorEmpty'.tr;
+          }
+          if (value.length != 8) {
+            return 'errorPhoneCount'.tr;
+          }
+          return null;
+        },
+        onEditingComplete: () {
+          requestfocusNode.requestFocus();
+        },
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(8),
+          FilteringTextInputFormatter.digitsOnly,
+        ],
+        maxLines: 1,
+        focusNode: focusNode,
+        textInputAction: TextInputAction.next,
+        enableSuggestions: false,
+        autocorrect: false,
+        decoration: InputDecoration(
+          prefixIcon: Padding(
+            padding: const EdgeInsets.only(left: 15),
+            child: Text(
+              '+ 993',
+              style: TextStyle(
+                color: AppColors.kSecondaryColor,
+                fontSize: AppFontSizes.getFontSize(4.8),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          hintText: '65 656565',
+          hintStyle: TextStyle(
+            color: Colors.grey.shade500,
+            fontWeight: FontWeight.w400,
+            fontSize: AppFontSizes.getFontSize(4.5),
+          ),
+          prefixIconConstraints: const BoxConstraints(minWidth: 80),
+          contentPadding: const EdgeInsets.only(left: 30, top: 18, bottom: 15, right: 10),
+          isDense: true,
+          border: _buildOutlineInputBorder(borderColor: Colors.grey),
+          enabledBorder: _buildOutlineInputBorder(borderColor: Colors.grey),
+          focusedBorder: _buildOutlineInputBorder(borderColor: AppColors.kSecondaryColor),
+          focusedErrorBorder: _buildOutlineInputBorder(borderColor: Colors.red),
+          errorBorder: _buildOutlineInputBorder(borderColor: Colors.red),
+        ),
+      ),
+    );
+  }
+
+  OutlineInputBorder _buildOutlineInputBorder({Color? borderColor}) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadii.borderRadius20,
+      borderSide: BorderSide(color: borderColor ?? Colors.grey, width: 2),
     );
   }
 }

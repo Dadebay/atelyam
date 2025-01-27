@@ -19,7 +19,7 @@ class ProductProfilController extends GetxController {
   final AuthController authController = Get.find();
   Future<void> fetchImages(final int id, final String mainImage) async {
     isLoading.value = true;
-    imagesFuture = ImageService().fetchImages(id);
+    imagesFuture = ImageService().fetchImageByProductID(id);
 
     await imagesFuture.then((imageModel) {
       if (imageModel != null) {
@@ -31,7 +31,7 @@ class ProductProfilController extends GetxController {
       isLoading.value = false;
     }).catchError((error) {
       isLoading.value = false;
-      showSnackBar('Hata', 'Resimler yüklenemedi: $error', AppColors.red1Color);
+      showSnackBar('Hata', 'Resimler yüklenemedi: $error', AppColors.redColor);
     });
   }
 
@@ -52,10 +52,10 @@ class ProductProfilController extends GetxController {
     final bool isPermanentlyDenied = statusStorage == PermissionStatus.permanentlyDenied || statusPhotos == PermissionStatus.permanentlyDenied;
 
     if (isPermanentlyDenied) {
-      showSnackBar('Uyarı', 'Depolama izni verilmedi. İndirme yapılamıyor.', AppColors.red1Color);
+      showSnackBar('Uyarı', 'Depolama izni verilmedi. İndirme yapılamıyor.', AppColors.redColor);
     } else {
       try {
-        showSnackBar('İndiriliyor', 'İndirme Başladı...', AppColors.systemGreenGraph);
+        showSnackBar('İndiriliyor', 'İndirme Başladı...', AppColors.greenColor);
 
         final Dio dio = Dio();
 
@@ -81,7 +81,7 @@ class ProductProfilController extends GetxController {
 
         showSnackBar('Başarılı', 'Resim İndirildi ve Galeriye Eklendi.', AppColors.kSecondaryColor);
       } catch (e) {
-        showSnackBar('Hata', 'Resim indirilirken hata oluştu: $e', AppColors.red1Color);
+        showSnackBar('Hata', 'Resim indirilirken hata oluştu: $e', AppColors.redColor);
       }
     }
   }

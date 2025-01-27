@@ -1,12 +1,12 @@
 // lib/app/modules/home_view/components/categories_mini.dart
 // ignore_for_file: deprecated_member_use
 
-import 'package:atelyam/app/core/custom_widgets/listview_top_name_icon_part.dart';
+import 'package:atelyam/app/core/custom_widgets/listview_top_name_and_icon.dart';
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_category_model.dart';
-import 'package:atelyam/app/modules/home_view/components/business_category/all_business_users_view.dart';
+import 'package:atelyam/app/modules/home_view/components/business_category_view/all_business_users_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +19,7 @@ class BusinessCategoryView extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ListviewTopNameIconPart(
+        ListviewTopNameAndIcon(
           text: 'types_of_business',
           icon: false,
           onTap: () {},

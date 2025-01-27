@@ -1,4 +1,4 @@
-import 'package:atelyam/app/core/custom_widgets/listview_top_name_icon_part.dart';
+import 'package:atelyam/app/core/custom_widgets/listview_top_name_and_icon.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,7 @@ class Matalar extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ListviewTopNameIconPart(
+        ListviewTopNameAndIcon(
           text: 'Matalar',
           icon: false,
           onTap: () {},

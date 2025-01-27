@@ -25,7 +25,6 @@ dependencies:
   path_provider:
   animate_do: ^3.3.4
   font_awesome_flutter: 
-  change_app_package_name:
   gal: ^2.3.1
   url_launcher:
   pull_to_refresh:

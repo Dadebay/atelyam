@@ -4,6 +4,7 @@ class ProductModel {
   final String description;
   final String price;
   final String img;
+  final String? status;
   final String created;
   final int user;
   final int viewCount;
@@ -21,6 +22,7 @@ class ProductModel {
     required this.user,
     required this.category,
     required this.hashtag,
+    this.status,
   });
 
   // JSON'dan ProductModel oluşturma
@@ -33,6 +35,7 @@ class ProductModel {
       img: json['img'].toString(),
       created: json['created'].toString(),
       user: json['user'] ?? 0,
+      status: json['status'] ?? 'pending',
       category: json['category'] ?? 0,
       hashtag: json['hashtag'] ?? 0,
       viewCount: json['viewcount'] ?? 0,
@@ -46,6 +49,7 @@ class ProductModel {
       'name': name,
       'description': description,
       'price': price,
+      'status': status,
       'img': img,
       'created': created,
       'user': user,

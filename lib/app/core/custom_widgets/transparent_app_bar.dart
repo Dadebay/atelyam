@@ -17,9 +17,9 @@ class TransparentAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         title.tr,
-        style: TextStyle(color: color, fontSize: AppFontSizes.fontSize20, fontWeight: FontWeight.bold),
+        style: TextStyle(color: color, fontSize: AppFontSizes.fontSize20 + 2, fontWeight: FontWeight.bold),
       ),
-
+      // automaticallyImplyLeading: false,
       centerTitle: true,
       scrolledUnderElevation: 0.0,
       backgroundColor: Colors.transparent,

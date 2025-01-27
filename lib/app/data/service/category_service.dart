@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:atelyam/app/core/custom_widgets/widgets.dart';
+import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/category_model.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
 import 'package:get/get.dart';
@@ -19,7 +21,8 @@ class CategoryService {
       final List<CategoryModel> categories = jsonData.map((item) => CategoryModel.fromJson(item)).toList();
       return categories;
     } else {
-      throw Exception('Failed to load categories');
+      showSnackBar('networkError'.tr, 'noInternet'.tr, AppColors.redColor);
+      return [];
     }
   }
 }

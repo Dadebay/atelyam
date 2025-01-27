@@ -1,5 +1,5 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:atelyam/app/core/custom_widgets/agree_button_view.dart';
+import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
@@ -35,7 +35,6 @@ class _BrandsProfileState extends State<BrandsProfile> {
   void initState() {
     super.initState();
     _businessUser = widget.businessUserModelFromOutside;
-    print(_businessUser.images!);
     if (_businessUser.images!.isNotEmpty) {
       _fetchBusinessUserData();
     } else {
@@ -44,12 +43,10 @@ class _BrandsProfileState extends State<BrandsProfile> {
   }
 
   Future<void> _fetchBusinessUserData() async {
-    print('asdasdasdas');
-
     setState(() => _isLoading = true);
     try {
       final newData = await BusinessUserService().fetchBusinessAccountByID(_businessUser.id);
-      setState(() => _businessUser = newData);
+      setState(() => _businessUser = newData!);
       productsFuture = _productService.fetchProducts(widget.categoryID, _businessUser.user);
     } catch (e) {
     } finally {
@@ -168,7 +165,7 @@ class _BrandsProfileState extends State<BrandsProfile> {
         if (await canLaunchUrl(url)) {
           await launchUrl(url);
         } else {
-          showSnackBar('URL açylmady', 'Gownunize gormek url acyp bilmedim', AppColors.darkSecondaryColor);
+          showSnackBar('URL açylmady', 'Gownunize gormek url acyp bilmedim', AppColors.darkMainColor);
         }
       },
       child: FadeInUp(
@@ -186,14 +183,14 @@ class _BrandsProfileState extends State<BrandsProfile> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 8),
-                      child: Icon(icon, color: AppColors.darkSecondaryColor.withOpacity(.6), size: AppFontSizes.fontSize20),
+                      child: Icon(icon, color: AppColors.darkMainColor.withOpacity(.6), size: AppFontSizes.fontSize20),
                     ),
                     Expanded(
                       child: Text(
                         name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: AppFontSizes.fontSize16, color: AppColors.darkSecondaryColor.withOpacity(.6)),
+                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: AppFontSizes.fontSize16, color: AppColors.darkMainColor.withOpacity(.6)),
                       ),
                     ),
                   ],
@@ -422,7 +419,7 @@ class _BrandsProfileState extends State<BrandsProfile> {
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: AppColors.darkSecondaryColor.withOpacity(.6),
+                      color: AppColors.darkMainColor.withOpacity(.6),
                       fontSize: AppFontSizes.fontSize14,
                       fontWeight: FontWeight.w400,
                     ),

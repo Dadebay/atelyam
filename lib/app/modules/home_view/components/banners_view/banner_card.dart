@@ -4,7 +4,7 @@ import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/banner_model.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
-import 'package:atelyam/app/modules/home_view/components/banner/banners_profile.dart';
+import 'package:atelyam/app/modules/home_view/components/banners_view/banners_profile_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

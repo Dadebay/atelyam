@@ -32,7 +32,7 @@ class DiscoveryCard extends StatelessWidget {
         margin: homePageStyle == true ? const EdgeInsets.only(left: 20, top: 10, bottom: 10) : EdgeInsets.zero,
         decoration: BoxDecoration(
           boxShadow: homePageStyle == true
-              ? [BoxShadow(color: AppColors.darkSecondaryColor.withOpacity(0.1), spreadRadius: 5, blurRadius: 5)]
+              ? [BoxShadow(color: AppColors.darkMainColor.withOpacity(0.1), spreadRadius: 5, blurRadius: 5)]
               : [BoxShadow(color: AppColors.kThirdColor.withOpacity(0.8), spreadRadius: 3, blurRadius: 3)],
           borderRadius: BorderRadii.borderRadius30,
         ),

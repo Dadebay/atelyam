@@ -8,7 +8,7 @@ class BackgroundPattern extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.asset(
-      Assets.backgorundPattern,
+      Assets.backgorundPattern2,
       height: Get.size.height * 1.2,
       width: Get.size.width * 1.2,
       fit: BoxFit.cover,
