@@ -1,7 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:atelyam/app/core/theme/theme.dart';
+import 'package:atelyam/app/modules/category_view/views/category_view.dart';
+import 'package:atelyam/app/modules/discovery_view/views/discovery_view.dart';
 import 'package:atelyam/app/modules/home_view/controllers/home_controller.dart';
+import 'package:atelyam/app/modules/home_view/views/home_view.dart';
+import 'package:atelyam/app/modules/settings_view/views/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -11,16 +15,22 @@ class BottomNavBar extends StatelessWidget {
 
   BottomNavBar({super.key});
 
+  final List<Widget> pages = [
+    HomeView(),
+    CategoryView(),
+    DiscoveryView(),
+    SettingsView(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true, // BottomNavigationBar'ı body'ye genişletiyoruz
-      body: Obx(() => homeController.pages[homeController.selectedIndex.value]),
+      body: Obx(() => pages[homeController.selectedIndex.value]),
       bottomNavigationBar: Obx(() {
         return CustomBottomNavBar(
           currentIndex: homeController.selectedIndex.value,
           onTap: (index) {
-            homeController.updateSelectedIndex(index);
+            homeController.selectedIndex.value = index;
           },
         );
       }),

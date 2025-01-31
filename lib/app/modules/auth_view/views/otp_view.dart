@@ -3,6 +3,7 @@ import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:lottie/lottie.dart';
@@ -21,7 +22,7 @@ class OTPView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
           Positioned.fill(child: BackgroundPattern()),
@@ -117,12 +118,17 @@ class OTPView extends StatelessWidget {
         return SizedBox(
           width: 55,
           child: TextField(
+            autofocus: index == 0, // İlk alana otomatik odaklan
             style: TextStyle(color: AppColors.darkMainColor, fontWeight: FontWeight.bold, fontSize: 20),
             controller: _otpControllers[index],
             focusNode: _otpFocusNodes[index],
             textAlign: TextAlign.center,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.number, // Sayısal klavye
             maxLength: 1,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              FilteringTextInputFormatter.digitsOnly,
+            ],
             decoration: InputDecoration(
               counterText: '',
               border: OutlineInputBorder(
@@ -136,13 +142,16 @@ class OTPView extends StatelessWidget {
             ),
             onChanged: (value) {
               if (value.isNotEmpty && index < 3) {
+                // Bir sonraki alana odaklan
                 FocusScope.of(context).requestFocus(_otpFocusNodes[index + 1]);
               } else if (value.isEmpty && index > 0) {
+                // Bir önceki alana odaklan
                 FocusScope.of(context).requestFocus(_otpFocusNodes[index - 1]);
               }
 
+              // Tüm alanlar doluysa OTP'yi doğrula
               if (_otpControllers.every((controller) => controller.text.isNotEmpty)) {
-                authController.verifyOTP(userName,phoneNumber, _otpControllers);
+                authController.verifyOTP(userName, phoneNumber, _otpControllers);
               }
             },
           ),

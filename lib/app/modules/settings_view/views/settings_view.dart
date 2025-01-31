@@ -177,7 +177,7 @@ class SettingsView extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Container(
         color: Colors.white,
-        height: Get.size.height / 6,
+        height: Get.size.height / 4,
       ),
     );
   }

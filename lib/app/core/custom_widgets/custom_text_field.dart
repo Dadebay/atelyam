@@ -11,14 +11,17 @@ class CustomTextField extends StatelessWidget {
   final bool? borderRadius;
   final IconData? prefixIcon;
   final Color? customColor;
-
+  final int? maxLine;
+  final bool? showLabel;
   const CustomTextField({
     required this.labelName,
     required this.controller,
     required this.focusNode,
     required this.requestfocusNode,
     this.borderRadius,
+    this.maxLine,
     this.prefixIcon,
+    this.showLabel,
     this.customColor,
     Key? key,
   }) : super(key: key);
@@ -46,37 +49,35 @@ class CustomTextField extends StatelessWidget {
           requestfocusNode.requestFocus();
         },
         keyboardType: TextInputType.text,
-        maxLines: 1,
+        maxLines: maxLine ?? 1,
         focusNode: focusNode,
         textInputAction: TextInputAction.done,
         enableSuggestions: false,
         autocorrect: false,
         decoration: InputDecoration(
           prefixIcon: prefixIcon != null
-              ? Icon(
-                  prefixIcon,
-                  color: AppColors.kSecondaryColor,
-                  size: AppFontSizes.getFontSize(7),
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Icon(
+                    prefixIcon,
+                    color: Colors.grey.shade400,
+                    size: AppFontSizes.getFontSize(7),
+                  ),
                 )
               : null,
-          hintText: labelName.tr,
+          hintText: showLabel == false ? labelName.tr : '',
+          labelText: showLabel == true ? labelName.tr : '',
+          labelStyle: TextStyle(
+            color: defaultColor,
+            fontSize: AppFontSizes.getFontSize(4.5),
+            fontWeight: FontWeight.w600,
+          ),
           hintStyle: TextStyle(
             color: defaultColor,
             fontSize: AppFontSizes.getFontSize(4.5),
             fontWeight: FontWeight.w600,
           ),
-          //  Padding(
-          //   padding: const EdgeInsets.only(bottom: 18),
-          //   child: Text(
-          //     labelName.tr,
-          //     overflow: TextOverflow.ellipsis,
-          //     style: TextStyle(
-          //       color: defaultColor,
-          //       fontSize: AppFontSizes.getFontSize(4.5),
-          //       fontWeight: FontWeight.w600,
-          //     ),
-          //   ),
-          // ),
+          floatingLabelAlignment: FloatingLabelAlignment.start,
           contentPadding: EdgeInsets.only(left: 30, top: 18, bottom: 15, right: 10),
           isDense: true,
           alignLabelWithHint: true,
@@ -155,7 +156,7 @@ class PhoneNumberTextField extends StatelessWidget {
             child: Text(
               '+ 993',
               style: TextStyle(
-                color: AppColors.kSecondaryColor,
+                color: AppColors.kPrimaryColor.withOpacity(.2),
                 fontSize: AppFontSizes.getFontSize(4.8),
                 fontWeight: FontWeight.w600,
               ),
@@ -163,15 +164,19 @@ class PhoneNumberTextField extends StatelessWidget {
           ),
           hintText: '65 656565',
           hintStyle: TextStyle(
-            color: Colors.grey.shade500,
-            fontWeight: FontWeight.w400,
+            color: Colors.grey.shade300,
+            fontWeight: FontWeight.w600,
             fontSize: AppFontSizes.getFontSize(4.5),
           ),
           prefixIconConstraints: const BoxConstraints(minWidth: 80),
           contentPadding: const EdgeInsets.only(left: 30, top: 18, bottom: 15, right: 10),
           isDense: true,
-          border: _buildOutlineInputBorder(borderColor: Colors.grey),
-          enabledBorder: _buildOutlineInputBorder(borderColor: Colors.grey),
+          border: _buildOutlineInputBorder(
+            borderColor: AppColors.kPrimaryColor.withOpacity(.2),
+          ),
+          enabledBorder: _buildOutlineInputBorder(
+            borderColor: AppColors.kPrimaryColor.withOpacity(.2),
+          ),
           focusedBorder: _buildOutlineInputBorder(borderColor: AppColors.kSecondaryColor),
           focusedErrorBorder: _buildOutlineInputBorder(borderColor: Colors.red),
           errorBorder: _buildOutlineInputBorder(borderColor: Colors.red),

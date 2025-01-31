@@ -22,81 +22,84 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(top: 20, left: 15, right: 15),
-        height: 220,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadii.borderRadius40,
-          color: Colors.transparent,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.kThirdColor.withOpacity(0.4),
-              blurRadius: 5,
-              spreadRadius: 4,
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadii.borderRadius40,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: categoryModel.logo == null
-                    ? const SizedBox.shrink()
-                    : Flow(
-                        delegate: ParallaxFlowDelegate(
-                          scrollable: scrollableState,
-                          itemContext: context,
-                          keyImage: keyImage,
-                        ),
-                        children: [
-                          CachedNetworkImage(
-                            imageUrl: '${authController.ipAddress}${categoryModel.logo!}',
-                            fit: BoxFit.cover,
-                            key: keyImage,
-                            placeholder: (context, url) => EmptyStates().loadingData(),
-                            errorWidget: (context, url, error) => EmptyStates().noMiniCategoryImage(),
-                          ),
-                        ],
-                      ),
+      child: Hero(
+        tag: categoryModel.name,
+        child: Container(
+          margin: const EdgeInsets.only(top: 20, left: 15, right: 15),
+          height: 220,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadii.borderRadius40,
+            color: Colors.transparent,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.kThirdColor.withOpacity(0.4),
+                blurRadius: 5,
+                spreadRadius: 4,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      Colors.black.withOpacity(0.8),
-                      Colors.transparent,
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadii.borderRadius40,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: categoryModel.logo == null
+                      ? const SizedBox.shrink()
+                      : Flow(
+                          delegate: ParallaxFlowDelegate(
+                            scrollable: scrollableState,
+                            itemContext: context,
+                            keyImage: keyImage,
+                          ),
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl: '${authController.ipAddress}${categoryModel.logo!}',
+                              fit: BoxFit.cover,
+                              key: keyImage,
+                              placeholder: (context, url) => EmptyStates().loadingData(),
+                              errorWidget: (context, url, error) => EmptyStates().noMiniCategoryImage(),
+                            ),
+                          ],
+                        ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        Colors.black.withOpacity(0.8),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 20,
+                  left: 20,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        categoryModel.name,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: AppFontSizes.fontSize24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "${categoryModel.count} ${"count".tr}",
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 16,
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-              Positioned(
-                bottom: 20,
-                left: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      categoryModel.name,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: AppFontSizes.fontSize24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "${categoryModel.count} ${"count".tr}",
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

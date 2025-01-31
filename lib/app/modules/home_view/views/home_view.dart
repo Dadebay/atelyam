@@ -133,7 +133,7 @@ class _HomeViewState extends State<HomeView> {
                 },
               );
             } else {
-              return const Text('no data');
+              return EmptyStates().noDataAvailable();
             }
           } else {
             return const Text('no data');
@@ -177,7 +177,7 @@ class _HomeViewState extends State<HomeView> {
                   },
                 );
               } else {
-                return const Text('no data');
+                return EmptyStates().noDataAvailable();
               }
             },
           ),

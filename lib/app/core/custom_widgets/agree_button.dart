@@ -29,10 +29,11 @@ class AgreeButton extends StatelessWidget {
       width: homeController.agreeButton.value ? 60 : Get.size.width,
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: EdgeInsets.symmetric(
-        vertical: 15,
+        vertical: 10,
         horizontal: homeController.agreeButton.value ? 0 : 10,
       ),
       decoration: BoxDecoration(
+        border: Border.all(color: AppColors.kSecondaryColor, width: 2),
         color: color ?? AppColors.kSecondaryColor,
         borderRadius: BorderRadii.borderRadius20,
       ),
@@ -45,7 +46,7 @@ class AgreeButton extends StatelessWidget {
       return const Center(
         child: SizedBox(
           width: 34,
-          height: 31,
+          height: 33,
           child: CircularProgressIndicator(color: Colors.white),
         ),
       );

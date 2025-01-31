@@ -24,7 +24,14 @@ class TransparentAppBar extends StatelessWidget implements PreferredSizeWidget {
       scrolledUnderElevation: 0.0,
       backgroundColor: Colors.transparent,
       leadingWidth: 60,
-      leading: removeLeading == false ? Padding(padding: EdgeInsets.only(left: 8, top: 4, bottom: 4, right: 4), child: BackButtonMine()) : null,
+      leading: removeLeading == false
+          ? Padding(
+              padding: EdgeInsets.only(left: 8, top: 4, bottom: 4, right: 4),
+              child: BackButtonMine(
+                miniButton: false,
+              ),
+            )
+          : null,
       actions: actions, // Actionları ekliyoruz
     );
   }

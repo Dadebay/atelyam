@@ -1,6 +1,7 @@
 analyzer:
   errors:
     deprecated_member_use: ignore
+    must_be_immutable: ignore
   plugins:
     - dart_code_metrics
 

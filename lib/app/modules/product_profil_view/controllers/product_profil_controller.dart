@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
-import 'package:atelyam/app/data/models/images_model.dart';
 import 'package:atelyam/app/data/service/image_service.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
 import 'package:dio/dio.dart';
@@ -12,16 +11,17 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ProductProfilController extends GetxController {
+  final ImageService _imageService = ImageService();
+  final AuthController authController = Get.find();
   RxInt selectedImageIndex = 0.obs;
   RxList<String> productImages = <String>[].obs;
   RxBool isLoading = true.obs;
-  late Future<ImageModel?> imagesFuture;
-  final AuthController authController = Get.find();
+  RxInt viewCount = 0.obs;
+
   Future<void> fetchImages(final int id, final String mainImage) async {
     isLoading.value = true;
-    imagesFuture = ImageService().fetchImageByProductID(id);
-
-    await imagesFuture.then((imageModel) {
+    try {
+      final imageModel = await _imageService.fetchImageByProductID(id);
       if (imageModel != null) {
         productImages.value = imageModel.images.where((img) => img != null).map((img) => authController.ipAddress + img!).toList();
         productImages.insert(0, authController.ipAddress + mainImage);
@@ -29,21 +29,31 @@ class ProductProfilController extends GetxController {
         productImages.insert(0, authController.ipAddress + mainImage);
       }
       isLoading.value = false;
-    }).catchError((error) {
+    } catch (e) {
       isLoading.value = false;
-      showSnackBar('Hata', 'Resimler yüklenemedi: $error', AppColors.redColor);
-    });
+      showSnackBar('error', '${'image_download_error'} $e', AppColors.redColor);
+    }
+  }
+
+  Future<void> fetchViewCount(final int id) async {
+    try {
+      final businessUser = await _imageService.fetchProductById(id);
+      if (businessUser != null) {
+        viewCount.value = businessUser.viewCount;
+      }
+    } catch (e) {
+      showSnackBar('error', '${'image_download_error'} $e', AppColors.redColor);
+    }
   }
 
   void updateSelectedImageIndex(int index) {
     selectedImageIndex.value = index;
   }
 
-  void checkPermissionAndDownloadImage(String imageURL) async {
-    // İzinleri kontrol et
+  Future<void> checkPermissionAndDownloadImage(String imageURL) async {
     final Map<Permission, PermissionStatus> statues = await [
       Permission.storage,
-      Permission.photos, // Android 13 ve üzeri için
+      Permission.photos,
     ].request();
 
     final PermissionStatus? statusStorage = statues[Permission.storage];
@@ -52,36 +62,26 @@ class ProductProfilController extends GetxController {
     final bool isPermanentlyDenied = statusStorage == PermissionStatus.permanentlyDenied || statusPhotos == PermissionStatus.permanentlyDenied;
 
     if (isPermanentlyDenied) {
-      showSnackBar('Uyarı', 'Depolama izni verilmedi. İndirme yapılamıyor.', AppColors.redColor);
+      showSnackBar('warning', 'storage_permission_denied', AppColors.redColor);
     } else {
       try {
-        showSnackBar('İndiriliyor', 'İndirme Başladı...', AppColors.greenColor);
+        showSnackBar('downloading', 'download_started', AppColors.greenColor);
 
         final Dio dio = Dio();
-
-        // Genel depolama alanına kaydetmek için `Pictures` klasörünü kullan
         final Directory? downloadsDir = await getExternalStorageDirectory();
         final String savePath = '${downloadsDir!.path}/Pictures';
-
-        // Klasör yoksa oluştur
         final Directory dir = Directory(savePath);
         if (!dir.existsSync()) {
           dir.createSync(recursive: true);
         }
-
-        // Dosya adını dinamik olarak oluştur
         final String fileName = 'Atelyam_${DateTime.now().toString().replaceAll(RegExp(r'[^\w]'), '_')}.webp';
         final String fullPath = '$savePath/$fileName';
-
-        // Dosyayı indir
         await dio.download(imageURL, fullPath);
-
-        // Dosyayı galeriye ekle
         await Gal.putImage(fullPath);
 
-        showSnackBar('Başarılı', 'Resim İndirildi ve Galeriye Eklendi.', AppColors.kSecondaryColor);
+        showSnackBar('success', 'downloaded', AppColors.kSecondaryColor);
       } catch (e) {
-        showSnackBar('Hata', 'Resim indirilirken hata oluştu: $e', AppColors.redColor);
+        showSnackBar('error', '${'image_download_error'} $e', AppColors.redColor);
       }
     }
   }

@@ -6,7 +6,6 @@ import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/data/service/business_user_service.dart';
-import 'package:atelyam/app/data/service/image_service.dart';
 import 'package:atelyam/app/modules/home_view/components/business_users/business_user_profile_view.dart';
 import 'package:atelyam/app/modules/product_profil_view/controllers/product_profil_controller.dart';
 import 'package:atelyam/app/modules/product_profil_view/views/photo_view_page.dart';
@@ -27,19 +26,12 @@ class ProductProfilView extends StatefulWidget {
 class _ProductProfilViewState extends State<ProductProfilView> {
   final ProductProfilController controller = Get.put(ProductProfilController());
   BusinessUserModel? businessUserModel;
-  int viewCount = 0;
+
   @override
   void initState() {
     super.initState();
     controller.fetchImages(widget.productModel.id, widget.productModel.img);
-    getViewCount();
-  }
-
-  dynamic getViewCount() async {
-    await ImageService().fetchProductById(widget.productModel.id).then((businessUser) {
-      setState(() {});
-      viewCount = businessUser!.viewCount;
-    });
+    controller.fetchViewCount(widget.productModel.id);
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
@@ -47,6 +39,7 @@ class _ProductProfilViewState extends State<ProductProfilView> {
     if (await canLaunchUrl(launchUri)) {
       await launchUrl(launchUri);
     } else {
+      showSnackBar('error', 'phone_call_error' + launchUri.toString(), AppColors.redColor);
       throw 'Could not launch $launchUri';
     }
   }
@@ -55,7 +48,20 @@ class _ProductProfilViewState extends State<ProductProfilView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteMainColor,
-      bottomSheet: _buildBottomSheet(),
+      bottomSheet: FadeInUp(
+        duration: const Duration(milliseconds: 500),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: AgreeButton(
+            onTap: () {
+              if (businessUserModel != null) {
+                _makePhoneCall('+${businessUserModel!.businessPhone}');
+              }
+            },
+            text: 'call'.tr,
+          ),
+        ),
+      ),
       body: CustomScrollView(
         slivers: <Widget>[
           appBar(),
@@ -73,8 +79,37 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                     businessUserModel = snapshot.data![0];
                     return SliverList(
                       delegate: SliverChildListDelegate([
-                        _buildItemHeader(),
-                        _buildItemDescription(),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
+                            color: AppColors.kSecondaryColor,
+                            borderRadius: BorderRadii.borderRadius15,
+                          ),
+                          child: Text(
+                            '${'sold'.tr} - ${widget.productModel.price.substring(0, widget.productModel.price.length - 3)} TMT',
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: AppColors.whiteMainColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: AppFontSizes.fontSize20,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12, top: 15),
+                          child: Text(
+                            widget.productModel.name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: AppColors.darkMainColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: AppFontSizes.fontSize20,
+                            ),
+                          ),
+                        ),
                         brendData(businessUserModel!),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -101,60 +136,6 @@ class _ProductProfilViewState extends State<ProductProfilView> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBottomSheet() {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 500),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: AgreeButton(
-          onTap: () {
-            if (businessUserModel != null) {
-              _makePhoneCall('+${businessUserModel!.businessPhone}');
-            }
-          },
-          text: 'call'.tr,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildItemHeader() {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: const BoxDecoration(
-        color: AppColors.kSecondaryColor,
-        borderRadius: BorderRadii.borderRadius15,
-      ),
-      child: Text(
-        '${'sold'.tr} - ${widget.productModel.price.substring(0, widget.productModel.price.length - 3)} TMT',
-        maxLines: 1,
-        textAlign: TextAlign.center,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: AppColors.whiteMainColor,
-          fontWeight: FontWeight.bold,
-          fontSize: AppFontSizes.fontSize20,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildItemDescription() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12, top: 15),
-      child: Text(
-        widget.productModel.name,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: AppColors.darkMainColor,
-          fontWeight: FontWeight.w600,
-          fontSize: AppFontSizes.fontSize20,
-        ),
       ),
     );
   }
@@ -189,7 +170,7 @@ class _ProductProfilViewState extends State<ProductProfilView> {
             Container(
               width: 70,
               height: 70,
-              margin: const EdgeInsets.only(right: 8),
+              margin: const EdgeInsets.only(right: 15),
               child: ClipRRect(
                 borderRadius: BorderRadii.borderRadius99,
                 child: WidgetsMine().customCachedImage(businessUserModel.backPhoto),
@@ -248,7 +229,7 @@ class _ProductProfilViewState extends State<ProductProfilView> {
       ),
       actions: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           margin: EdgeInsets.only(right: 10),
           decoration: BoxDecoration(color: AppColors.whiteMainColor, borderRadius: BorderRadii.borderRadius15),
           child: Row(
@@ -258,9 +239,11 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                 padding: const EdgeInsets.only(right: 8),
                 child: Icon(IconlyLight.show, color: AppColors.darkMainColor, size: AppFontSizes.fontSize20 - 2),
               ),
-              Text(
-                viewCount.toString(),
-                style: TextStyle(color: AppColors.darkMainColor, fontWeight: FontWeight.bold, fontSize: AppFontSizes.fontSize20 - 2),
+              Obx(
+                () => Text(
+                  controller.viewCount.toString(),
+                  style: TextStyle(color: AppColors.darkMainColor, fontWeight: FontWeight.bold, fontSize: AppFontSizes.fontSize20 - 2),
+                ),
               ),
             ],
           ),
@@ -358,10 +341,10 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                                 ],
                                 border: index == controller.selectedImageIndex.value
                                     ? Border.all(
-                                        color: AppColors.whiteMainColor, // Seçili ise border rengi
+                                        color: AppColors.whiteMainColor,
                                         width: 2.0,
                                       )
-                                    : null, // Seçili değilse border yok
+                                    : null,
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadii.borderRadius18,

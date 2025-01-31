@@ -3,6 +3,7 @@ import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
+import 'package:atelyam/app/modules/home_view/components/business_users/business_user_profile_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,13 +19,12 @@ class BrendCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showSnackBar('Error', 'Category id berip bilemizok', Colors.red);
-        //   Get.to(
-        //     () => BrandsProfile(
-        //       businessUserModelFromOutside: businessUserModel,
-        //       categoryID: ,
-        //     ),
-        //   );
+        Get.to(
+          () => BrandsProfile(
+            businessUserModelFromOutside: businessUserModel,
+            categoryID: businessUserModel.title,
+          ),
+        );
       },
       child: Container(
         margin: const EdgeInsets.only(top: 10, bottom: 10),
@@ -172,7 +172,7 @@ class BrendCard extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.whiteMainColor, fontSize: AppFontSizes.fontSize20),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.only(top: 8),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -180,14 +180,14 @@ class BrendCard extends StatelessWidget {
                         const Padding(
                           padding: EdgeInsets.only(right: 6),
                           child: Icon(
-                            Icons.call_outlined,
+                            IconlyLight.image_2,
                             color: AppColors.whiteMainColor,
                             size: 20,
                           ),
                         ),
                         Expanded(
                           child: Text(
-                            businessUserModel.businessPhone.isEmpty ? 'phone_number'.tr : businessUserModel.businessPhone,
+                            businessUserModel.productCount.toString() + '  ' + 'productCount'.tr,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontWeight: FontWeight.w600, color: AppColors.whiteMainColor, fontSize: AppFontSizes.fontSize14),
@@ -195,28 +195,6 @@ class BrendCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(right: 6),
-                        child: Icon(
-                          IconlyLight.image_2,
-                          color: AppColors.whiteMainColor,
-                          size: 20,
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          businessUserModel.productCount.toString(),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontWeight: FontWeight.w600, color: AppColors.whiteMainColor, fontSize: AppFontSizes.fontSize14),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),

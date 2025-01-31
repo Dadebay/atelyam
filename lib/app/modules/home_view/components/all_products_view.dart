@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
+import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/modules/discovery_view/components/discovery_card.dart';
@@ -41,7 +42,7 @@ class _AllProductsViewState extends State<AllProductsView> {
               EmptyStates().loadingData()
             else if (_homeController.allProducts.isEmpty)
               Positioned.fill(
-                child: EmptyStates().noDataAvailablePage(),
+                child: EmptyStates().noDataAvailablePage(textColor: AppColors.whiteMainColor),
               )
             else
               _buildProductGrid(),
@@ -153,7 +154,7 @@ class _AllProductsViewState extends State<AllProductsView> {
         alignment: Alignment.bottomCenter,
         child: GestureDetector(
           onTap: () {
-            _homeController.toggleFilterExpanded(); // Filtre durumunu değiştir
+            _homeController.isFilterExpanded.toggle();
           },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
@@ -176,7 +177,7 @@ class _AllProductsViewState extends State<AllProductsView> {
                       radioListTileButton(text: 'HighPrice', value: FilterOption.highPrice),
                       TextButton(
                         onPressed: () {
-                          _homeController.toggleFilterExpanded(); // Filtre durumunu değiştir
+                          _homeController.isFilterExpanded.toggle();
                         },
                         child: Text(
                           'cancel'.tr,
@@ -220,7 +221,7 @@ class _AllProductsViewState extends State<AllProductsView> {
             _homeController.selectedFilter.value = value;
             _homeController.activeFilter.value = text.toString();
             _homeController.initializeProducts(widget.id);
-            _homeController.toggleFilterExpanded();
+            _homeController.isFilterExpanded.toggle();
           }
         },
       ),

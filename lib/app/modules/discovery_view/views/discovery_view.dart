@@ -3,7 +3,6 @@
 import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
 import 'package:atelyam/app/core/custom_widgets/transparent_app_bar.dart';
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/modules/discovery_view/components/discovery_card.dart';
 import 'package:atelyam/app/modules/discovery_view/controllers/discovery_controller.dart';
 import 'package:flutter/material.dart';
@@ -24,23 +23,6 @@ class DiscoveryView extends StatelessWidget {
           buildGridView(),
         ],
       ),
-    );
-  }
-
-  SliverLayoutBuilder buildAppBar() {
-    return SliverLayoutBuilder(
-      builder: (BuildContext context, constraints) {
-        return SliverAppBar(
-          expandedHeight: 110,
-          floating: false,
-          pinned: true,
-          titleTextStyle: TextStyle(color: AppColors.whiteMainColor, fontSize: AppFontSizes.fontSize30, fontWeight: FontWeight.bold),
-          backgroundColor: Colors.transparent,
-          title: Text(
-            'Fasonlar'.tr,
-          ),
-        );
-      },
     );
   }
 

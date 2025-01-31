@@ -1,239 +1,306 @@
 import 'dart:io';
 
+import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
+import 'package:atelyam/app/core/custom_widgets/back_button.dart';
 import 'package:atelyam/app/core/custom_widgets/custom_text_field.dart';
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_category_model.dart';
 import 'package:atelyam/app/data/models/hashtag_model.dart';
-import 'package:atelyam/app/data/service/auth_service.dart';
-import 'package:atelyam/app/data/service/business_category_service.dart';
-import 'package:atelyam/app/data/service/hashtag_service.dart';
-import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
+import 'package:atelyam/app/modules/settings_view/controllers/product_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
+import 'package:iconly/iconly.dart';
 
-class UploadProductView extends StatefulWidget {
-  const UploadProductView({super.key});
+class CreateProductView extends StatelessWidget {
+  CreateProductView({super.key});
+  final ProductController controller = Get.put(ProductController());
 
-  @override
-  State<UploadProductView> createState() => _UploadProductViewState();
-}
-
-class _UploadProductViewState extends State<UploadProductView> {
-  final _formKey = GlobalKey<FormState>();
-  final BusinessCategoryService _categoryService = BusinessCategoryService();
-  final HashtagService _hashtagService = HashtagService();
-  final ImagePicker _picker = ImagePicker();
-
-  List<BusinessCategoryModel>? categories;
-  List<HashtagModel>? hashtags;
-  BusinessCategoryModel? selectedCategory;
-  HashtagModel? selectedHashtag;
-  File? _selectedImage;
-
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _loadCategories();
-    _loadHashtags();
-  }
-
-  Future<void> _loadCategories() async {
-    final result = await _categoryService.fetchCategories();
-    if (result != null) {
-      setState(() => categories = result);
-    }
-  }
-
-  Future<void> _loadHashtags() async {
-    final result = await _hashtagService.fetchHashtags();
-    setState(() => hashtags = result);
-  }
-
-  Future<void> _pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() => _selectedImage = File(image.path));
-    }
-  }
-
-  Future<void> _submitProduct() async {
-    if (selectedCategory == null || selectedHashtag == null || _selectedImage == null) {
-      showSnackBar('Hata', 'Lütfen tüm alanları doldurun', AppColors.redColor);
-      return;
-    }
-
-    final token = await Auth().getToken();
-    final headers = {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'multipart/form-data',
-    };
-    final AuthController authController = Get.find();
-
-    final request = http.MultipartRequest(
-      'POST',
-      Uri.parse('${authController.ipAddress}/mobile/uploadProducts/'),
+  AppBar _appBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: AppColors.kSecondaryColor,
+      title: Text(
+        'create_product'.tr, // Başlık metni
+        style: TextStyle(
+          color: AppColors.whiteMainColor,
+          fontSize: AppFontSizes.fontSize16 + 2,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: AppColors.kSecondaryColor),
+      leading: BackButtonMine(
+        miniButton: true,
+      ),
     );
+  }
 
-    request.fields.addAll({
-      'category_id': selectedCategory!.id.toString(),
-      'hashtag_id': selectedHashtag!.id.toString(),
-      'name': _nameController.text,
-      'description': _descriptionController.text,
-      'price': _priceController.text,
-    });
+  List<FocusNode> focusNodes = List.generate(3, (_) => FocusNode());
+  List<TextEditingController> textEditingControllers = List.generate(3, (_) => TextEditingController());
 
-    request.files.add(
-      await http.MultipartFile.fromPath('file', _selectedImage!.path),
+  Widget _buildUploadButton() {
+    return GestureDetector(
+      onTap: controller.pickImages,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Colors.grey.shade300, width: 2),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(IconlyLight.image, size: 40, color: Colors.grey.shade400),
+            SizedBox(height: 8),
+            Text(
+              'add_image'.tr,
+              style: TextStyle(
+                color: Colors.grey.shade400,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
+  }
 
-    request.headers.addAll(headers);
-
-    try {
-      final response = await request.send();
-      final responseBody = await response.stream.bytesToString();
-      print(responseBody);
-      print(response.statusCode);
-      print(selectedCategory!.id);
-      print(selectedHashtag!.id);
-      print(token);
-      if (response.statusCode == 201) {
-        Get.back();
-        Get.back();
-        showSnackBar('Başarılı', 'Ürün başarıyla yüklendi', AppColors.greenColor);
-      } else {
-        showSnackBar('Hata', 'Ürün yüklenemedi: ${response.reasonPhrase}', AppColors.redColor);
-      }
-    } catch (e) {
-      showSnackBar('Hata', 'Bir hata oluştu: $e', AppColors.redColor);
-    }
+  Widget _buildImageItem(File image, int index) {
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Image.file(
+            image,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+        ),
+        Positioned(
+          right: 5,
+          top: 5,
+          child: GestureDetector(
+            onTap: () => controller.removeImage(index),
+            child: Container(
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.close, color: Colors.white, size: 20),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Yeni Ürün Yükle'),
-        backgroundColor: AppColors.kSecondaryColor,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Kategori Seçimi
-              DropdownButtonFormField<BusinessCategoryModel>(
+      backgroundColor: AppColors.whiteMainColor,
+      appBar: _appBar(context),
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+            child: Obx(
+              () => DropdownButtonFormField<BusinessCategoryModel>(
                 decoration: InputDecoration(
-                  labelText: 'Kategori',
+                  labelText: 'category'.tr,
+                  labelStyle: TextStyle(fontSize: AppFontSizes.getFontSize(4), fontWeight: FontWeight.w600, color: Colors.grey.shade400),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadii.borderRadius20,
+                    borderRadius: BorderRadii.borderRadius15,
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadii.borderRadius15,
+                    borderSide: BorderSide(color: Colors.grey.shade300, width: 2),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadii.borderRadius15,
+                    borderSide: BorderSide(color: AppColors.kPrimaryColor, width: 2),
                   ),
                 ),
-                value: selectedCategory,
-                items: categories?.map((category) {
+                value: controller.selectedCategory.value,
+                items: controller.categories.map((category) {
                   return DropdownMenuItem(
                     value: category,
-                    child: Text(category.name),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Text(category.name),
+                    ),
                   );
                 }).toList(),
-                onChanged: (value) => setState(() => selectedCategory = value),
-                validator: (value) => value == null ? 'Lütfen kategori seçin' : null,
+                icon: Icon(IconlyLight.arrow_down_circle, color: Colors.grey.shade300, size: 30), // Ok ikonunun boyutunu artır
+                iconSize: 30, // Ok ikonunun boyutunu artır
+                isExpanded: true, // Dropdown'u genişlet
+                itemHeight: 60, // D
+                onChanged: (value) => controller.selectedCategory.value = value,
+                validator: (value) => value == null ? 'fill_all_fields'.tr : null,
               ),
-
-              const SizedBox(height: 20),
-
-              // Hashtag Seçimi
-              DropdownButtonFormField<HashtagModel>(
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+            child: Obx(
+              () => DropdownButtonFormField<HashtagModel>(
                 decoration: InputDecoration(
-                  labelText: 'Hashtag',
+                  labelText: 'hashtag'.tr,
+                  labelStyle: TextStyle(fontSize: AppFontSizes.getFontSize(4), fontWeight: FontWeight.w600, color: Colors.grey.shade400),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadii.borderRadius20,
+                    borderRadius: BorderRadii.borderRadius15,
+                    borderSide: BorderSide(color: Colors.grey.shade400),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadii.borderRadius15,
+                    borderSide: BorderSide(color: Colors.grey.shade300, width: 2),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadii.borderRadius15,
+                    borderSide: BorderSide(color: AppColors.kPrimaryColor, width: 2),
                   ),
                 ),
-                value: selectedHashtag,
-                items: hashtags?.map((hashtag) {
+                value: controller.selectedHashtag.value,
+                items: controller.hashtags.map((hashtag) {
                   return DropdownMenuItem(
                     value: hashtag,
-                    child: Text(hashtag.name),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Text(hashtag.name),
+                    ),
                   );
                 }).toList(),
-                onChanged: (value) => setState(() => selectedHashtag = value),
-                validator: (value) => value == null ? 'Lütfen hashtag seçin' : null,
+                icon: Icon(IconlyLight.arrow_down_circle, color: Colors.grey.shade300, size: 30), // Ok ikonunun boyutunu artır
+                iconSize: 30, // Ok ikonunun boyutunu artır
+                isExpanded: true, // Dropdown'u genişlet
+                itemHeight: 60, // D
+                onChanged: (value) => controller.selectedHashtag.value = value,
+                validator: (value) => value == null ? 'fill_all_fields'.tr : null,
               ),
-
-              const SizedBox(height: 20),
-
-              // Ürün Resmi Yükleme
-              GestureDetector(
-                onTap: _pickImage,
-                child: Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadii.borderRadius20,
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: _selectedImage == null
+            ),
+          ),
+          CustomTextField(
+            labelName: 'product_name'.tr,
+            borderRadius: true,
+            customColor: Colors.grey.shade300,
+            controller: textEditingControllers[0],
+            prefixIcon: IconlyBroken.edit,
+            showLabel: true,
+            focusNode: focusNodes[0],
+            requestfocusNode: focusNodes[1],
+          ),
+          CustomTextField(
+            labelName: 'price'.tr,
+            controller: textEditingControllers[1],
+            borderRadius: true,
+            showLabel: true,
+            prefixIcon: IconlyBroken.wallet,
+            customColor: Colors.grey.shade300,
+            focusNode: focusNodes[1],
+            requestfocusNode: focusNodes[2],
+          ),
+          CustomTextField(
+            labelName: 'description'.tr,
+            borderRadius: true,
+            maxLine: 6,
+            showLabel: true,
+            customColor: Colors.grey.shade300,
+            focusNode: focusNodes[2],
+            requestfocusNode: focusNodes[0],
+            controller: textEditingControllers[2],
+          ),
+          GestureDetector(
+            onTap: controller.pickImage,
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                height: 250,
+                width: 200,
+                margin: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadii.borderRadius20,
+                  border: Border.all(color: Colors.grey.shade300, width: 2),
+                ),
+                child: Obx(
+                  () => controller.selectedImage.value == null
                       ? Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.add_a_photo, size: 40),
-                            Text('Resim Yükle'),
+                          children: [
+                            Icon(IconlyLight.image, color: AppColors.kPrimaryColor, size: 40),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'main_image_upload'.tr,
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.w600),
+                              ),
+                            ),
                           ],
                         )
-                      : Image.file(_selectedImage!, fit: BoxFit.cover),
+                      : ClipRRect(
+                          borderRadius: BorderRadii.borderRadius20,
+                          child: Image.file(
+                            controller.selectedImage.value!,
+                            width: Get.size.width,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                 ),
               ),
-
-              const SizedBox(height: 20),
-
-              // Ürün Bilgileri
-              CustomTextField(
-                labelName: 'Ürün Adı',
-                controller: _nameController,
-                focusNode: FocusNode(),
-                requestfocusNode: FocusNode(),
-              ),
-
-              CustomTextField(
-                labelName: 'Açıklama',
-                focusNode: FocusNode(),
-                requestfocusNode: FocusNode(),
-                controller: _descriptionController,
-              ),
-
-              CustomTextField(
-                labelName: 'Fiyat',
-                controller: _priceController,
-                focusNode: FocusNode(),
-                requestfocusNode: FocusNode(),
-              ),
-
-              const SizedBox(height: 30),
-
-              // Gönder Butonu
-              ElevatedButton(
-                onPressed: _submitProduct,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.kSecondaryColor,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadii.borderRadius20,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'upload_images'.tr + ' (Max 4)',
+                  style: TextStyle(
+                    color: AppColors.kPrimaryColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                child: const Text('Ürünü Yükle', style: TextStyle(fontSize: 18)),
-              ),
-            ],
+                SizedBox(height: 10),
+                Obx(
+                  () => GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 0.8,
+                    ),
+                    itemCount: controller.selectedImages.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index < controller.selectedImages.length) {
+                        return _buildImageItem(controller.selectedImages[index]!, index);
+                      } else {
+                        return controller.selectedImages.length < controller.maxImageCount ? _buildUploadButton() : SizedBox.shrink();
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: AgreeButton(
+              onTap: () {
+                controller.submitProduct(nameController: textEditingControllers[0].text, descriptionController: textEditingControllers[2].text, priceController: textEditingControllers[1].text);
+              },
+              text: 'upload_product'.tr,
+            ),
+          ),
+        ],
       ),
     );
   }

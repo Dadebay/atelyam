@@ -45,7 +45,7 @@ class AuthView extends StatelessWidget {
               child: Container(
                 color: Colors.white,
                 height: Get.size.height / 1.9,
-                padding: const EdgeInsets.only(bottom: 40, top: 80),
+                padding: const EdgeInsets.only(bottom: 40, top: 50),
                 child: _buildFormSection(),
               ),
             ),
@@ -82,7 +82,7 @@ class AuthView extends StatelessWidget {
               style: TextStyle(
                 color: AppColors.whiteMainColor,
                 fontWeight: FontWeight.bold,
-                fontSize: AppFontSizes.getFontSize(8),
+                fontSize: AppFontSizes.getFontSize(7),
               ),
             ),
           ),
@@ -97,7 +97,7 @@ class AuthView extends StatelessWidget {
               style: TextStyle(
                 color: Colors.white70,
                 fontWeight: FontWeight.w500,
-                fontSize: AppFontSizes.fontSize20,
+                fontSize: AppFontSizes.getFontSize(5),
               ),
             ),
           ),
@@ -119,7 +119,7 @@ class AuthView extends StatelessWidget {
               style: TextStyle(
                 color: AppColors.kPrimaryColor,
                 fontWeight: FontWeight.w600,
-                fontSize: AppFontSizes.fontSize20 - 2,
+                fontSize: AppFontSizes.getFontSize(4.5),
               ),
             ),
           ),
@@ -132,7 +132,7 @@ class AuthView extends StatelessWidget {
             focusNode: usernameFocusNode,
             requestfocusNode: phoneFocusNode,
             borderRadius: true,
-            customColor: AppColors.kPrimaryColor.withOpacity(.4),
+            customColor: AppColors.kPrimaryColor.withOpacity(.2),
             prefixIcon: IconlyLight.profile,
           ),
         ),

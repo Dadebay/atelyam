@@ -56,8 +56,7 @@ class ProductService {
         final List<ProductModel> products = data.map((json) => ProductModel.fromJson(json)).toList();
         return products;
       } else {
-        _handleApiError(response.statusCode);
-        return null;
+        return [];
       }
     } on SocketException {
       showSnackBar('networkError'.tr, 'noInternet'.tr, Colors.red);
@@ -77,7 +76,6 @@ class ProductService {
         final List<dynamic> results = data['results'];
         return results.map((json) => ProductModel.fromJson(json)).toList();
       } else {
-        _handleApiError(response.statusCode);
         return null;
       }
     } on SocketException {

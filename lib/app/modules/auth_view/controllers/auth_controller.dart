@@ -72,7 +72,8 @@ class AuthController extends GetxController {
       if (response == 200) {
         final homeController = Get.find<HomeController>();
         final settingsController = Get.find<NewSettingsPageController>();
-        homeController.updateSelectedIndex(0);
+        homeController.selectedIndex.value = 0;
+
         settingsController.isLoginView.value = true;
         await settingsController.saveUserData(username, phoneNumber);
         await Get.offAll(() => BottomNavBar());

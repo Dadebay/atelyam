@@ -1,7 +1,7 @@
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/data/service/product_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -41,7 +41,7 @@ class DiscoveryController extends GetxController {
         refreshController.loadNoData(); // RefreshController'ı güncelle
       }
     } catch (e) {
-      showSnackBar('Hata', 'Bir hata oluştu: $e', AppColors.redColor); // Hata mesajı göster
+      showSnackBar('networkError'.tr, 'noInternet'.tr, Colors.red);
     } finally {
       if (isRefresh) {
         refreshController.refreshCompleted(); // Yenileme işlemi tamamlandı

@@ -37,7 +37,7 @@ class EmptyStates {
     );
   }
 
-  Widget noDataAvailablePage() {
+  Widget noDataAvailablePage({required Color textColor}) {
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -51,9 +51,9 @@ class EmptyStates {
             'no_data_available'.tr,
             maxLines: 2,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: AppColors.whiteMainColor,
-              fontSize: 20,
+            style: TextStyle(
+              color: textColor,
+              fontSize: AppFontSizes.getFontSize(6),
               fontWeight: FontWeight.bold,
             ),
           ),

@@ -32,7 +32,7 @@ class Banners extends StatelessWidget {
                 if (snapshot.data!.isEmpty) {
                   return EmptyStates().noBannersAvailable();
                 }
-                return _buildCarousel(snapshot.data!, controller);
+                return _buildCarousel(snapshot.data!);
               } else {
                 return EmptyStates().noBannersAvailable();
               }
@@ -44,7 +44,7 @@ class Banners extends StatelessWidget {
     );
   }
 
-  Widget _buildCarousel(List<BannerModel> banners, HomeController controller) {
+  Widget _buildCarousel(List<BannerModel> banners) {
     return CarouselSlider.builder(
       itemCount: banners.length,
       itemBuilder: (context, index, count) {
@@ -52,7 +52,7 @@ class Banners extends StatelessWidget {
       },
       options: CarouselOptions(
         onPageChanged: (index, CarouselPageChangedReason a) {
-          controller.updateCarouselIndex(index);
+          controller.carouselSelectedIndex.value = index;
         },
         height: 250,
         viewportFraction: 1.0,

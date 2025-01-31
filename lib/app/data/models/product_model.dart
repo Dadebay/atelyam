@@ -34,11 +34,11 @@ class ProductModel {
       price: json['price'].toString(),
       img: json['img'].toString(),
       created: json['created'].toString(),
+      viewCount: json['viewcount'] ?? 0,
+      status: json['pending'].toString(),
       user: json['user'] ?? 0,
-      status: json['status'] ?? 'pending',
       category: json['category'] ?? 0,
       hashtag: json['hashtag'] ?? 0,
-      viewCount: json['viewcount'] ?? 0,
     );
   }
 

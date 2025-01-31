@@ -198,6 +198,9 @@ class SignInService {
       default:
         errorMessage = '${'errorStatus'.tr} $statusCode: $message';
     }
-    showSnackBar('apiError'.tr, errorMessage, Colors.red);
+    if (statusCode == 409) {
+    } else {
+      showSnackBar('apiError'.tr, errorMessage, Colors.red);
+    }
   }
 }

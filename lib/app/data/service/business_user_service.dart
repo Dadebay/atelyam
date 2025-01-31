@@ -12,7 +12,6 @@ import 'package:http/http.dart' as http;
 
 class BusinessUserService {
   final AuthController authController = Get.find();
-  final Auth _auth = Auth();
 
   Future<List<BusinessUserModel>> getBusinessAccountsByCategory({required int categoryID}) async {
     final url = Uri.parse('${authController.ipAddress}/mobile/cats_id/$categoryID/');
@@ -97,31 +96,27 @@ class BusinessUserService {
     }
   }
 
-  Future<List<BusinessUserModel>?> getMyBusinessAccounts() async {
-    final token = await _auth.getToken();
+  final String getMyStatusEndpoint = '/getMyStatus/';
+
+  Future<List<GetMyStatusModel>?> getMyStatus() async {
+    final url = Uri.parse('${authController.ipAddress}/mobile' + getMyStatusEndpoint);
+    final token = await Auth().getToken();
+
     try {
-      final uri = Uri.parse('${authController.ipAddress}/mobile/getMyStatus/');
       final response = await http.get(
-        uri,
+        url,
         headers: {
-          HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
-          HttpHeaders.authorizationHeader: 'Bearer $token',
+          'Authorization': 'Bearer $token',
         },
       );
+
       if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes);
-        final List<dynamic> responseData = json.decode(responseBody);
-        final List<BusinessUserModel> categories = responseData.map((json) => BusinessUserModel.fromJson(json)).toList();
-        return categories;
+        final List<dynamic> jsonList = json.decode(response.body);
+        return jsonList.map((json) => GetMyStatusModel.fromJson(json)).toList();
       } else {
-        _handleApiError(response.statusCode);
         return null;
       }
-    } on SocketException {
-      showSnackBar('networkError'.tr, 'noInternet'.tr, Colors.red);
-      return null;
     } catch (e) {
-      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, Colors.red);
       return null;
     }
   }

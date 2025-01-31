@@ -11,8 +11,6 @@ class NewSettingsPageController extends GetxController {
   final Dialogs dialogs = Dialogs();
   RxBool isLoginView = false.obs;
   final RxList<ProductModel> favoriteProducts = <ProductModel>[].obs;
-
-  // User data
   final RxString username = ''.obs;
   final RxString phoneNumber = ''.obs;
 
@@ -63,7 +61,6 @@ class NewSettingsPageController extends GetxController {
     _box.write('favoriteProducts', favoritesJson);
   }
 
-  // Toggle favorite product
   void toggleFavoriteProduct(ProductModel product) {
     if (favoriteProducts.any((p) => p.id == product.id)) {
       favoriteProducts.removeWhere((p) => p.id == product.id); // Remove product
@@ -87,7 +84,6 @@ class NewSettingsPageController extends GetxController {
     isLoginView.value = false; // Update login status
   }
 
-  // Save user data (username and phone number)
   Future<void> saveUserData(String newUsername, String newPhoneNumber) async {
     username.value = newUsername;
     phoneNumber.value = newPhoneNumber;
@@ -95,7 +91,6 @@ class NewSettingsPageController extends GetxController {
     await _box.write('phoneNumber', newPhoneNumber);
   }
 
-  // Load user data (username and phone number)
   void loadUserData() {
     final String? storedUsername = _box.read('username');
     final String? storedPhoneNumber = _box.read('phoneNumber');
@@ -107,7 +102,6 @@ class NewSettingsPageController extends GetxController {
     }
   }
 
-  // Clear user data (username and phone number)
   Future<void> clearUserData() async {
     username.value = '';
     phoneNumber.value = '';

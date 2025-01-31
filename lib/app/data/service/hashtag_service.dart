@@ -55,7 +55,6 @@ class HashtagService {
         final List<dynamic> results = jsonData['results'];
         return results.map((item) => ProductModel.fromJson(item)).toList();
       } else {
-        _handleApiError(response.statusCode);
         return [];
       }
     } on SocketException {
