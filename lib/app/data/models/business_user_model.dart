@@ -11,12 +11,13 @@ class BusinessUserModel {
   final String? website;
   final String? status;
   final String? popular;
-  final String created;
+  final String? created;
   final List<String>? images;
 
   final int title;
   final int user;
   final int? productCount;
+  final int? userID;
 
   BusinessUserModel({
     required this.id,
@@ -24,9 +25,10 @@ class BusinessUserModel {
     required this.description,
     required this.businessName,
     required this.businessPhone,
-    required this.created,
     required this.title,
     required this.user,
+    this.created,
+    this.userID,
     this.address,
     this.popular,
     this.productCount,
@@ -41,23 +43,22 @@ class BusinessUserModel {
   factory BusinessUserModel.fromJson(Map<String, dynamic> json) {
     return BusinessUserModel(
       id: json['id'] as int? ?? 0,
+      userID: json['user_id'] ?? 0,
       businessName: json['businessName'] as String? ?? '',
       businessPhone: json['businessPhone'] as String? ?? json['phone'],
       backPhoto: json['back_photo'] as String? ?? '',
       description: json['description'] as String? ?? '',
       address: json['address'] ?? '',
       tiktok: json['tiktok'] ?? '',
-      instagram: json['instagram  '] as String?,
-      youtube: json['youtube'] as String?,
-      website: json['website'] as String?,
-      created: json['created'] as String? ?? '',
+      instagram: json['instagram'] ?? '',
+      youtube: json['youtube'] ?? '',
+      website: json['website'] ?? '',
+      created: json['created'].toString(),
       popular: json['popular'].toString(),
-      status: json['status'] ?? 'pending',
-
-      productCount: json['productCount'] as int? ?? 0,
-
-      title: json['title'] as int? ?? json['title_id'],
-      user: json['user'] as int? ?? 0,
+      status: json['status'].toString(),
+      user: json['user'] ?? 0,
+      productCount: json['productCount'] ?? 0,
+      title: json['title'] ?? json['title_id'] ?? 0,
       images: (json['images'] as List<dynamic>?)?.map((image) => image['image'] as String).toList() ?? [], // Empty list if null
     );
   }

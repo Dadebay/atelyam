@@ -1,14 +1,11 @@
-import 'dart:io';
-
 import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
-import 'package:atelyam/app/core/custom_widgets/back_button.dart';
 import 'package:atelyam/app/core/custom_widgets/custom_text_field.dart';
+import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_category_model.dart';
 import 'package:atelyam/app/data/models/hashtag_model.dart';
 import 'package:atelyam/app/modules/settings_view/controllers/product_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
@@ -16,90 +13,17 @@ class CreateProductView extends StatelessWidget {
   CreateProductView({super.key});
   final ProductController controller = Get.put(ProductController());
 
-  AppBar _appBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: AppColors.kSecondaryColor,
-      title: Text(
-        'create_product'.tr, // Başlık metni
-        style: TextStyle(
-          color: AppColors.whiteMainColor,
-          fontSize: AppFontSizes.fontSize16 + 2,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: AppColors.kSecondaryColor),
-      leading: BackButtonMine(
-        miniButton: true,
-      ),
-    );
-  }
-
   List<FocusNode> focusNodes = List.generate(3, (_) => FocusNode());
   List<TextEditingController> textEditingControllers = List.generate(3, (_) => TextEditingController());
-
-  Widget _buildUploadButton() {
-    return GestureDetector(
-      onTap: controller.pickImages,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey.shade100,
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: Colors.grey.shade300, width: 2),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(IconlyLight.image, size: 40, color: Colors.grey.shade400),
-            SizedBox(height: 8),
-            Text(
-              'add_image'.tr,
-              style: TextStyle(
-                color: Colors.grey.shade400,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImageItem(File image, int index) {
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Image.file(
-            image,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-        ),
-        Positioned(
-          right: 5,
-          top: 5,
-          child: GestureDetector(
-            onTap: () => controller.removeImage(index),
-            child: Container(
-              padding: EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.black54,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(Icons.close, color: Colors.white, size: 20),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteMainColor,
-      appBar: _appBar(context),
+      appBar: appBar(
+        appBarName: 'create_product'.tr,
+        actions: [],
+      ),
       body: ListView(
         children: [
           Padding(
@@ -107,18 +31,18 @@ class CreateProductView extends StatelessWidget {
             child: Obx(
               () => DropdownButtonFormField<BusinessCategoryModel>(
                 decoration: InputDecoration(
-                  labelText: 'category'.tr,
+                  labelText: 'select_types_of_business'.tr,
                   labelStyle: TextStyle(fontSize: AppFontSizes.getFontSize(4), fontWeight: FontWeight.w600, color: Colors.grey.shade400),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadii.borderRadius15,
+                    borderRadius: BorderRadii.borderRadius20,
                     borderSide: BorderSide(color: Colors.grey.shade400),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadii.borderRadius15,
+                    borderRadius: BorderRadii.borderRadius20,
                     borderSide: BorderSide(color: Colors.grey.shade300, width: 2),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadii.borderRadius15,
+                    borderRadius: BorderRadii.borderRadius20,
                     borderSide: BorderSide(color: AppColors.kPrimaryColor, width: 2),
                   ),
                 ),
@@ -146,18 +70,18 @@ class CreateProductView extends StatelessWidget {
             child: Obx(
               () => DropdownButtonFormField<HashtagModel>(
                 decoration: InputDecoration(
-                  labelText: 'hashtag'.tr,
+                  labelText: 'select_categories'.tr,
                   labelStyle: TextStyle(fontSize: AppFontSizes.getFontSize(4), fontWeight: FontWeight.w600, color: Colors.grey.shade400),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadii.borderRadius15,
+                    borderRadius: BorderRadii.borderRadius20,
                     borderSide: BorderSide(color: Colors.grey.shade400),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadii.borderRadius15,
+                    borderRadius: BorderRadii.borderRadius20,
                     borderSide: BorderSide(color: Colors.grey.shade300, width: 2),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadii.borderRadius15,
+                    borderRadius: BorderRadii.borderRadius20,
                     borderSide: BorderSide(color: AppColors.kPrimaryColor, width: 2),
                   ),
                 ),
@@ -228,7 +152,7 @@ class CreateProductView extends StatelessWidget {
                       ? Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(IconlyLight.image, color: AppColors.kPrimaryColor, size: 40),
+                            Icon(IconlyLight.image, color: Colors.grey.shade400, size: 40),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
@@ -278,12 +202,23 @@ class CreateProductView extends StatelessWidget {
                       mainAxisSpacing: 10,
                       childAspectRatio: 0.8,
                     ),
-                    itemCount: controller.selectedImages.length + 1,
+                    itemCount: controller.selectedImages.length < 4 ? controller.selectedImages.length + 1 : controller.selectedImages.length,
                     itemBuilder: (context, index) {
                       if (index < controller.selectedImages.length) {
-                        return _buildImageItem(controller.selectedImages[index]!, index);
+                        return buildImageItem(
+                          image: controller.selectedImages[index]!,
+                          onTap: () {
+                            controller.selectedImages.removeAt(index);
+                          },
+                        );
                       } else {
-                        return controller.selectedImages.length < controller.maxImageCount ? _buildUploadButton() : SizedBox.shrink();
+                        return controller.selectedImages.length < controller.maxImageCount
+                            ? buildUploadButton(
+                                onTap: () {
+                                  controller.pickImages();
+                                },
+                              )
+                            : SizedBox.shrink();
                       }
                     },
                   ),
@@ -294,8 +229,12 @@ class CreateProductView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: AgreeButton(
-              onTap: () {
-                controller.submitProduct(nameController: textEditingControllers[0].text, descriptionController: textEditingControllers[2].text, priceController: textEditingControllers[1].text);
+              onTap: () async {
+                await controller.addProductToBackend(
+                  nameController: textEditingControllers[0].text,
+                  descriptionController: textEditingControllers[2].text,
+                  priceController: textEditingControllers[1].text,
+                );
               },
               text: 'upload_product'.tr,
             ),

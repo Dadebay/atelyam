@@ -14,14 +14,18 @@ class BrandsController extends GetxController {
   late Rx<BusinessUserModel?> businessUser = Rx<BusinessUserModel?>(null);
   late Rx<Future<List<ProductModel>?>> productsFuture = Rx<Future<List<ProductModel>?>>(Future.value(null));
 
-  Future<void> fetchBusinessUserData(
-    BusinessUserModel businessUserModelFromOutside,
-    int categoryID,
-  ) async {
+  Future<void> fetchBusinessUserData({
+    required BusinessUserModel businessUserModelFromOutside,
+    required int categoryID,
+    required String whichPage,
+  }) async {
     isLoadingBrandsProfile.value = true;
     try {
       businessUser.value = await _businessUserService.fetchBusinessAccountByID(businessUserModelFromOutside.id);
-      if (businessUser.value != null) {
+      print(whichPage);
+      if (whichPage == 'popular') {
+        productsFuture.value = _productService.fetchPopularProductsByUserID(categoryID);
+      } else {
         productsFuture.value = _productService.fetchProducts(categoryID, businessUser.value!.user);
       }
       isLoadingBrandsProfile.value = false;

@@ -1,9 +1,9 @@
+import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/banner_model.dart';
 import 'package:atelyam/app/modules/home_view/components/banners_view/banner_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
 
 class BannersProfile extends StatelessWidget {
   const BannersProfile({required this.banner, super.key});
@@ -12,16 +12,7 @@ class BannersProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteMainColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        scrolledUnderElevation: 0,
-        leading: IconButton(onPressed: () => Get.back(), icon: const Icon(IconlyLight.arrow_left_circle, color: AppColors.whiteMainColor)),
-        backgroundColor: AppColors.kPrimaryColor,
-        title: Text(
-          'banners_profile'.tr,
-          style: TextStyle(color: AppColors.whiteMainColor, fontSize: AppFontSizes.fontSize20, fontWeight: FontWeight.bold),
-        ),
-      ),
+      appBar: appBar(appBarName: 'banners_profile', actions: []),
       body: ListView(
         children: [
           SizedBox(

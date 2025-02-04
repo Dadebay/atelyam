@@ -20,9 +20,10 @@ class BrendCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Get.to(
-          () => BrandsProfile(
+          () => BusinessUserProfileView(
             businessUserModelFromOutside: businessUserModel,
-            categoryID: businessUserModel.title,
+            categoryID: businessUserModel.userID!,
+            whichPage: 'popular',
           ),
         );
       },
@@ -41,7 +42,10 @@ class BrendCard extends StatelessWidget {
           border: Border.all(color: AppColors.kPrimaryColor.withOpacity(.2)),
         ),
         child: Column(
-          children: [topPart(), masonGridView()],
+          children: [
+            topPart(),
+            masonGridView(),
+          ],
         ),
       ),
     );
@@ -106,7 +110,7 @@ class BrendCard extends StatelessWidget {
                         decoration: BoxDecoration(borderRadius: BorderRadii.borderRadius25, border: Border.all(color: AppColors.whiteMainColor.withOpacity(.9))),
                         child: ClipRRect(
                           borderRadius: BorderRadii.borderRadius25,
-                          child: businessUserModel.images!.length < 2
+                          child: businessUserModel.images!.length < 3
                               ? Icon(
                                   IconlyLight.image_2,
                                   color: AppColors.whiteMainColor.withOpacity(.6),

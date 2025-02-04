@@ -43,8 +43,9 @@ class HomeController extends GetxController {
     activeFilter = 'last'.obs;
     selectedFilter.value = FilterOption.last;
     allProducts.clear();
-    currentPage.value = 1;
     loadProducts(hashtagId);
+
+    currentPage.value = 1;
   }
 
   // Ürünleri yükle

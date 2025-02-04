@@ -1,5 +1,5 @@
+import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/modules/discovery_view/components/discovery_card.dart';
 import 'package:atelyam/app/modules/settings_view/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
@@ -17,22 +17,8 @@ class FavoritesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        scrolledUnderElevation: 0,
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(IconlyLight.arrow_left_circle, color: AppColors.whiteMainColor),
-        ),
-        backgroundColor: AppColors.kPrimaryColor,
-        title: Text(
-          'favorites'.tr,
-          style: TextStyle(
-            color: AppColors.whiteMainColor,
-            fontSize: AppFontSizes.fontSize20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+      appBar: appBar(
+        appBarName: 'favorites',
         actions: [
           Obx(
             () {
@@ -62,7 +48,7 @@ class FavoritesView extends StatelessWidget {
       ),
       body: Obx(() {
         if (settingsController.favoriteProducts.isEmpty) {
-          return EmptyStates().noFavoritesFound();
+          return Center(child: EmptyStates().noFavoritesFound());
         }
 
         return MasonryGridView.builder(

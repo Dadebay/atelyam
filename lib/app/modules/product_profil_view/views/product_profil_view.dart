@@ -67,69 +67,64 @@ class _ProductProfilViewState extends State<ProductProfilView> {
           appBar(),
           SliverPadding(
             padding: const EdgeInsets.all(12),
-            sliver: FutureBuilder<List<BusinessUserModel>>(
-              future: BusinessUserService().getBusinessAccountsByCategory(categoryID: widget.productModel.category),
+            sliver: FutureBuilder<BusinessUserModel?>(
+              future: BusinessUserService().fetchBusinessAccountKICI(widget.productModel.user.toInt()),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return SliverToBoxAdapter(child: EmptyStates().loadingData());
                 } else if (snapshot.hasError) {
                   return SliverToBoxAdapter(child: EmptyStates().errorData(snapshot.hasError.toString()));
                 } else if (snapshot.hasData) {
-                  if (snapshot.data!.isNotEmpty) {
-                    businessUserModel = snapshot.data![0];
-                    return SliverList(
-                      delegate: SliverChildListDelegate([
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: const BoxDecoration(
-                            color: AppColors.kSecondaryColor,
-                            borderRadius: BorderRadii.borderRadius15,
-                          ),
-                          child: Text(
-                            '${'sold'.tr} - ${widget.productModel.price.substring(0, widget.productModel.price.length - 3)} TMT',
-                            maxLines: 1,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: AppColors.whiteMainColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: AppFontSizes.fontSize20,
-                            ),
+                  return SliverList(
+                    delegate: SliverChildListDelegate([
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: const BoxDecoration(
+                          color: AppColors.kSecondaryColor,
+                          borderRadius: BorderRadii.borderRadius15,
+                        ),
+                        child: Text(
+                          '${'sold'.tr} - ${widget.productModel.price.substring(0, widget.productModel.price.length - 3)} TMT',
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: AppColors.whiteMainColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppFontSizes.fontSize20,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 12, top: 15),
-                          child: Text(
-                            widget.productModel.name,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: AppColors.darkMainColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: AppFontSizes.fontSize20,
-                            ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12, top: 15),
+                        child: Text(
+                          widget.productModel.name,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: AppColors.darkMainColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: AppFontSizes.fontSize20,
                           ),
                         ),
-                        brendData(businessUserModel!),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          child: Text(
-                            'info_product'.tr,
-                            style: TextStyle(color: Colors.black, fontSize: AppFontSizes.fontSize20, fontWeight: FontWeight.w600),
-                          ),
+                      ),
+                      brendData(snapshot.data!),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Text(
+                          'info_product'.tr,
+                          style: TextStyle(color: Colors.black, fontSize: AppFontSizes.fontSize20, fontWeight: FontWeight.w600),
                         ),
-                        Text(
-                          widget.productModel.description,
-                          style: TextStyle(color: Colors.grey, fontSize: AppFontSizes.fontSize16 - 2, fontWeight: FontWeight.w400),
-                        ),
-                        const SizedBox(
-                          height: 200,
-                        ),
-                      ]),
-                    );
-                  } else {
-                    return SliverToBoxAdapter(child: EmptyStates().noDataAvailable());
-                  }
+                      ),
+                      Text(
+                        widget.productModel.description,
+                        style: TextStyle(color: Colors.grey, fontSize: AppFontSizes.fontSize16 - 2, fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(
+                        height: 200,
+                      ),
+                    ]),
+                  );
                 }
                 return SliverToBoxAdapter(child: EmptyStates().noDataAvailable());
               },
@@ -144,9 +139,10 @@ class _ProductProfilViewState extends State<ProductProfilView> {
     return GestureDetector(
       onTap: () {
         Get.to(
-          () => BrandsProfile(
-            categoryID: widget.productModel.category,
+          () => BusinessUserProfileView(
+            categoryID: businessUserModel.userID!,
             businessUserModelFromOutside: businessUserModel,
+            whichPage: 'popular',
           ),
         );
       },
@@ -308,7 +304,7 @@ class _ProductProfilViewState extends State<ProductProfilView> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                height: 90,
+                height: 100,
                 width: Get.size.width,
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -318,7 +314,6 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: controller.productImages.length,
-                    itemExtent: 80,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return FadeInUp(
@@ -329,7 +324,8 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                           },
                           child: Obx(() {
                             return Container(
-                              margin: const EdgeInsets.only(left: 5, right: 5),
+                              margin: const EdgeInsets.all(8),
+                              width: 70,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadii.borderRadius18,
                                 boxShadow: [

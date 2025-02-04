@@ -1,34 +1,35 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, deprecated_member_use
-
+// SignInService().checkConnection();
 import 'dart:async';
 import 'dart:math';
 
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/service/auth_service.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
 class ConnectionCheckView extends StatefulWidget {
-  const ConnectionCheckView({super.key});
-
   @override
-  _ConnectionCheckViewState createState() => _ConnectionCheckViewState();
+  State<ConnectionCheckView> createState() => _ConnectionCheckViewState();
 }
 
 class _ConnectionCheckViewState extends State<ConnectionCheckView> {
   final ScrollController _scrollController = ScrollController();
+
   late Timer _scrollTimer;
+
   final int itemCount = 29;
+
   late List<int> extendedItemList;
+
   final AuthController authController = Get.put(AuthController());
 
   @override
   void initState() {
     super.initState();
-    FirebaseMessaging.instance.getToken().then((token) {});
+
     final random = Random();
     final startIndex = random.nextInt(itemCount);
     extendedItemList = List.generate(itemCount * 2, (index) => (index + startIndex) % itemCount + 1);
@@ -36,6 +37,17 @@ class _ConnectionCheckViewState extends State<ConnectionCheckView> {
     SignInService().checkConnection();
     authController.fetchIpAddress();
   }
+
+  List<String> loadingMessages = [
+    'brandingTitle1',
+    'brandingTitle2',
+    'brandingTitle3',
+    'brandingTitle4',
+    'brandingTitle5',
+    'brandingTitle6',
+    'brandingTitle7',
+    'brandingTitle8',
+  ];
 
   @override
   void dispose() {
@@ -85,9 +97,30 @@ class _ConnectionCheckViewState extends State<ConnectionCheckView> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25),
-            child: Image.asset(
-              'assets/image/fasonlar/${extendedItemList[index]}.webp',
+            child: Image(
+              image: AssetImage('assets/image/fasonlar/${extendedItemList[index]}.webp'),
               fit: BoxFit.cover,
+              frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+                if (wasSynchronouslyLoaded) {
+                  return child;
+                }
+                return AnimatedOpacity(
+                  opacity: frame == null ? 0 : 1,
+                  duration: const Duration(seconds: 1),
+                  curve: Curves.easeOut,
+                  child: child,
+                );
+              },
+              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) {
+                  return child;
+                }
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                  ),
+                );
+              },
             ),
           ),
         );
@@ -97,6 +130,8 @@ class _ConnectionCheckViewState extends State<ConnectionCheckView> {
 
   @override
   Widget build(BuildContext context) {
+    final random = Random();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -151,7 +186,15 @@ class _ConnectionCheckViewState extends State<ConnectionCheckView> {
                   ],
                 ),
               ),
-              child: const LinearProgressIndicator(),
+              child: Text(
+                loadingMessages[random.nextInt(loadingMessages.length)].tr.toString(),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: AppFontSizes.getFontSize(5),
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         ],

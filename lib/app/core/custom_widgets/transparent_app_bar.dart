@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TransparentAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const TransparentAppBar({required this.title, required this.color, Key? key, this.actions, this.removeLeading}) : super(key: key);
+  const TransparentAppBar({required this.title, required this.color, Key? key, this.actions, this.miniBackButton, this.removeLeading}) : super(key: key);
   final String title;
   final Color color;
+  final bool? miniBackButton;
   final bool? removeLeading;
   final List<Widget>? actions; // İsteğe bağlı action listesi
 
@@ -28,10 +29,10 @@ class TransparentAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? Padding(
               padding: EdgeInsets.only(left: 8, top: 4, bottom: 4, right: 4),
               child: BackButtonMine(
-                miniButton: false,
+                miniButton: miniBackButton ?? false,
               ),
             )
-          : null,
+          : SizedBox.shrink(),
       actions: actions, // Actionları ekliyoruz
     );
   }

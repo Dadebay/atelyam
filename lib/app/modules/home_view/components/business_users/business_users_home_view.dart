@@ -11,24 +11,24 @@ class BusinessUsersHomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    return Column(
-      children: [
-        ListviewTopNameAndIcon(
-          text: 'most_popular_users',
-          icon: false,
-          onTap: () {},
-        ),
-        SizedBox(
-          height: screenHeight * 0.40, // Dinamik yükseklik
-          child: FutureBuilder<List<BusinessUserModel>?>(
-            future: BusinessUserService().fetchPopularBusinessAccounts(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return EmptyStates().loadingData();
-              } else if (snapshot.hasError) {
-                return EmptyStates().errorData(snapshot.hasError.toString());
-              } else if (snapshot.hasData) {
-                return ListView.builder(
+    return FutureBuilder<List<BusinessUserModel>?>(
+      future: BusinessUserService().fetchPopularBusinessAccounts(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return EmptyStates().loadingData();
+        } else if (snapshot.hasError) {
+          return EmptyStates().errorData(snapshot.hasError.toString());
+        } else if (snapshot.hasData) {
+          return Column(
+            children: [
+              ListviewTopNameAndIcon(
+                text: 'most_popular_users',
+                icon: false,
+                onTap: () {},
+              ),
+              Container(
+                height: screenHeight * 0.40, // Dinamik yükseklik
+                child: ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemExtent: screenWidth * 0.80,
                   shrinkWrap: true,
@@ -43,13 +43,13 @@ class BusinessUsersHomeView extends StatelessWidget {
                       ),
                     );
                   },
-                );
-              }
-              return EmptyStates().noDataAvailable();
-            },
-          ),
-        ),
-      ],
+                ),
+              ),
+            ],
+          );
+        }
+        return SizedBox.shrink();
+      },
     );
   }
 }

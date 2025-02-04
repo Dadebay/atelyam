@@ -76,8 +76,9 @@ class AuthController extends GetxController {
 
         settingsController.isLoginView.value = true;
         await settingsController.saveUserData(username, phoneNumber);
-        await Get.offAll(() => BottomNavBar());
         showSnackBar('success', 'successOTP', AppColors.kSecondaryColor);
+
+        await Get.offAll(() => BottomNavBar());
       } else {
         showSnackBar('error', 'errorOTP', Colors.red);
       }

@@ -1,5 +1,7 @@
 import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
 import 'package:atelyam/app/core/custom_widgets/custom_text_field.dart';
+import 'package:atelyam/app/core/custom_widgets/dialogs.dart';
+import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
@@ -156,10 +158,22 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                           : ClipRRect(
                               borderRadius: BorderRadii.borderRadius25,
                               child: widget.businessUser.backPhoto == null
-                                  ? Icon(
-                                      IconlyLight.image_2,
-                                      color: Colors.grey,
+                                  ? buildUploadButton(
+                                      onTap: () {
+                                        controller.pickImage();
+                                      },
                                     )
+                                  //  Column(
+                                  //     mainAxisSize: MainAxisSize.min,
+                                  //     mainAxisAlignment: MainAxisAlignment.center,
+                                  //     children: [
+                                  //       Icon(
+                                  //         IconlyLight.image_2,
+                                  //         color: Colors.grey,
+                                  //       ),
+
+                                  //     ],
+                                  //   )
                                   : CachedNetworkImage(
                                       imageUrl: authController.ipAddress + widget.businessUser.backPhoto!,
                                       fit: BoxFit.cover,
@@ -177,6 +191,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
               Center(
                 child: AgreeButton(
                   onTap: () {
+                    final String photo = controller.selectedImage.value == null ? widget.businessUser.backPhoto! : controller.selectedImage.value!.path;
                     controller.updateBusinessAccount(
                       GetMyStatusModel(
                         id: widget.businessUser.id,
@@ -189,6 +204,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                         youtube: textEditingControllers[6].text,
                         website: textEditingControllers[7].text,
                       ),
+                      photo,
                     );
                   },
                   text: 'update'.tr,
@@ -215,7 +231,9 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
       actions: [
         IconButton(
           icon: const Icon(IconlyLight.delete, color: Colors.white),
-          onPressed: () => controller.deleteBusiness(widget.businessUser.id!, context),
+          onPressed: () {
+            Dialogs().deleteBusinessAccount();
+          },
         ),
       ],
       systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: AppColors.kSecondaryColor),

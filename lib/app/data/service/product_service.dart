@@ -17,6 +17,7 @@ class ProductService {
   final Auth _auth = Auth();
 
   Future<List<ProductModel>?> fetchProducts(int categoryId, int userId) async {
+    print('${authController.ipAddress}/mobile/products/$categoryId/$userId/');
     try {
       final response = await _client.get(
         Uri.parse('${authController.ipAddress}/mobile/products/$categoryId/$userId/'),
@@ -28,6 +29,31 @@ class ProductService {
         return products;
       } else {
         _handleApiError(response.statusCode);
+        return null;
+      }
+    } on SocketException {
+      showSnackBar('networkError'.tr, 'noInternet'.tr, Colors.red);
+      return null;
+    } catch (e) {
+      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, Colors.red);
+      return null;
+    }
+  }
+
+  Future<List<ProductModel>?> fetchPopularProductsByUserID(int userId) async {
+    print(userId);
+    try {
+      final response = await _client.get(
+        Uri.parse('${authController.ipAddress}/mobile/getProduct/$userId/'),
+      );
+      print(response.body);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        final responseBody = utf8.decode(response.bodyBytes);
+        final List<dynamic> data = json.decode(responseBody)['results'];
+        final List<ProductModel> products = data.map((json) => ProductModel.fromJson(json)).toList();
+        return products;
+      } else {
         return null;
       }
     } on SocketException {

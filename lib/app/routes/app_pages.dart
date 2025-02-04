@@ -20,7 +20,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: _Paths.CONNECTIONCHECKVIEW,
-      page: () => const ConnectionCheckView(),
+      page: () => ConnectionCheckView(),
       binding: AuthBinding(),
     ),
     GetPage(

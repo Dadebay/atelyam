@@ -3,6 +3,7 @@ import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconly/iconly.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SocialMediaIcon extends StatelessWidget {
@@ -45,6 +46,10 @@ class SocialMediaIcon extends StatelessWidget {
     } else if (userName.startsWith('http://') || userName.startsWith('https://')) {
       urlToLaunch = userName;
       displayedUserName = Uri.parse(userName).host;
+    } else if (userName.startsWith('+') || RegExp(r'^[0-9]+$').hasMatch(userName)) {
+      // Eğer userName bir telefon numarası ise
+      urlToLaunch = 'tel:$userName';
+      displayedUserName = userName;
     } else {
       urlToLaunch = userName;
     }
@@ -52,6 +57,7 @@ class SocialMediaIcon extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         final Uri url = Uri.parse(urlToLaunch);
+        print(url);
         if (await canLaunchUrl(url)) {
           await launchUrl(url);
         } else {
@@ -59,54 +65,60 @@ class SocialMediaIcon extends StatelessWidget {
         }
       },
       child: FadeInUp(
-        duration: Duration(milliseconds: 500 * index),
+        duration: Duration(milliseconds: 300 * index),
         child: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, top: 30),
+          padding: const EdgeInsets.only(right: 10, bottom: 50),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Container(
+                width: AppFontSizes.getFontSize(12),
+                height: AppFontSizes.getFontSize(12),
+                margin: EdgeInsets.only(right: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadii.borderRadius18,
+                  color: AppColors.kSecondaryColor,
+                ),
+                child: Icon(
+                  icon,
+                  color: AppColors.whiteMainColor,
+                  size: AppFontSizes.getFontSize(6),
+                ),
+              ),
               Expanded(
-                flex: 2,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: Icon(
-                        icon,
+                    Text(
+                      name.tr,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: AppFontSizes.getFontSize(3.5),
                         color: AppColors.darkMainColor.withOpacity(.6),
-                        size: AppFontSizes.fontSize20,
                       ),
                     ),
-                    Expanded(
-                      child: Text(
-                        name.tr,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: AppFontSizes.fontSize16,
-                          color: AppColors.darkMainColor.withOpacity(.6),
-                        ),
+                    Text(
+                      displayedUserName,
+                      maxLines: maxline,
+                      textAlign: TextAlign.left,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: AppFontSizes.getFontSize(4.5),
+                        color: AppColors.kPrimaryColor,
                       ),
                     ),
                   ],
                 ),
               ),
-              const Spacer(),
-              Expanded(
-                flex: 3,
-                child: Text(
-                  displayedUserName,
-                  maxLines: maxline,
-                  textAlign: TextAlign.end,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: AppFontSizes.fontSize16,
-                    color: AppColors.kPrimaryColor,
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Icon(
+                  IconlyLight.arrow_right_circle,
+                  color: AppColors.kPrimaryColor,
+                  size: AppFontSizes.getFontSize(6),
                 ),
               ),
             ],

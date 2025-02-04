@@ -1,6 +1,7 @@
 // lib/app/core/utils/dialogs.dart
 import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
+import 'package:atelyam/app/modules/settings_view/controllers/product_controller.dart';
 import 'package:atelyam/app/modules/settings_view/controllers/settings_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +11,140 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
 class Dialogs {
+  void deleteBusinessAccount() {
+    final ProductController productController = Get.find();
+
+    Get.dialog(
+      Center(
+        child: Container(
+          padding: const EdgeInsets.all(20.0),
+          margin: const EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadii.borderRadius25,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Material(
+            color: Colors.white,
+            borderRadius: BorderRadii.borderRadius25,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'delete_account'.tr,
+                  style: TextStyle(fontSize: AppFontSizes.getFontSize(5), color: AppColors.kPrimaryColor, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+                  child: Text(
+                    'are_you_sure'.tr,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: AppFontSizes.getFontSize(4), color: AppColors.darkMainColor, fontWeight: FontWeight.w400),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: Text(
+                        'cancel'.tr,
+                        style: TextStyle(fontSize: AppFontSizes.getFontSize(4), color: AppColors.kPrimaryColor, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        productController.deleteBusiness();
+                      },
+                      child: Text(
+                        'delete'.tr,
+                        style: TextStyle(fontSize: AppFontSizes.getFontSize(4), color: AppColors.darkMainColor.withOpacity(.6), fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void deleteProductDialog({required int productID}) {
+    final ProductController productController = Get.find();
+
+    Get.dialog(
+      Center(
+        child: Container(
+          padding: const EdgeInsets.all(20.0),
+          margin: const EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadii.borderRadius25,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Material(
+            color: Colors.white,
+            borderRadius: BorderRadii.borderRadius25,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'delete_product'.tr,
+                  style: TextStyle(fontSize: AppFontSizes.getFontSize(5), color: AppColors.kPrimaryColor, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+                  child: Text(
+                    'are_you_sure_product'.tr,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: AppFontSizes.getFontSize(4), color: AppColors.darkMainColor, fontWeight: FontWeight.w400),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: Text(
+                        'cancel'.tr,
+                        style: TextStyle(fontSize: AppFontSizes.getFontSize(4), color: AppColors.kPrimaryColor, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        productController.deleteProduct(productID);
+                      },
+                      child: Text(
+                        'delete'.tr,
+                        style: TextStyle(fontSize: AppFontSizes.getFontSize(4), color: AppColors.darkMainColor.withOpacity(.6), fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void showNoConnectionDialog(Function onRetry) {
     Get.dialog(
       Dialog(
@@ -29,7 +164,7 @@ class Dialogs {
                   children: <Widget>[
                     Text(
                       'noConnection1'.tr,
-                      style: const TextStyle(fontSize: 24.0, color: AppColors.kThirdColor, fontFamily: Fonts.plusJakartaSans),
+                      style: const TextStyle(fontSize: 24.0, color: AppColors.kPrimaryColor, fontWeight: FontWeight.bold, fontFamily: Fonts.plusJakartaSans),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -45,13 +180,13 @@ class Dialogs {
                         Future.delayed(const Duration(milliseconds: 1000), () => onRetry());
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.kThirdColor,
+                        backgroundColor: AppColors.kPrimaryColor,
                         shape: const RoundedRectangleBorder(borderRadius: BorderRadii.borderRadius10),
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
                       ),
                       child: Text(
                         'noConnection3'.tr,
-                        style: const TextStyle(fontSize: 18, color: Colors.white, fontFamily: Fonts.plusJakartaSans),
+                        style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold, fontFamily: Fonts.plusJakartaSans),
                       ),
                     ),
                     const SizedBox(height: 20),

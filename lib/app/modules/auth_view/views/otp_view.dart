@@ -1,5 +1,6 @@
 import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
 import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
+import 'package:atelyam/app/core/custom_widgets/transparent_app_bar.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
@@ -26,17 +27,12 @@ class OTPView extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(child: BackgroundPattern()),
+          TransparentAppBar(title: 'verify_phone', miniBackButton: true, removeLeading: false, color: Colors.white),
           Positioned(
             left: 0,
             right: 0,
             bottom: 0,
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                _buildAppBar(),
-                _buildOTPContent(context),
-              ],
-            ),
+            child: _buildOTPContent(context),
           ),
         ],
       ),
@@ -75,7 +71,7 @@ class OTPView extends StatelessWidget {
 
   Widget _buildOTPContent(BuildContext context) {
     return Container(
-      height: Get.size.height / 1.12,
+      height: Get.size.height / 1.15,
       padding: EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
         color: AppColors.whiteMainColor,

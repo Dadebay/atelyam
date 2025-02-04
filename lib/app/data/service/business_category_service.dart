@@ -27,7 +27,6 @@ class BusinessCategoryService {
         final List<BusinessCategoryModel> categories = responseData.map((json) => BusinessCategoryModel.fromJson(json)).toList();
         return categories;
       } else {
-        showSnackBar('apiError'.tr, 'anErrorOccurred'.tr, AppColors.redColor);
         return null;
       }
     } on SocketException {

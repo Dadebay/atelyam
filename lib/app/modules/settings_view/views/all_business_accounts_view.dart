@@ -49,7 +49,7 @@ class _AllBusinessAccountsViewState extends State<AllBusinessAccountsView> {
         'all_business_accounts'.tr, // Başlık metni
         style: TextStyle(
           color: AppColors.whiteMainColor,
-          fontSize: AppFontSizes.fontSize16 + 2,
+          fontSize: AppFontSizes.getFontSize(5),
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -101,8 +101,11 @@ class _AllBusinessAccountsViewState extends State<AllBusinessAccountsView> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: AgreeButton(
-                    onTap: () {
-                      Get.to(() => CreateProductView()); // Örnek olarak CreateBusinessAccountView'a yönlendirir.
+                    onTap: () async {
+                      final result = await Get.to(() => CreateProductView());
+                      if (result == true) {
+                        setState(() {});
+                      }
                     },
                     text: 'add_product', // Buton metni
                   ),
@@ -135,8 +138,11 @@ class _AllBusinessAccountsViewState extends State<AllBusinessAccountsView> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: AgreeButton(
-                  onTap: () {
-                    Get.to(() => CreateProductView());
+                  onTap: () async {
+                    final result = await Get.to(() => CreateProductView());
+                    if (result == true) {
+                      setState(() {});
+                    }
                   },
                   text: 'add_product', // Buton metni
                 ),
@@ -165,8 +171,11 @@ class _AllBusinessAccountsViewState extends State<AllBusinessAccountsView> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: AgreeButton(
-                    onTap: () {
-                      Get.to(() => CreateBusinessAccountView()); // Örnek olarak CreateBusinessAccountView'a yönlendirir.
+                    onTap: () async {
+                      final result = await Get.to(() => CreateBusinessAccountView()); // Örnek olarak CreateBusinessAccountView'a yönlendirir.
+                      if (result == true) {
+                        setState(() {});
+                      }
                     },
                     text: 'add_account', // Buton metni
                   ),

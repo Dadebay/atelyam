@@ -28,7 +28,7 @@ class SettingsView extends StatelessWidget {
           title: Text(
             'profil'.tr,
           ),
-          titleTextStyle: TextStyle(color: AppColors.whiteMainColor, fontSize: AppFontSizes.fontSize24, fontWeight: FontWeight.w600),
+          titleTextStyle: TextStyle(color: AppColors.whiteMainColor, fontFamily: Fonts.plusJakartaSans, fontSize: AppFontSizes.fontSize24, fontWeight: FontWeight.w600),
           flexibleSpace: FlexibleSpaceBar(
             background: GestureDetector(
               onTap: () => Dialogs().showAvatarDialog(),
@@ -87,10 +87,7 @@ class SettingsView extends StatelessWidget {
   }
 
   String formatPhoneNumber(String phoneNumber) {
-    // Remove any existing hyphens
     phoneNumber = phoneNumber.replaceAll('-', '');
-
-    // Add a hyphen after every 2 characters
     String formattedNumber = '';
     for (int i = 0; i < phoneNumber.length; i++) {
       formattedNumber += phoneNumber[i];

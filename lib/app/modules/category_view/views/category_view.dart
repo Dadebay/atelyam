@@ -39,7 +39,7 @@ class _CategoryViewState extends State<CategoryView> {
                   expandedHeight: constraints.maxHeight * 0.06,
                   backgroundColor: Colors.transparent,
                   title: Text(
-                    'category'.tr,
+                    'categories'.tr,
                     style: TextStyle(
                       color: AppColors.whiteMainColor,
                       fontWeight: FontWeight.bold,

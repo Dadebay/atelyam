@@ -18,14 +18,16 @@ class AllBusinessUsersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(categoryId);
+
     return Scaffold(
       body: Stack(
         children: [
           BackgroundPattern(),
-          TransparentAppBar(title: 'commecial_users'.tr, removeLeading: false, color: AppColors.whiteMainColor),
+          TransparentAppBar(title: 'commecial_users'.tr, actions: [], removeLeading: false, color: AppColors.whiteMainColor),
           Padding(
             padding: const EdgeInsets.only(top: kToolbarHeight + 40),
-            child: FutureBuilder<List<BusinessUserModel>>(
+            child: FutureBuilder<List<BusinessUserModel>?>(
               future: BusinessUserService().getBusinessAccountsByCategory(categoryID: categoryId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {

@@ -220,7 +220,9 @@ class _AllProductsViewState extends State<AllProductsView> {
           if (value != null) {
             _homeController.selectedFilter.value = value;
             _homeController.activeFilter.value = text.toString();
-            _homeController.initializeProducts(widget.id);
+            _homeController.allProducts.clear();
+            _homeController.loadProducts(widget.id);
+            _homeController.currentPage.value = 1;
             _homeController.isFilterExpanded.toggle();
           }
         },

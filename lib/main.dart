@@ -9,24 +9,15 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 Future<void> main() async {
-  // Ensure Flutter binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize GetStorage for local storage
   await GetStorage.init();
-
-  // Set preferred device orientations
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
-  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // Configure system UI overlay style
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       systemStatusBarContrastEnforced: true,
@@ -53,11 +44,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Atelyam',
       theme: AppThemes.lightTheme,
-      fallbackLocale: const Locale('en'), // Fallback locale
+      fallbackLocale: const Locale('tr'), // Fallback locale
       locale: _getLocale(), // Set locale based on storage
       translations: MyTranslations(), // Your translations
       defaultTransition: Transition.fadeIn, // Default transition
-      home: const ConnectionCheckView(), // Initial screen
+      home: ConnectionCheckView(), // Initial screen
     );
   }
 

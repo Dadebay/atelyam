@@ -132,6 +132,7 @@ class AuthView extends StatelessWidget {
             focusNode: usernameFocusNode,
             requestfocusNode: phoneFocusNode,
             borderRadius: true,
+            showLabel: false,
             customColor: AppColors.kPrimaryColor.withOpacity(.2),
             prefixIcon: IconlyLight.profile,
           ),

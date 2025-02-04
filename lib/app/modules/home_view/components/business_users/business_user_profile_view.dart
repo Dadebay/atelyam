@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
+import 'package:atelyam/app/core/custom_widgets/back_button.dart';
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
@@ -15,20 +16,26 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
-class BrandsProfile extends StatefulWidget {
+class BusinessUserProfileView extends StatefulWidget {
   final BusinessUserModel businessUserModelFromOutside;
   final int categoryID;
-  const BrandsProfile({required this.businessUserModelFromOutside, required this.categoryID, super.key});
-  State<BrandsProfile> createState() => _BrandsProfileState();
+  final String whichPage;
+  const BusinessUserProfileView({required this.businessUserModelFromOutside, required this.categoryID, required this.whichPage, super.key});
+  State<BusinessUserProfileView> createState() => _BusinessUserProfileViewState();
 }
 
-class _BrandsProfileState extends State<BrandsProfile> {
+class _BusinessUserProfileViewState extends State<BusinessUserProfileView> {
   final BrandsController _homeController = Get.put<BrandsController>(BrandsController());
   final AuthController authController = Get.find<AuthController>();
   @override
   void initState() {
     super.initState();
-    _homeController.fetchBusinessUserData(widget.businessUserModelFromOutside, widget.categoryID);
+    // _homeController.fetchBusinessUserData(widget.businessUserModelFromOutside, widget.categoryID);
+    _homeController.fetchBusinessUserData(
+      businessUserModelFromOutside: widget.businessUserModelFromOutside,
+      categoryID: widget.categoryID,
+      whichPage: widget.whichPage,
+    );
   }
 
   @override
@@ -74,9 +81,10 @@ class _BrandsProfileState extends State<BrandsProfile> {
   Widget _buildInfoTab() {
     return Obx(
       () => Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.only(left: 15, right: 15, top: 25),
+        child: ListView(
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
           children: [
             if (_homeController.businessUser.value!.instagram?.isNotEmpty == true)
               SocialMediaIcon(name: 'instagram', userName: _homeController.businessUser.value!.instagram.toString(), icon: FontAwesomeIcons.instagram, maxline: 1, index: 3),
@@ -174,6 +182,7 @@ class _BrandsProfileState extends State<BrandsProfile> {
       pinned: true,
       floating: true,
       snap: true,
+      leading: BackButtonMine(miniButton: true),
       scrolledUnderElevation: 0.0,
       expandedHeight: 360.0,
       foregroundColor: AppColors.kSecondaryColor,
@@ -191,10 +200,10 @@ class _BrandsProfileState extends State<BrandsProfile> {
         ),
         unselectedLabelStyle: TextStyle(
           fontWeight: FontWeight.w500,
+          fontFamily: Fonts.plusJakartaSans,
           fontSize: AppFontSizes.fontSize20 - 2,
         ),
         dividerColor: Colors.transparent,
-        // indicatorPadding: const EdgeInsets.symmetric(horizontal: 25),
         indicator: const UnderlineTabIndicator(
           borderRadius: BorderRadii.borderRadius40,
           borderSide: BorderSide(color: AppColors.kSecondaryColor, width: 5.0),

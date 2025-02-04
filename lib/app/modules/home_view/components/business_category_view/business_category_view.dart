@@ -25,7 +25,7 @@ class BusinessCategoryView extends StatelessWidget {
           onTap: () {},
         ),
         SizedBox(
-          height: screenWidth * 0.35,
+          height: screenWidth * 0.37,
           child: FutureBuilder<List<BusinessCategoryModel>?>(
             future: categoriesFuture,
             builder: (context, snapshot) {
@@ -60,7 +60,7 @@ class BusinessCategoryView extends StatelessWidget {
       child: Hero(
         tag: category.name,
         child: Container(
-          margin: const EdgeInsets.only(left: 25, top: 5, bottom: 5),
+          margin: const EdgeInsets.only(left: 25, top: 10, bottom: 10),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -71,7 +71,7 @@ class BusinessCategoryView extends StatelessWidget {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.kSecondaryColor.withOpacity(0.1),
+                      color: AppColors.kThirdColor.withOpacity(0.5),
                       blurRadius: 5,
                       spreadRadius: 4,
                     ),

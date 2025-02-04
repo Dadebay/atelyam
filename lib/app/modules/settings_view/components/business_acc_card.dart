@@ -45,6 +45,11 @@ class BusinessAccCard extends StatelessWidget {
                 Container(
                   width: 75,
                   height: 75,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadii.borderRadius20,
+                    color: Colors.white,
+                    border: businessUser.backPhoto == null ? Border.all(color: AppColors.kSecondaryColor, width: 1) : Border.all(),
+                  ),
                   margin: EdgeInsets.only(right: 20),
                   child: ClipRRect(
                     borderRadius: BorderRadii.borderRadius18, // Logo köşe yuvarlaklığı

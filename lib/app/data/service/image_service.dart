@@ -26,7 +26,7 @@ class ImageService {
         if (data.isNotEmpty) {
           return ImageModel.fromJson(data[0]);
         }
-        return null;
+        return ImageModel(id: 0, images: [], product: 0);
       } else {
         _handleApiError(response.statusCode);
         return null;
@@ -52,14 +52,11 @@ class ImageService {
       if (response.statusCode == 200) {
         return ProductModel.fromJson(json.decode(response.body));
       } else {
-        _handleApiError(response.statusCode);
         return null;
       }
     } on SocketException {
-      showSnackBar('networkError'.tr, 'noInternet'.tr, AppColors.redColor);
       return null;
     } catch (e) {
-      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, AppColors.redColor);
       return null;
     }
   }

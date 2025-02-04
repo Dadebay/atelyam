@@ -13,49 +13,55 @@ import 'package:http/http.dart' as http;
 class BusinessUserService {
   final AuthController authController = Get.find();
 
-  Future<List<BusinessUserModel>> getBusinessAccountsByCategory({required int categoryID}) async {
+  Future<List<BusinessUserModel>?> getBusinessAccountsByCategory({required int categoryID}) async {
     final url = Uri.parse('${authController.ipAddress}/mobile/cats_id/$categoryID/');
     try {
       final response = await http.get(url);
-      if (response.statusCode == 200) {
-        dynamic decodedResponse;
-        try {
-          final responseBody = utf8.decode(response.bodyBytes);
-          decodedResponse = json.decode(responseBody);
-        } catch (e) {
-          _handleApiError(500); // Json decode error will be a server side error
-          return [];
-        }
 
-        if (decodedResponse is List) {
-          final List<BusinessUserModel> responseData = decodedResponse.map((json) => BusinessUserModel.fromJson(json as Map<String, dynamic>)).toList();
-          return responseData;
-        } else if (decodedResponse is Map) {
-          final BusinessUserModel responseData = BusinessUserModel.fromJson(decodedResponse as Map<String, dynamic>);
-          return [responseData];
-        } else {
-          _handleApiError(500); //Unexpected data type
-          return [];
-        }
+      if (response.statusCode == 200) {
+        final responseBody = utf8.decode(response.bodyBytes);
+
+        final List<dynamic> decodedJson = jsonDecode(responseBody);
+        final List<BusinessUserModel> responseData = decodedJson.map((json) => BusinessUserModel.fromJson(json as Map<String, dynamic>)).toList();
+        return responseData;
       } else {
-        _handleApiError(response.statusCode);
-        return [];
+        return null;
       }
     } on SocketException {
-      showSnackBar('networkError'.tr, 'noInternet'.tr, Colors.red);
       return [];
     } catch (e) {
-      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, Colors.red);
       return [];
     }
   }
 
   Future<BusinessUserModel?> fetchBusinessAccountByID(int id) async {
     final url = Uri.parse('${authController.ipAddress}/mobile/GetUserId/$id/');
+    print(url);
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         return BusinessUserModel.fromJson(json.decode(response.body));
+      } else {
+        _handleApiError(response.statusCode);
+        return null;
+      }
+    } on SocketException {
+      showSnackBar('networkError'.tr, 'noInternet'.tr, Colors.red);
+      return null;
+    } catch (e) {
+      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, Colors.red);
+      return null;
+    }
+  }
+
+  Future<BusinessUserModel?> fetchBusinessAccountKICI(int id) async {
+    final url = Uri.parse('${authController.ipAddress}/mobile/getUserById/$id/');
+    print(url);
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        print(json.decode(response.body)[0]);
+        return BusinessUserModel.fromJson(json.decode(response.body)[0]);
       } else {
         _handleApiError(response.statusCode);
         return null;
@@ -84,14 +90,11 @@ class BusinessUserService {
         final List<BusinessUserModel> categories = responseData.map((json) => BusinessUserModel.fromJson(json)).toList();
         return categories;
       } else {
-        _handleApiError(response.statusCode);
         return null;
       }
     } on SocketException {
-      showSnackBar('networkError'.tr, 'noInternet'.tr, Colors.red);
       return null;
     } catch (e) {
-      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, Colors.red);
       return null;
     }
   }

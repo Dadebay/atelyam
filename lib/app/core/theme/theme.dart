@@ -10,10 +10,10 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
 class Assets {
-  static const String noConnection = 'assets/lottie/no_connection.json';
+  static const String noConnection = 'assets/lottie/no_connection.gif';
   static const String loading = 'assets/lottie/loading.json';
   static const String otp_loading = 'assets/lottie/otp_animation.json';
-  static const String appName = 'Atelyam';
+  static const String appName = 'Atelýam';
   static const String logoWhite = 'assets/image/logo_white.png';
   static const String logoBlack = 'assets/image/logo_black.png';
   static const String russianLangIcon = 'assets/image/flags/lang_ru.svg';
@@ -51,7 +51,7 @@ final List<Map<String, dynamic>> settingsViews = [
 ];
 final List<Map<String, dynamic>> loggedInSettingsViews = [
   {
-    'name': 'business_accounts',
+    'name': 'business_accounts_profil',
     'icon': IconlyLight.user,
     'page': () => AllBusinessAccountsView(), // Dil ayarları sayfası
   },

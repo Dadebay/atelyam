@@ -18,9 +18,10 @@ class BusinessUsersCardView extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Get.to(
-          () => BrandsProfile(
+          () => BusinessUserProfileView(
             businessUserModelFromOutside: category,
             categoryID: categoryID,
+            whichPage: '',
           ),
         );
       },

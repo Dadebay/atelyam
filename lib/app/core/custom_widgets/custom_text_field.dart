@@ -65,15 +65,17 @@ class CustomTextField extends StatelessWidget {
                   ),
                 )
               : null,
-          hintText: showLabel == false ? labelName.tr : '',
-          labelText: showLabel == true ? labelName.tr : '',
+          hintText: labelName.tr,
+          labelText: showLabel == true ? labelName.tr : null,
           labelStyle: TextStyle(
             color: defaultColor,
+            fontFamily: Fonts.plusJakartaSans,
             fontSize: AppFontSizes.getFontSize(4.5),
             fontWeight: FontWeight.w600,
           ),
           hintStyle: TextStyle(
             color: defaultColor,
+            fontFamily: Fonts.plusJakartaSans,
             fontSize: AppFontSizes.getFontSize(4.5),
             fontWeight: FontWeight.w600,
           ),
