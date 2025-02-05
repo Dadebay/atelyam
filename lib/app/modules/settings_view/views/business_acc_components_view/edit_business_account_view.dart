@@ -152,28 +152,17 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                     child: Obx(
                       () => controller.selectedImage.value != null
                           ? ClipRRect(
-                              borderRadius: BorderRadii.borderRadius25,
-                              child: Image.file(controller.selectedImage.value!, fit: BoxFit.cover),
+                              borderRadius: BorderRadius.circular(23),
+                              child: Image.file(controller.selectedImage.value!, height: Get.size.height, width: Get.size.width, fit: BoxFit.cover),
                             )
                           : ClipRRect(
-                              borderRadius: BorderRadii.borderRadius25,
+                              borderRadius: BorderRadius.circular(23),
                               child: widget.businessUser.backPhoto == null
                                   ? buildUploadButton(
                                       onTap: () {
                                         controller.pickImage();
                                       },
                                     )
-                                  //  Column(
-                                  //     mainAxisSize: MainAxisSize.min,
-                                  //     mainAxisAlignment: MainAxisAlignment.center,
-                                  //     children: [
-                                  //       Icon(
-                                  //         IconlyLight.image_2,
-                                  //         color: Colors.grey,
-                                  //       ),
-
-                                  //     ],
-                                  //   )
                                   : CachedNetworkImage(
                                       imageUrl: authController.ipAddress + widget.businessUser.backPhoto!,
                                       fit: BoxFit.cover,

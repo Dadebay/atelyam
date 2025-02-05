@@ -48,7 +48,7 @@ class CreateBusinessAccountView extends StatelessWidget {
             child: Obx(
               () => DropdownButtonFormField<BusinessCategoryModel>(
                 decoration: InputDecoration(
-                  labelText: 'category'.tr,
+                  labelText: 'select_types_of_business'.tr,
                   labelStyle: TextStyle(fontSize: AppFontSizes.getFontSize(4), fontWeight: FontWeight.w600, color: Colors.grey.shade400),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadii.borderRadius20,
@@ -178,7 +178,7 @@ class CreateBusinessAccountView extends StatelessWidget {
                   () => controller.selectedImage.value != null
                       ? ClipRRect(
                           borderRadius: BorderRadii.borderRadius25,
-                          child: Image.file(controller.selectedImage.value!, fit: BoxFit.cover),
+                          child: Image.file(controller.selectedImage.value!, width: Get.size.width, height: Get.size.height, fit: BoxFit.cover),
                         )
                       : Column(
                           mainAxisAlignment: MainAxisAlignment.center,

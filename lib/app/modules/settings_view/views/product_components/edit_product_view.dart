@@ -50,11 +50,17 @@ class _UpdateProductViewState extends State<UpdateProductView> {
       controller.selectedHashtag.value = controller.hashtags.firstWhereOrNull((e) => e.id == widget.product.hashtag);
     });
     await _imageService.fetchImageByProductID(widget.product.id).then((image) {
-      image!.images.forEach((element) {
-        print(element);
-        controller.selectedImagesEditProduct.add(element);
+      print(image!.images);
+      image.images.forEach((element) {
+        controller.deleteImageNames.add(element);
+
+        if (element == null) {
+        } else {
+          controller.selectedImagesEditProduct.add(element);
+        }
       });
     });
+    print(controller.deleteImageNames);
   }
 
   Widget _buildImageSection() {
@@ -327,7 +333,13 @@ class _UpdateProductViewState extends State<UpdateProductView> {
                                   return buildImageItemEditProduct(
                                     image: image,
                                     onTap: () {
+                                      for (int a = 0; a < 4; a++) {
+                                        if (controller.deleteImageNames[a] == controller.selectedImagesEditProduct[index]) {
+                                          controller.deleteSelectedImage(widget.product.id, a + 1);
+                                        }
+                                      }
                                       controller.selectedImagesEditProduct.removeAt(index);
+                                      controller.selectedImagesEditProduct.refresh();
                                     },
                                   );
                                 } else if (image.startsWith('/data/') || image.startsWith('file://')) {
@@ -369,7 +381,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
                           priceController: textControllers[1].text,
                         )
                             .then((a) {
-                          // controller.uploadProductImages(widget.product.id);
+                          controller.uploadProductImages(widget.product.id);
                         });
                       },
                       text: 'update_product'.tr,

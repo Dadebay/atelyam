@@ -43,8 +43,8 @@ class BusinessAccCard extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 75,
-                  height: 75,
+                  width: 80,
+                  height: 80,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadii.borderRadius20,
                     color: Colors.white,

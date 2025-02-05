@@ -25,7 +25,7 @@ class BusinessCategoryView extends StatelessWidget {
           onTap: () {},
         ),
         SizedBox(
-          height: screenWidth * 0.37,
+          height: screenWidth * 0.40,
           child: FutureBuilder<List<BusinessCategoryModel>?>(
             future: categoriesFuture,
             builder: (context, snapshot) {

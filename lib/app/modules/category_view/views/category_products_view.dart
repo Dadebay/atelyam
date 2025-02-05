@@ -73,7 +73,7 @@ class _CategoryProductViewState extends State<CategoryProductView> {
                     if (_categoryController.isLoadingProducts.value) {
                       return EmptyStates().loadingData();
                     } else if (_categoryController.allProducts.isEmpty) {
-                      return EmptyStates().noDataAvailablePage(textColor: AppColors.whiteMainColor);
+                      return EmptyStates().noDataAvailablePage(textColor: AppColors.darkMainColor);
                     } else {
                       return _buildProductGrid();
                     }

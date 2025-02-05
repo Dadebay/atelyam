@@ -11,7 +11,7 @@ dependencies:
   flutter_lints: ^2.0.1  # Adding a version for flutter_lints
   iconly: 
   flutter_svg:
-  firebase_core:
+  # firebase_core:
   cloud_firestore:
   firebase_messaging:
   lottie: ^3.1.0

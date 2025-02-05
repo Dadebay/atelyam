@@ -6,6 +6,7 @@ class MyTranslations extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'tm': {
+          'image_deleted': 'Surat pozuldy ',
           'product_upload_success': 'Haryt üstünlikli ýüklendiňiz',
           'image_upload_failed': 'Surat ýüklenmedi täzeden synanşyň',
           'max_4_images': '4 sany surat ýükläp bilersiňiz',

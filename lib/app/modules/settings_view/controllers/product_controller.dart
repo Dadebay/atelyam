@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
@@ -27,6 +28,7 @@ class ProductController extends GetxController {
   Rx<File?> selectedImage = Rx<File?>(null);
   RxList<File?> selectedImages = RxList<File?>([]); // 1. Değişiklik: Liste yapısı
   RxList<String?> selectedImagesEditProduct = RxList<String?>([]); // 1. Değişiklik: Liste yapısı
+  RxList<String?> deleteImageNames = RxList<String?>([]); // 1. Değişiklik: Liste yapısı
 
   final BusinessCategoryService _categoryService = BusinessCategoryService();
   final dio.Dio _dio = dio.Dio(); // Dio örneğini oluştur
@@ -44,8 +46,18 @@ class ProductController extends GetxController {
     final XFile? image = await _picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 70,
+      maxWidth: 1000,
+      maxHeight: 1000,
     );
     if (image != null) {
+      final File file = File(image.path);
+      final int fileSizeInBytes = await file.length();
+      final double fileSizeInKB = fileSizeInBytes / 1024;
+      final double fileSizeInMB = fileSizeInKB / 1024;
+
+      print('Dosya Boyutu: ${fileSizeInBytes} B');
+      print('Dosya Boyutu: ${fileSizeInKB.toStringAsFixed(2)} KB');
+      print('Dosya Boyutu: ${fileSizeInMB.toStringAsFixed(2)} MB');
       selectedImage.value = File(image.path);
     }
   }
@@ -53,6 +65,8 @@ class ProductController extends GetxController {
   Future<void> pickImages({bool isEditProduct = false}) async {
     final List<XFile> images = await _picker.pickMultiImage(
       imageQuality: 70,
+      maxWidth: 1000,
+      maxHeight: 1000,
     );
     if (images.isNotEmpty) {
       if (selectedImages.length + images.length > maxImageCount) {
@@ -103,15 +117,26 @@ class ProductController extends GetxController {
         );
       }
       final response = await request.send();
+
+      print('Response Status Code: ${response.statusCode}');
+      final responseBytes = await response.stream.toBytes(); // Byte olarak oku
+      final responseBody = utf8.decode(responseBytes); // UTF-8 formatına çevir
+      print('Response Body: $responseBody');
+
       if (response.statusCode == 201) {
-        final responseBody = await response.stream.bytesToString();
         final responseData = jsonDecode(responseBody);
-        await uploadProductImages(int.parse(responseData['id'])); // Resimleri yükle
+        print(int.parse(responseData['id'].toString()));
+        if (selectedImages.isNotEmpty) {
+          await uploadProductImages(int.parse(responseData['id'].toString())); // Resimleri yükle
+        } else {
+          Get.back(result: true);
+          showSnackBar('success', 'product_upload_success'.tr, AppColors.greenColor);
+        }
       } else {
         showSnackBar('error', 'product_creation_failed'.tr, AppColors.redColor);
       }
     } catch (e) {
-      showSnackBar('error', 'error_occurred'.tr, AppColors.redColor);
+      showSnackBar('error', 'error_occured'.tr, AppColors.redColor);
     } finally {
       homeController.agreeButton.toggle();
     }
@@ -119,6 +144,9 @@ class ProductController extends GetxController {
 
   Future<void> uploadProductImages(int productId) async {
     final token = await Auth().getToken();
+    print('Selected Images Length: ${selectedImages.length}');
+    print('Selected Images Length: ${selectedImagesEditProduct.length}');
+
     try {
       final request = http.MultipartRequest(
         'PUT',
@@ -128,31 +156,93 @@ class ProductController extends GetxController {
         'Authorization': 'Bearer $token',
         'Content-Type': 'multipart/form-data',
       });
-      final List images = selectedImages.isEmpty ? selectedImagesEditProduct : selectedImages;
-      int imgIndex = 0;
-      for (int i = 0; i < images.length; i++) {
-        final image = images[i] as String;
-        if (image.startsWith('/media/')) {
-          imgIndex++;
-        } else {
-          request.files.add(
-            await http.MultipartFile.fromPath(
-              'img$imgIndex',
-              image,
-            ),
-          );
-          imgIndex++;
+
+      // selectedImages listesinin boyutunu kontrol et
+      if (selectedImages.isEmpty) {
+        for (int i = 0; i < selectedImagesEditProduct.length; i++) {
+          if (selectedImagesEditProduct[i] != null) {
+            log(selectedImagesEditProduct[i].toString());
+            if (selectedImagesEditProduct[i]!.startsWith('/media/')) {
+            } else {
+              request.files.add(
+                await http.MultipartFile.fromPath(
+                  'img${i + 1}', // img1, img2, img3, img4
+                  selectedImagesEditProduct[i]!,
+                ),
+              );
+            }
+          } else {
+            print('Image at index $i is null.');
+          }
+        }
+      } else {
+        for (int i = 0; i < selectedImages.length; i++) {
+          if (selectedImages[i] != null) {
+            request.files.add(
+              await http.MultipartFile.fromPath(
+                'img${i + 1}', // img1, img2, img3, img4
+                selectedImages[i]!.path,
+              ),
+            );
+          } else {
+            print('Image at index $i is null.');
+          }
         }
       }
+      request.fields.forEach((key, value) {
+        print('Field: $key, Value: $value');
+      });
+      if (selectedImagesEditProduct.isNotEmpty || selectedImages.isNotEmpty) {
+        final response = await request.send();
+        print('Response Status Code: ${response.statusCode}');
+        final responseBytes = await response.stream.toBytes(); // Byte olarak oku
+        final responseBody = utf8.decode(responseBytes); // UTF-8 formatına çevir
+        print('Response Body: $responseBody');
+
+        if (response.statusCode == 200) {
+          Get.back(result: true);
+          showSnackBar('success', 'product_upload_success'.tr, AppColors.greenColor);
+        } else {
+          showSnackBar('error', 'image_upload_failed'.tr, AppColors.redColor);
+        }
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+      showSnackBar('error', 'error_occured'.tr, AppColors.redColor);
+    }
+  }
+
+  Future<void> deleteSelectedImage(int productId, int imageIndex) async {
+    final token = await Auth().getToken();
+    try {
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse('${authController.ipAddress}/mobile/uploadImage/$productId/'),
+      );
+      request.headers.addAll({
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'multipart/form-data',
+      });
+
+      request.fields['img${imageIndex}'] = '1'; // Sadece index numarasını gönderiyoruz
+
+      request.fields.forEach((key, value) {
+        print('Field: $key, Value: $value');
+      });
       final response = await request.send();
+      print('Response Status Code: ${response.statusCode}');
+      final responseBytes = await response.stream.toBytes(); // Byte olarak oku
+      final responseBody = utf8.decode(responseBytes); // UTF-8 formatına çevir
+      print('Response Body: $responseBody');
+
       if (response.statusCode == 200) {
-        Get.back(result: true);
-        showSnackBar('success', 'product_upload_success'.tr, AppColors.greenColor);
+        showSnackBar('success', 'image_deleted'.tr, AppColors.greenColor);
       } else {
         showSnackBar('error', 'image_upload_failed'.tr, AppColors.redColor);
       }
     } catch (e) {
-      showSnackBar('error', 'error_occurred'.tr, AppColors.redColor);
+      print('Error occurred: $e');
+      showSnackBar('error', 'error_occured'.tr, AppColors.redColor);
     }
   }
 
@@ -188,6 +278,11 @@ class ProductController extends GetxController {
         );
       }
       final response = await request.send();
+      print('Response Status Code: ${response.statusCode}');
+      final responseBytes = await response.stream.toBytes(); // Byte olarak oku
+      final responseBody = utf8.decode(responseBytes); // UTF-8 formatına çevir
+      print('Response Body: $responseBody');
+
       if (response.statusCode == 200) {
         Get.back(result: true);
         showSnackBar('success', 'product_updated'.tr, AppColors.greenColor);
@@ -260,6 +355,8 @@ class ProductController extends GetxController {
     request.headers.addAll(headers);
     try {
       final response = await request.send();
+      print(response.statusCode);
+      print(response.stream.toBytes());
       if (response.statusCode == 201) {
         Get.back(result: true);
       } else if (response.statusCode == 400) {
@@ -331,6 +428,7 @@ class ProductController extends GetxController {
         headers: headers,
       );
       if (response.statusCode == 200) {
+        Get.back(result: true);
         Get.back(result: true);
         showSnackBar('success', 'deleted_success', AppColors.greenColor);
       } else {

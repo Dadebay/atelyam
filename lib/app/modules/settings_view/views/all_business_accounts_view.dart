@@ -118,7 +118,8 @@ class _AllBusinessAccountsViewState extends State<AllBusinessAccountsView> {
               Expanded(
                 child: ListView.builder(
                   itemCount: snapshot.data!.length, // İşletme hesabı sayısı
-                  itemExtent: Get.size.height * 0.13, // Her bir öğenin yüksekliği
+                  itemExtent: 120,
+// Her bir öğenin yüksekliği
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(), // Kaydırma fizikleri
                   scrollDirection: Axis.vertical, // Dikey kaydırma
@@ -185,7 +186,7 @@ class _AllBusinessAccountsViewState extends State<AllBusinessAccountsView> {
           }
           return ListView.builder(
             itemCount: snapshot.data!.length, // İşletme hesabı sayısı
-            itemExtent: 120, // Her bir öğenin yüksekliği
+            itemExtent: 120,
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(), // Kaydırma fizikleri
             scrollDirection: Axis.vertical, // Dikey kaydırma

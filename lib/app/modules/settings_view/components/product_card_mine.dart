@@ -40,8 +40,12 @@ class MyProductCard extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 75,
-                  height: 75,
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadii.borderRadius18,
+                    border: Border.all(color: AppColors.kSecondaryColor, width: 1),
+                  ),
                   margin: EdgeInsets.only(right: 20),
                   child: ClipRRect(
                     borderRadius: BorderRadii.borderRadius18, // Logo köşe yuvarlaklığı
@@ -112,15 +116,17 @@ class MyProductCard extends StatelessWidget {
               fontSize: AppFontSizes.getFontSize(4.5),
             ),
           ),
-          Text(
-            'wait_desc'.tr,
-            maxLines: 2,
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: AppColors.kPrimaryColor,
-              fontWeight: FontWeight.w400,
-              fontSize: AppFontSizes.getFontSize(3.5),
+          Expanded(
+            child: Text(
+              'wait_desc'.tr,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: AppColors.kPrimaryColor,
+                fontWeight: FontWeight.w400,
+                fontSize: AppFontSizes.getFontSize(3.5),
+              ),
             ),
           ),
         ],

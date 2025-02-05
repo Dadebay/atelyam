@@ -23,6 +23,7 @@ class ImageService {
       );
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
+        print(data);
         if (data.isNotEmpty) {
           return ImageModel.fromJson(data[0]);
         }

@@ -122,6 +122,7 @@ class _HomeViewState extends State<HomeView> {
             return EmptyStates().errorData(snapshot.hasError.toString());
           } else if (snapshot.hasData) {
             if (snapshot.data!.isNotEmpty) {
+              print(snapshot.data!.length);
               return ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -129,7 +130,8 @@ class _HomeViewState extends State<HomeView> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (BuildContext context, int index) {
                   final hashtag = snapshot.data![index];
-                  return hashtag.count == 0 ? const SizedBox.shrink() : _buildProductList(size: size, hashtagModel: hashtag);
+                  print(hashtag.count);
+                  return hashtag.count <= 0 ? const SizedBox.shrink() : _buildProductList(size: size, hashtagModel: hashtag);
                 },
               );
             } else {
