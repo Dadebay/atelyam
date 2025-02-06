@@ -12,7 +12,7 @@ class AboutUsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteMainColor,
-      appBar: appBar(appBarName: 'aboutUs', actions: []),
+      appBar: WidgetsMine().appBar(appBarName: 'aboutUs', actions: []),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: FutureBuilder(

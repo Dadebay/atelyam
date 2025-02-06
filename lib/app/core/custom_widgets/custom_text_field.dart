@@ -110,7 +110,6 @@ class PhoneNumberTextField extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
   final FocusNode requestfocusNode;
-
   const PhoneNumberTextField({
     required this.controller,
     required this.focusNode,
@@ -170,7 +169,7 @@ class PhoneNumberTextField extends StatelessWidget {
             fontWeight: FontWeight.w600,
             fontSize: AppFontSizes.getFontSize(4.5),
           ),
-          prefixIconConstraints: const BoxConstraints(minWidth: 80),
+          prefixIconConstraints: BoxConstraints(minWidth: 80),
           contentPadding: const EdgeInsets.only(left: 30, top: 18, bottom: 15, right: 10),
           isDense: true,
           border: _buildOutlineInputBorder(

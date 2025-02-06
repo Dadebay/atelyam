@@ -105,7 +105,7 @@ class MyProductCard extends StatelessWidget {
   Expanded waitingDesign() {
     return Expanded(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
@@ -116,17 +116,15 @@ class MyProductCard extends StatelessWidget {
               fontSize: AppFontSizes.getFontSize(4.5),
             ),
           ),
-          Expanded(
-            child: Text(
-              'wait_desc'.tr,
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: AppColors.kPrimaryColor,
-                fontWeight: FontWeight.w400,
-                fontSize: AppFontSizes.getFontSize(3.5),
-              ),
+          Text(
+            'wait_desc'.tr,
+            maxLines: 2,
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: AppColors.kPrimaryColor,
+              fontWeight: FontWeight.w400,
+              fontSize: AppFontSizes.getFontSize(3.5),
             ),
           ),
         ],

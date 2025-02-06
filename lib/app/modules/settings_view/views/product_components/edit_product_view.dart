@@ -231,7 +231,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteMainColor,
-      appBar: appBar(
+      appBar: WidgetsMine().appBar(
         appBarName: 'update_product'.tr,
         actions: [
           IconButton(
@@ -330,7 +330,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
                               final image = controller.selectedImagesEditProduct[index];
                               if (image != null) {
                                 if (image.startsWith('/media/')) {
-                                  return buildImageItemEditProduct(
+                                  return WidgetsMine().buildImageItemEditProduct(
                                     image: image,
                                     onTap: () {
                                       for (int a = 0; a < 4; a++) {
@@ -343,14 +343,14 @@ class _UpdateProductViewState extends State<UpdateProductView> {
                                     },
                                   );
                                 } else if (image.startsWith('/data/') || image.startsWith('file://')) {
-                                  return buildImageItem(
+                                  return WidgetsMine().buildImageItem(
                                     image: File(image),
                                     onTap: () {
                                       controller.selectedImagesEditProduct.removeAt(index);
                                     },
                                   );
                                 } else if (image is File) {
-                                  return buildImageItem(
+                                  return WidgetsMine().buildImageItem(
                                     image: File(image),
                                     onTap: () {
                                       controller.selectedImagesEditProduct.removeAt(index);
@@ -359,7 +359,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
                                 }
                               }
                             }
-                            return buildUploadButton(
+                            return WidgetsMine().buildUploadButton(
                               onTap: () {
                                 controller.pickImages(isEditProduct: true);
                               },

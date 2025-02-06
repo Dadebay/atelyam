@@ -11,20 +11,20 @@ import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomeController extends GetxController {
-  RxString activeFilter = 'last'.obs; // Varsayılan filtre
+  RxString activeFilter = 'last'.obs;
   RxBool agreeButton = false.obs;
-  RxList<ProductModel> allProducts = <ProductModel>[].obs;
-  late Rx<Future<List<BannerModel>>> bannersFuture;
-  RxInt carouselSelectedIndex = 0.obs;
-  late Rx<Future<List<BusinessCategoryModel>?>> categoriesFuture;
-  RxInt currentPage = 1.obs;
-  late Rx<Future<List<HashtagModel>>> hashtagsFuture; // Hashtag verileri
-  RxBool isFilterExpanded = false.obs; // Yeni değişken
-  RxBool isLoadingProducts = false.obs;
-  RxMap<int, Future<List<ProductModel>>> productsFutures = <int, Future<List<ProductModel>>>{}.obs; // Ürünlerin verileri
-  final RefreshController refreshController = RefreshController();
-  Rx<FilterOption?> selectedFilter = Rx<FilterOption?>(FilterOption.last); // Seçilen filtre
   RxInt selectedIndex = 0.obs;
+  RxInt carouselSelectedIndex = 0.obs;
+  RxInt currentPage = 1.obs;
+  RxBool isFilterExpanded = false.obs;
+  RxBool isLoadingProducts = false.obs;
+  final RefreshController refreshController = RefreshController();
+  RxList<ProductModel> allProducts = <ProductModel>[].obs;
+  RxMap<int, Future<List<ProductModel>>> productsFutures = <int, Future<List<ProductModel>>>{}.obs;
+  Rx<FilterOption?> selectedFilter = Rx<FilterOption?>(FilterOption.last);
+  late Rx<Future<List<BannerModel>>> bannersFuture;
+  late Rx<Future<List<BusinessCategoryModel>?>> categoriesFuture;
+  late Rx<Future<List<HashtagModel>>> hashtagsFuture;
   final BannerService _bannerService = BannerService();
   final BusinessCategoryService _categoryService = BusinessCategoryService();
   final HashtagService _hashtagService = HashtagService();
@@ -32,32 +32,28 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _fetchBanners();
-    _fetchCategories();
-    _fetchHashtags();
+    bannersFuture = _bannerService.fetchBanners().obs;
+    categoriesFuture = _categoryService.fetchCategories().obs;
+    hashtagsFuture = _hashtagService.fetchHashtags().obs;
   }
 
-  // Ürünleri başlat
   void initializeProducts(int hashtagId) {
     isLoadingProducts.value = true;
     activeFilter = 'last'.obs;
     selectedFilter.value = FilterOption.last;
     allProducts.clear();
     loadProducts(hashtagId);
-
     currentPage.value = 1;
   }
 
-  // Ürünleri yükle
   Future<void> loadProducts(int hashtagId) async {
     try {
       final products = await HashtagService().fetchProductsByHashtagId(
         hashtagId: hashtagId,
         page: currentPage.value,
-        size: 10, // Sabit sayfa boyutu
+        size: 10,
         filter: activeFilter.value,
       );
-
       if (products.isNotEmpty) {
         allProducts.addAll(products);
       }
@@ -65,27 +61,20 @@ class HomeController extends GetxController {
       showSnackBar('Hata', 'Bir hata oluştu: $e', AppColors.redColor); // Hata mesajı göster
     } finally {
       isLoadingProducts.value = false;
-
       refreshController.loadComplete();
     }
   }
 
-  // Yenileme işlemi
-  Future<void> refreshProducts(
-    int hashtagId,
-  ) async {
+  Future<void> refreshProducts(int hashtagId) async {
     isLoadingProducts.value = true;
-
     currentPage.value = 1;
     allProducts.clear();
     await loadProducts(hashtagId);
     refreshController.refreshCompleted();
   }
 
-  // Daha fazla ürün yükleme işlemi
   Future<void> loadMoreProducts(int hashtagId) async {
     currentPage.value++;
-
     await loadProducts(hashtagId);
     refreshController.loadComplete();
   }
@@ -95,20 +84,8 @@ class HomeController extends GetxController {
   }
 
   Future<void> refreshBanners() async {
-    await _fetchBanners();
-    await _fetchCategories();
-    await _fetchHashtags();
-  }
-
-  Future<void> _fetchBanners() async {
     bannersFuture = _bannerService.fetchBanners().obs;
-  }
-
-  Future<void> _fetchCategories() async {
     categoriesFuture = _categoryService.fetchCategories().obs;
-  }
-
-  Future<void> _fetchHashtags() async {
     hashtagsFuture = _hashtagService.fetchHashtags().obs;
   }
 }

@@ -71,7 +71,7 @@ class OTPView extends StatelessWidget {
 
   Widget _buildOTPContent(BuildContext context) {
     return Container(
-      height: Get.size.height / 1.15,
+      height: Get.size.height / 1.2,
       padding: EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
         color: AppColors.whiteMainColor,
@@ -98,7 +98,7 @@ class OTPView extends StatelessWidget {
           _buildOTPFields(context),
           AgreeButton(
             onTap: () {
-              authController.verifyOTP(userName, phoneNumber, _otpControllers);
+              authController.verifyOTP(username: userName, phoneNumber: phoneNumber, otpControllers: _otpControllers);
             },
             text: 'verify',
           ),
@@ -147,7 +147,8 @@ class OTPView extends StatelessWidget {
 
               // Tüm alanlar doluysa OTP'yi doğrula
               if (_otpControllers.every((controller) => controller.text.isNotEmpty)) {
-                authController.verifyOTP(userName, phoneNumber, _otpControllers);
+                print('iseldim');
+                authController.verifyOTP(username: userName, phoneNumber: phoneNumber, otpControllers: _otpControllers);
               }
             },
           ),

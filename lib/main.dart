@@ -42,23 +42,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Atelyam',
+      title: Assets.appName,
       theme: AppThemes.lightTheme,
-      fallbackLocale: const Locale('tr'), // Fallback locale
-      locale: _getLocale(), // Set locale based on storage
-      translations: MyTranslations(), // Your translations
-      defaultTransition: Transition.fadeIn, // Default transition
-      home: ConnectionCheckView(), // Initial screen
+      fallbackLocale: const Locale('tr'),
+      locale: _getLocale(),
+      translations: MyTranslations(),
+      defaultTransition: Transition.fadeIn,
+      home: ConnectionCheckView(),
     );
   }
 
-  // Helper method to get locale from storage
   Locale _getLocale() {
     final String? langCode = storage.read('langCode');
     if (langCode != null) {
       return Locale(langCode);
     } else {
-      return const Locale('tm'); // Default locale
+      return const Locale('tm');
     }
   }
 }

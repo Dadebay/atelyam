@@ -92,7 +92,7 @@ class AuthView extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              'brandingTitle'.tr,
+              'brandingTitle1'.tr,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white70,

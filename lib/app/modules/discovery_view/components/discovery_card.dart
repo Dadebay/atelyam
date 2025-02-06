@@ -13,11 +13,13 @@ class DiscoveryCard extends StatelessWidget {
   final ProductModel productModel;
   final bool homePageStyle;
   final bool? showViewCount;
+  final String? businessUserID;
 
   DiscoveryCard({
     required this.productModel,
     required this.homePageStyle,
     this.showViewCount,
+    this.businessUserID,
     super.key,
   });
   final AuthController authController = Get.find();
@@ -26,7 +28,7 @@ class DiscoveryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => ProductProfilView(productModel: productModel));
+        Get.to(() => ProductProfilView(productModel: productModel, businessUserID: businessUserID));
       },
       child: Container(
         margin: homePageStyle == true ? const EdgeInsets.only(left: 20, top: 10, bottom: 10) : EdgeInsets.zero,

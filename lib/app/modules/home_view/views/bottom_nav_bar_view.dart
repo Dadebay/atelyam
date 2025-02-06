@@ -12,9 +12,7 @@ import 'package:iconly/iconly.dart';
 
 class BottomNavBar extends StatelessWidget {
   final HomeController homeController = Get.put<HomeController>(HomeController());
-
   BottomNavBar({super.key});
-
   final List<Widget> pages = [
     HomeView(),
     CategoryView(),

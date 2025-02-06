@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:atelyam/app/core/custom_widgets/back_button.dart';
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
@@ -16,109 +17,6 @@ enum FilterOption {
   viewCount,
   first,
   last,
-}
-
-AppBar appBar({required String appBarName, required List<Widget> actions}) {
-  return AppBar(
-    backgroundColor: AppColors.kSecondaryColor,
-    title: Text(
-      appBarName.tr,
-      style: TextStyle(
-        color: AppColors.whiteMainColor,
-        fontSize: AppFontSizes.fontSize16 + 2,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: AppColors.kSecondaryColor),
-    leading: BackButtonMine(miniButton: true),
-    actions: actions,
-  );
-}
-
-Widget buildUploadButton({required VoidCallback onTap}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.grey.shade300, width: 2),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(IconlyLight.image, size: 40, color: Colors.grey.shade400),
-          SizedBox(height: 8),
-          Text(
-            'add_image'.tr,
-            style: TextStyle(
-              color: Colors.grey.shade400,
-              fontSize: 14,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-Widget buildImageItem({required File image, required VoidCallback onTap}) {
-  return Stack(
-    children: [
-      ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Image.file(
-          image,
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-        ),
-      ),
-      Positioned(
-        right: 5,
-        top: 5,
-        child: GestureDetector(
-          onTap: onTap,
-          child: Container(
-            padding: EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: Colors.black54,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(Icons.close, color: Colors.white, size: 20),
-          ),
-        ),
-      ),
-    ],
-  );
-}
-
-Widget buildImageItemEditProduct({required String image, required VoidCallback onTap}) {
-  return Stack(
-    children: [
-      ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: WidgetsMine().customCachedImage(
-          image,
-        ),
-      ),
-      Positioned(
-        right: 5,
-        top: 5,
-        child: GestureDetector(
-          onTap: onTap,
-          child: Container(
-            padding: EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: Colors.black54,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(Icons.close, color: Colors.white, size: 20),
-          ),
-        ),
-      ),
-    ],
-  );
 }
 
 SnackbarController showSnackBar(String title, String subtitle, Color color) {
@@ -148,6 +46,92 @@ SnackbarController showSnackBar(String title, String subtitle, Color color) {
 }
 
 class WidgetsMine {
+  Widget buildUploadButton({required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Colors.grey.shade300, width: 2),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(IconlyLight.image, size: 40, color: Colors.grey.shade400),
+            SizedBox(height: 8),
+            Text(
+              'add_image'.tr,
+              style: TextStyle(
+                color: Colors.grey.shade400,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildImageItem({required File image, required VoidCallback onTap}) {
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Image.file(
+            image,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+        ),
+        Positioned(
+          right: 5,
+          top: 5,
+          child: GestureDetector(
+            onTap: onTap,
+            child: Container(
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.close, color: Colors.white, size: 20),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildImageItemEditProduct({required String image, required VoidCallback onTap}) {
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: WidgetsMine().customCachedImage(
+            image,
+          ),
+        ),
+        Positioned(
+          right: 5,
+          top: 5,
+          child: GestureDetector(
+            onTap: onTap,
+            child: Container(
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.close, color: Colors.white, size: 20),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget customCachedImage(String image) {
     final AuthController authController = Get.find();
 
@@ -161,12 +145,36 @@ class WidgetsMine {
       errorWidget: (context, url, error) => EmptyStates().noMiniCategoryImage(),
     );
   }
+
+  Widget buildAnimatedWidget(Widget child, int delay) {
+    return FadeInUp(
+      delay: Duration(milliseconds: delay),
+      child: child,
+    );
+  }
+
+  AppBar appBar({required String appBarName, required List<Widget> actions}) {
+    return AppBar(
+      backgroundColor: AppColors.kSecondaryColor,
+      title: Text(
+        appBarName.tr,
+        style: TextStyle(
+          color: AppColors.whiteMainColor,
+          fontSize: AppFontSizes.fontSize16 + 2,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: AppColors.kSecondaryColor),
+      leading: BackButtonMine(miniButton: true),
+      actions: actions,
+    );
+  }
 }
 
 class WaveClipper extends CustomClipper<Path> {
-  final bool isTopWave; // Parameter to control the clipping behavior
-
   WaveClipper({this.isTopWave = true});
+
+  final bool isTopWave; // Parameter to control the clipping behavior
 
   @override
   Path getClip(Size size) {

@@ -1,4 +1,4 @@
-# telegram_chat_app
+# Atelyam fashion app
 
 A new Flutter project.
 

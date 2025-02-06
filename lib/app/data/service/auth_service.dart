@@ -63,6 +63,8 @@ class SignInService {
   final Auth _auth = Auth();
 
   Future<int?> otpCheck({required String phoneNumber, String? otp}) async {
+    print(phoneNumber);
+    print(otp);
     return _handleApiRequest(
       '/mobile/auth/',
       body: <String, dynamic>{
@@ -73,6 +75,7 @@ class SignInService {
       requiresToken: true,
       isForm: true,
       handleSuccess: (responseJson) async {
+        print(responseJson);
         _auth.login(responseJson['data']);
         await _auth.setToken(responseJson['access_token']);
         await _auth.setRefreshToken(responseJson['refresh']);

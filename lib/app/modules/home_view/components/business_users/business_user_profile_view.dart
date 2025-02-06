@@ -49,7 +49,7 @@ class _BusinessUserProfileViewState extends State<BusinessUserProfileView> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: AgreeButton(
               onTap: () {
-                _homeController.makePhoneCall('+${widget.businessUserModelFromOutside.businessPhone}');
+                _homeController.makePhoneCall('+993${widget.businessUserModelFromOutside.businessPhone}');
               },
               text: 'call'.tr,
             ),
@@ -90,7 +90,7 @@ class _BusinessUserProfileViewState extends State<BusinessUserProfileView> {
               SocialMediaIcon(name: 'instagram', userName: _homeController.businessUser.value!.instagram.toString(), icon: FontAwesomeIcons.instagram, maxline: 1, index: 3),
             SocialMediaIcon(name: 'youtube', userName: _homeController.businessUser.value!.youtube.toString(), icon: FontAwesomeIcons.youtube, index: 4, maxline: 1),
             SocialMediaIcon(name: 'tiktok', userName: _homeController.businessUser.value!.tiktok.toString(), icon: FontAwesomeIcons.tiktok, index: 5, maxline: 1),
-            SocialMediaIcon(name: 'phone_number', userName: _homeController.businessUser.value!.businessPhone.toString(), icon: IconlyBold.call, index: 6, maxline: 1),
+            SocialMediaIcon(name: 'phone_number', userName: '+993${_homeController.businessUser.value!.businessPhone.toString()}', icon: IconlyBold.call, index: 6, maxline: 1),
             SocialMediaIcon(name: 'location', userName: _homeController.businessUser.value!.address.toString(), icon: IconlyBold.location, index: 6, maxline: 4),
           ],
         ),
@@ -99,8 +99,11 @@ class _BusinessUserProfileViewState extends State<BusinessUserProfileView> {
   }
 
   Widget _buildImagesTab() {
-    return Obx(
-      () => FutureBuilder<List<ProductModel>?>(
+    return Obx(() {
+      if (_homeController.isLoadingBrandsProfile.value) {
+        return EmptyStates().loadingData();
+      }
+      return FutureBuilder<List<ProductModel>?>(
         future: _homeController.productsFuture.value,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -121,15 +124,6 @@ class _BusinessUserProfileViewState extends State<BusinessUserProfileView> {
               crossAxisSpacing: 15.0,
               itemBuilder: (BuildContext context, int index) {
                 final product = products[index];
-                if (index > 10) {
-                  return SizedBox(
-                    height: index % 2 == 0 ? 250 : 220,
-                    child: DiscoveryCard(
-                      productModel: product,
-                      homePageStyle: false,
-                    ),
-                  );
-                }
                 return FadeInUp(
                   duration: Duration(milliseconds: 100 * index),
                   child: SizedBox(
@@ -137,6 +131,7 @@ class _BusinessUserProfileViewState extends State<BusinessUserProfileView> {
                     child: DiscoveryCard(
                       productModel: product,
                       homePageStyle: false,
+                      businessUserID: widget.businessUserModelFromOutside.userID.toString(),
                     ),
                   ),
                 );
@@ -144,8 +139,8 @@ class _BusinessUserProfileViewState extends State<BusinessUserProfileView> {
             );
           }
         },
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildVideosTab() {
@@ -210,9 +205,9 @@ class _BusinessUserProfileViewState extends State<BusinessUserProfileView> {
         ),
         unselectedLabelColor: Colors.grey,
         tabs: [
-          FadeInDown(duration: const Duration(milliseconds: 900), child: Tab(text: 'tab1'.tr)),
-          FadeInDown(duration: const Duration(milliseconds: 900), child: Tab(text: 'tab2'.tr)),
-          FadeInDown(duration: const Duration(milliseconds: 900), child: Tab(text: 'tab3'.tr)),
+          Tab(text: 'tab1'.tr),
+          Tab(text: 'tab2'.tr),
+          Tab(text: 'tab3'.tr),
         ],
       ),
       flexibleSpace: FlexibleSpaceBar(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
 import 'package:atelyam/app/core/custom_widgets/widgets.dart';
@@ -17,15 +19,16 @@ import 'package:iconly/iconly.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductProfilView extends StatefulWidget {
-  const ProductProfilView({required this.productModel, super.key});
+  const ProductProfilView({required this.productModel, super.key, this.businessUserID});
   final ProductModel productModel;
+  final String? businessUserID;
   @override
   State<ProductProfilView> createState() => _ProductProfilViewState();
 }
 
 class _ProductProfilViewState extends State<ProductProfilView> {
   final ProductProfilController controller = Get.put(ProductProfilController());
-  BusinessUserModel? businessUserModel;
+  BusinessUserModel? outSideBusinessuserModel;
 
   @override
   void initState() {
@@ -54,8 +57,12 @@ class _ProductProfilViewState extends State<ProductProfilView> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: AgreeButton(
             onTap: () {
-              if (businessUserModel != null) {
-                _makePhoneCall('+${businessUserModel!.businessPhone}');
+              print(outSideBusinessuserModel!.address);
+              // print(businessUserModel!.businessPhone);
+              if (outSideBusinessuserModel != null) {
+                _makePhoneCall('+${outSideBusinessuserModel!.businessPhone}');
+              } else {
+                showSnackBar('error', 'phone_call_error', AppColors.redColor);
               }
             },
             text: 'call'.tr,
@@ -75,6 +82,7 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                 } else if (snapshot.hasError) {
                   return SliverToBoxAdapter(child: EmptyStates().errorData(snapshot.hasError.toString()));
                 } else if (snapshot.hasData) {
+                  outSideBusinessuserModel = snapshot.data;
                   return SliverList(
                     delegate: SliverChildListDelegate([
                       Container(
@@ -138,13 +146,19 @@ class _ProductProfilViewState extends State<ProductProfilView> {
   Widget brendData(BusinessUserModel businessUserModel) {
     return GestureDetector(
       onTap: () {
-        Get.to(
-          () => BusinessUserProfileView(
-            categoryID: businessUserModel.userID!,
-            businessUserModelFromOutside: businessUserModel,
-            whichPage: 'popular',
-          ),
-        );
+        print(widget.productModel.user);
+        print(widget.businessUserID);
+        if (widget.productModel.user.toString() == widget.businessUserID.toString()) {
+          Get.back();
+        } else {
+          Get.to(
+            () => BusinessUserProfileView(
+              categoryID: businessUserModel.userID!,
+              businessUserModelFromOutside: businessUserModel,
+              whichPage: 'popular',
+            ),
+          );
+        }
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20),

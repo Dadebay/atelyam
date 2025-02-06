@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
-  final ipAddress = ''.obs;
+  final ipAddress = 'http://216.250.12.49:8000/'.obs;
   final db = FirebaseFirestore.instance;
 
   Future<void> fetchIpAddress() async {
@@ -27,30 +27,22 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> saveIpAddress(String newIp) async {
-    try {
-      await db.collection('server').doc('server_ip').set({'ip': newIp});
-      ipAddress.value = newIp;
-    } catch (e) {
-      // Handle error
-    }
-  }
-
   Future<void> handleAuthAction({required String phoneController, required String usernameController}) async {
     final HomeController homeController = Get.find();
     homeController.agreeButton.toggle();
-
     final signInService = SignInService();
     final phoneNumber = phoneController;
     final userName = usernameController;
-
     try {
       final registerResponse = await signInService.register(phoneNumber: phoneNumber, name: userName);
+      print('------------------------------------------------------------------------ ${registerResponse}');
       if (registerResponse == 200) {
         homeController.agreeButton.toggle();
         await Get.to(() => OTPView(phoneNumber: phoneNumber, userName: userName));
       } else {
         final loginResponse = await signInService.login(phone: phoneNumber);
+        print('------------------------------------------------------------------------ ${loginResponse}');
+
         if (loginResponse == 200) {
           homeController.agreeButton.toggle();
           await Get.to(() => OTPView(phoneNumber: phoneNumber, userName: userName));
@@ -65,10 +57,13 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> verifyOTP(String username, String phoneNumber, List<TextEditingController> otpControllers) async {
+  Future<void> verifyOTP({required String phoneNumber, required List<TextEditingController> otpControllers, required String username}) async {
     final String otp = otpControllers.map((controller) => controller.text).join();
+    print(phoneNumber);
+    print(otp);
     if (otp.length == 4) {
       final response = await SignInService().otpCheck(phoneNumber: phoneNumber, otp: otp);
+      print(response);
       if (response == 200) {
         final homeController = Get.find<HomeController>();
         final settingsController = Get.find<NewSettingsPageController>();

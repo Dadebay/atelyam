@@ -20,7 +20,7 @@ class CreateProductView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteMainColor,
-      appBar: appBar(
+      appBar: WidgetsMine().appBar(
         appBarName: 'create_product'.tr,
         actions: [],
       ),
@@ -205,7 +205,7 @@ class CreateProductView extends StatelessWidget {
                     itemCount: controller.selectedImages.length < 4 ? controller.selectedImages.length + 1 : controller.selectedImages.length,
                     itemBuilder: (context, index) {
                       if (index < controller.selectedImages.length) {
-                        return buildImageItem(
+                        return WidgetsMine().buildImageItem(
                           image: controller.selectedImages[index]!,
                           onTap: () {
                             controller.selectedImages.removeAt(index);
@@ -213,7 +213,7 @@ class CreateProductView extends StatelessWidget {
                         );
                       } else {
                         return controller.selectedImages.length < controller.maxImageCount
-                            ? buildUploadButton(
+                            ? WidgetsMine().buildUploadButton(
                                 onTap: () {
                                   controller.pickImages();
                                 },

@@ -12,7 +12,7 @@ class BannersProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteMainColor,
-      appBar: appBar(appBarName: 'banners_profile', actions: []),
+      appBar: WidgetsMine().appBar(appBarName: 'banners_profile', actions: []),
       body: ListView(
         children: [
           SizedBox(

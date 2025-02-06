@@ -14,7 +14,8 @@ class BannerService {
 
   Future<List<BannerModel>> fetchBanners() async {
     final response = await http.get(Uri.parse(authController.ipAddress + _apiEndpoint));
-
+    print(response.body);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
       return jsonList.map((json) => BannerModel.fromJson(json)).toList();

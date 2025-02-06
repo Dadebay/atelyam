@@ -13,7 +13,6 @@ class BrandsController extends GetxController {
   RxBool isLoadingBrandsProfile = false.obs;
   late Rx<BusinessUserModel?> businessUser = Rx<BusinessUserModel?>(null);
   late Rx<Future<List<ProductModel>?>> productsFuture = Rx<Future<List<ProductModel>?>>(Future.value(null));
-
   Future<void> fetchBusinessUserData({
     required BusinessUserModel businessUserModelFromOutside,
     required int categoryID,
@@ -28,10 +27,10 @@ class BrandsController extends GetxController {
       } else {
         productsFuture.value = _productService.fetchProducts(categoryID, businessUser.value!.user);
       }
-      isLoadingBrandsProfile.value = false;
     } catch (e) {
-      isLoadingBrandsProfile.value = false;
       showSnackBar('error', 'anErrorOccurred' + '$e', AppColors.redColor);
+    } finally {
+      isLoadingBrandsProfile.value = false;
     }
   }
 

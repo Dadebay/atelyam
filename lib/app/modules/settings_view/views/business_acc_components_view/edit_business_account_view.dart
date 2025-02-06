@@ -158,7 +158,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                           : ClipRRect(
                               borderRadius: BorderRadius.circular(23),
                               child: widget.businessUser.backPhoto == null
-                                  ? buildUploadButton(
+                                  ? WidgetsMine().buildUploadButton(
                                       onTap: () {
                                         controller.pickImage();
                                       },

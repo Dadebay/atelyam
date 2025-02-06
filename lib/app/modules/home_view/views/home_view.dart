@@ -1,6 +1,6 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
 import 'package:atelyam/app/core/custom_widgets/listview_top_name_and_icon.dart';
+import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/hashtag_model.dart';
@@ -29,65 +29,27 @@ class _HomeViewState extends State<HomeView> {
     return Stack(
       children: [
         BackgroundPattern(),
-        LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            final double screenHeight = constraints.maxHeight;
-            final double screenWidth = constraints.maxWidth;
-
-            return RefreshIndicator(
-              onRefresh: () => homeController.refreshBanners(),
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  _buildSliverAppBar(screenHeight),
-                  SliverToBoxAdapter(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40),
-                        ),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadii.borderRadius40,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              FadeInUp(
-                                delay: const Duration(milliseconds: 400),
-                                child: Banners(),
-                              ),
-                              FadeInUp(
-                                delay: const Duration(milliseconds: 500),
-                                child: BusinessCategoryView(
-                                  screenWidth: screenWidth,
-                                  categoriesFuture: homeController.categoriesFuture.value,
-                                ),
-                              ),
-                              FadeInUp(
-                                delay: const Duration(milliseconds: 600),
-                                child: const BusinessUsersHomeView(),
-                              ),
-                              FadeInUp(
-                                delay: const Duration(milliseconds: 700),
-                                child: _buildProducts(size: Size(screenWidth, screenHeight)),
-                              ),
-                              Container(
-                                height: screenHeight * 0.20,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+        _buildContent(),
       ],
+    );
+  }
+
+  Widget _buildContent() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double screenHeight = constraints.maxHeight;
+        final double screenWidth = constraints.maxWidth;
+
+        return RefreshIndicator(
+          onRefresh: homeController.refreshBanners,
+          child: CustomScrollView(
+            slivers: <Widget>[
+              _buildSliverAppBar(screenHeight),
+              _buildMainContent(screenWidth, screenHeight),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -111,7 +73,39 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildProducts({required Size size}) {
+  Widget _buildMainContent(double screenWidth, double screenHeight) {
+    return SliverToBoxAdapter(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadii.borderRadius40,
+          child: Column(
+            children: [
+              WidgetsMine().buildAnimatedWidget(Banners(), 400),
+              WidgetsMine().buildAnimatedWidget(
+                BusinessCategoryView(
+                  screenWidth: screenWidth,
+                  categoriesFuture: homeController.categoriesFuture.value,
+                ),
+                500,
+              ),
+              WidgetsMine().buildAnimatedWidget(const BusinessUsersHomeView(), 600),
+              WidgetsMine().buildAnimatedWidget(_buildProducts(Size(screenWidth, screenHeight)), 700),
+              Container(height: screenHeight * 0.20, color: Colors.white),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProducts(Size size) {
     return Obx(() {
       return FutureBuilder<List<HashtagModel>>(
         future: homeController.hashtagsFuture.value,
@@ -120,40 +114,32 @@ class _HomeViewState extends State<HomeView> {
             return EmptyStates().loadingData();
           } else if (snapshot.hasError) {
             return EmptyStates().errorData(snapshot.hasError.toString());
-          } else if (snapshot.hasData) {
-            if (snapshot.data!.isNotEmpty) {
-              print(snapshot.data!.length);
-              return ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                itemCount: snapshot.data!.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final hashtag = snapshot.data![index];
-                  print(hashtag.count);
-                  return hashtag.count <= 0 ? const SizedBox.shrink() : _buildProductList(size: size, hashtagModel: hashtag);
-                },
-              );
-            } else {
-              return EmptyStates().noDataAvailable();
-            }
+          } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+            return ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final hashtag = snapshot.data![index];
+                return hashtag.count > 0 ? _buildProductList(size, hashtag) : const SizedBox.shrink();
+              },
+            );
           } else {
-            return const Text('no data');
+            return EmptyStates().noDataAvailable();
           }
         },
       );
     });
   }
 
-  Widget _buildProductList({required Size size, required HashtagModel hashtagModel}) {
-    return Wrap(
+  Widget _buildProductList(Size size, HashtagModel hashtagModel) {
+    return Column(
       children: [
         ListviewTopNameAndIcon(
           text: hashtagModel.name,
           icon: true,
-          onTap: () {
-            Get.to(() => AllProductsView(title: hashtagModel.name, id: hashtagModel.id));
-          },
+          onTap: () => Get.to(() => AllProductsView(title: hashtagModel.name, id: hashtagModel.id)),
         ),
         SizedBox(
           height: size.height * 0.35,
@@ -171,7 +157,7 @@ class _HomeViewState extends State<HomeView> {
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) {
+                  itemBuilder: (context, index) {
                     return DiscoveryCard(
                       homePageStyle: true,
                       productModel: snapshot.data![index],

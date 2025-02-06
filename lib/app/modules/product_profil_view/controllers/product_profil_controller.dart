@@ -21,6 +21,7 @@ class ProductProfilController extends GetxController {
   Future<void> fetchImages(final int id, final String mainImage) async {
     isLoading.value = true;
     try {
+      productImages.clear();
       final imageModel = await _imageService.fetchImageByProductID(id);
       if (imageModel != null) {
         productImages.value = imageModel.images.where((img) => img != null).map((img) => authController.ipAddress + img!).toList();
