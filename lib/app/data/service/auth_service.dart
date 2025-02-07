@@ -127,7 +127,7 @@ class SignInService {
   }) async {
     try {
       final token = await _auth.getToken();
-      final uri = Uri.parse('${authController.ipAddress}$endpoint');
+      final uri = Uri.parse('${authController.ipAddress.value}$endpoint');
       late http.BaseRequest request;
       if (isForm) {
         request = http.MultipartRequest(method, uri);

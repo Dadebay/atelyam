@@ -93,7 +93,7 @@ class ProductController extends GetxController {
     try {
       final request = http.MultipartRequest(
         'POST',
-        Uri.parse('${authController.ipAddress}/mobile/uploadProducts/'),
+        Uri.parse('${authController.ipAddress.value}/mobile/uploadProducts/'),
       );
       request.headers.addAll({
         'Authorization': 'Bearer $token',
@@ -150,7 +150,7 @@ class ProductController extends GetxController {
     try {
       final request = http.MultipartRequest(
         'PUT',
-        Uri.parse('${authController.ipAddress}/mobile/uploadImage/$productId/'),
+        Uri.parse('${authController.ipAddress.value}/mobile/uploadImage/$productId/'),
       );
       request.headers.addAll({
         'Authorization': 'Bearer $token',
@@ -217,7 +217,7 @@ class ProductController extends GetxController {
     try {
       final request = http.MultipartRequest(
         'POST',
-        Uri.parse('${authController.ipAddress}/mobile/uploadImage/$productId/'),
+        Uri.parse('${authController.ipAddress.value}/mobile/uploadImage/$productId/'),
       );
       request.headers.addAll({
         'Authorization': 'Bearer $token',
@@ -256,7 +256,7 @@ class ProductController extends GetxController {
     try {
       final request = http.MultipartRequest(
         'POST',
-        Uri.parse('${authController.ipAddress}/mobile/productUpdate/$productId/'),
+        Uri.parse('${authController.ipAddress.value}/mobile/productUpdate/$productId/'),
       );
       request.headers.addAll({
         'Authorization': 'Bearer $token',
@@ -303,7 +303,7 @@ class ProductController extends GetxController {
     };
     try {
       final response = await http.delete(
-        Uri.parse('${authController.ipAddress}/mobile/productDelete/$productID/'),
+        Uri.parse('${authController.ipAddress.value}/mobile/productDelete/$productID/'),
         headers: headers,
       );
       if (response.statusCode == 200) {
@@ -336,7 +336,7 @@ class ProductController extends GetxController {
     };
     final request = http.MultipartRequest(
       'POST',
-      Uri.parse('${authController.ipAddress}/mobile/createUser/'),
+      Uri.parse('${authController.ipAddress.value}/mobile/createUser/'),
     );
     request.fields.addAll({
       'title_id': selectedCategory.value!.id.toString(),
@@ -399,7 +399,7 @@ class ProductController extends GetxController {
     }
     try {
       final response = await _dio.post(
-        '${authController.ipAddress}/mobile/updateBusiness/',
+        '${authController.ipAddress.value}/mobile/updateBusiness/',
         data: formData,
         options: dio.Options(headers: headers),
       );
@@ -424,7 +424,7 @@ class ProductController extends GetxController {
     };
     try {
       final response = await http.delete(
-        Uri.parse('${authController.ipAddress}/mobile/deleteBusiness/'),
+        Uri.parse('${authController.ipAddress.value}/mobile/deleteBusiness/'),
         headers: headers,
       );
       if (response.statusCode == 200) {

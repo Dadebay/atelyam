@@ -17,10 +17,9 @@ class ProductService {
   final Auth _auth = Auth();
 
   Future<List<ProductModel>?> fetchProducts(int categoryId, int userId) async {
-    print('${authController.ipAddress}/mobile/products/$categoryId/$userId/');
     try {
       final response = await _client.get(
-        Uri.parse('${authController.ipAddress}/mobile/products/$categoryId/$userId/'),
+        Uri.parse('${authController.ipAddress.value}/mobile/products/$categoryId/$userId/'),
       );
       if (response.statusCode == 200) {
         final responseBody = utf8.decode(response.bodyBytes);
@@ -44,7 +43,7 @@ class ProductService {
     print(userId);
     try {
       final response = await _client.get(
-        Uri.parse('${authController.ipAddress}/mobile/getProduct/$userId/'),
+        Uri.parse('${authController.ipAddress.value}/mobile/getProduct/$userId/'),
       );
       print(response.body);
       print(response.statusCode);
@@ -68,7 +67,7 @@ class ProductService {
   Future<List<ProductModel>?> getMyProducts() async {
     try {
       final token = await _auth.getToken();
-      final uri = Uri.parse('${authController.ipAddress}/mobile/GetMyProducts/');
+      final uri = Uri.parse('${authController.ipAddress.value}/mobile/GetMyProducts/');
       final response = await http.get(
         uri,
         headers: {
@@ -95,7 +94,7 @@ class ProductService {
 
   Future<List<ProductModel>?> fetchPopularProducts({int page = 1, int size = 10}) async {
     try {
-      final response = await _client.get(Uri.parse('${authController.ipAddress}/mobile/getProductsPopular/?page=$page&size=$size'));
+      final response = await _client.get(Uri.parse('${authController.ipAddress.value}/mobile/getProductsPopular/?page=$page&size=$size'));
       if (response.statusCode == 200) {
         final responseBody = utf8.decode(response.bodyBytes);
         final Map<String, dynamic> data = json.decode(responseBody);

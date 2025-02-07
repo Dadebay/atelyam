@@ -11,10 +11,9 @@ dependencies:
   flutter_lints: ^2.0.1  # Adding a version for flutter_lints
   iconly: 
   flutter_svg:
-  # cloud_firestore: ^4.6.0
-  # firebase_messaging:
-  cloud_firestore: ^2.2.1
-  firebase_messaging: ^10.0.2
+  firebase_messaging:
+  awesome_notifications:
+  firebase_core_platform_interface: 4.5.1
   lottie: ^3.1.0
   get_storage: ^2.0.0  # Added version for get_storage
   image_picker: ^0.8.5+3  # Added version for image_picker

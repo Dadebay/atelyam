@@ -53,7 +53,7 @@ class CategoryCard extends StatelessWidget {
                           ),
                           children: [
                             CachedNetworkImage(
-                              imageUrl: '${authController.ipAddress}${categoryModel.logo!}',
+                              imageUrl: '${authController.ipAddress.value}${categoryModel.logo!}',
                               fit: BoxFit.cover,
                               key: keyImage,
                               placeholder: (context, url) => EmptyStates().loadingData(),

@@ -19,7 +19,7 @@ class ImageService {
   Future<ImageModel?> fetchImageByProductID(int productId) async {
     try {
       final response = await _client.get(
-        Uri.parse('${authController.ipAddress}/mobile/images/$productId'),
+        Uri.parse('${authController.ipAddress.value}/mobile/images/$productId'),
       );
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -48,7 +48,7 @@ class ImageService {
     });
     try {
       final response = await _client.get(
-        Uri.parse('${authController.ipAddress}/mobile/product/$productId?device=$deviceToken'),
+        Uri.parse('${authController.ipAddress.value}/mobile/product/$productId?device=$deviceToken'),
       );
       if (response.statusCode == 200) {
         return ProductModel.fromJson(json.decode(response.body));

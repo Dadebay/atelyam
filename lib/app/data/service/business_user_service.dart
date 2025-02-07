@@ -14,7 +14,7 @@ class BusinessUserService {
   final AuthController authController = Get.find();
 
   Future<List<BusinessUserModel>?> getBusinessAccountsByCategory({required int categoryID}) async {
-    final url = Uri.parse('${authController.ipAddress}/mobile/cats_id/$categoryID/');
+    final url = Uri.parse('${authController.ipAddress.value}/mobile/cats_id/$categoryID/');
     try {
       final response = await http.get(url);
 
@@ -35,7 +35,7 @@ class BusinessUserService {
   }
 
   Future<BusinessUserModel?> fetchBusinessAccountByID(int id) async {
-    final url = Uri.parse('${authController.ipAddress}/mobile/GetUserId/$id/');
+    final url = Uri.parse('${authController.ipAddress.value}/mobile/GetUserId/$id/');
     print(url);
     try {
       final response = await http.get(url);
@@ -55,7 +55,7 @@ class BusinessUserService {
   }
 
   Future<BusinessUserModel?> fetchBusinessAccountKICI(int id) async {
-    final url = Uri.parse('${authController.ipAddress}/mobile/getUserById/$id/');
+    final url = Uri.parse('${authController.ipAddress.value}/mobile/getUserById/$id/');
     print(url);
     try {
       final response = await http.get(url);
@@ -77,7 +77,7 @@ class BusinessUserService {
 
   Future<List<BusinessUserModel>?> fetchPopularBusinessAccounts() async {
     try {
-      final uri = Uri.parse('${authController.ipAddress}/mobile/getPopular/');
+      final uri = Uri.parse('${authController.ipAddress.value}/mobile/getPopular/');
       final response = await http.get(
         uri,
         headers: {
@@ -102,7 +102,7 @@ class BusinessUserService {
   final String getMyStatusEndpoint = '/getMyStatus/';
 
   Future<List<GetMyStatusModel>?> getMyStatus() async {
-    final url = Uri.parse('${authController.ipAddress}/mobile' + getMyStatusEndpoint);
+    final url = Uri.parse('${authController.ipAddress.value}/mobile' + getMyStatusEndpoint);
     final token = await Auth().getToken();
 
     try {

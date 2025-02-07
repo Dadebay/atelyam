@@ -164,7 +164,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                                       },
                                     )
                                   : CachedNetworkImage(
-                                      imageUrl: authController.ipAddress + widget.businessUser.backPhoto!,
+                                      imageUrl: authController.ipAddress.value + widget.businessUser.backPhoto!,
                                       fit: BoxFit.cover,
                                       fadeInCurve: Curves.ease,
                                       height: Get.size.height,

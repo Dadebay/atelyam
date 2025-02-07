@@ -14,7 +14,7 @@ class BusinessCategoryService {
 
   Future<List<BusinessCategoryModel>?> fetchCategories() async {
     try {
-      final uri = Uri.parse('${authController.ipAddress}/mobile/cats/');
+      final uri = Uri.parse('${authController.ipAddress.value}/mobile/cats/');
       final response = await http.get(
         uri,
         headers: {

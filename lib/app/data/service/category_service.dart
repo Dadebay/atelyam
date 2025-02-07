@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 class CategoryService {
   final AuthController authController = Get.find();
   Future<List<CategoryModel>> fetchCategories() async {
-    final String url = '${authController.ipAddress}/mobile/hashtags/';
+    final String url = '${authController.ipAddress.value}/mobile/hashtags/';
 
     final response = await http.get(Uri.parse(url));
 

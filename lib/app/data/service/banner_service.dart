@@ -11,9 +11,9 @@ import 'package:http/http.dart' as http;
 class BannerService {
   final String _apiEndpoint = '/mobile/banners/';
   final AuthController authController = Get.find();
-
   Future<List<BannerModel>> fetchBanners() async {
-    final response = await http.get(Uri.parse(authController.ipAddress + _apiEndpoint));
+    print(authController.ipAddress.value + _apiEndpoint);
+    final response = await http.get(Uri.parse(authController.ipAddress.value + _apiEndpoint));
     print(response.body);
     print(response.statusCode);
     if (response.statusCode == 200) {

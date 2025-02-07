@@ -5,27 +5,27 @@ import 'package:atelyam/app/modules/auth_view/views/otp_view.dart';
 import 'package:atelyam/app/modules/home_view/controllers/home_controller.dart';
 import 'package:atelyam/app/modules/home_view/views/bottom_nav_bar_view.dart';
 import 'package:atelyam/app/modules/settings_view/controllers/settings_controller.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
-  final ipAddress = 'http://216.250.12.49:8000/'.obs;
-  final db = FirebaseFirestore.instance;
+  final ipAddress = 'http://216.250.12.49:8000'.obs;
+  // final db = FirebaseFirestore.instance;
 
-  Future<void> fetchIpAddress() async {
-    try {
-      final DocumentSnapshot snapshot = await db.collection('server').doc('server_ip').get();
-      if (snapshot.exists && snapshot.data() != null) {
-        final data = snapshot.data() as Map<String, dynamic>;
-        ipAddress.value = data['ip'] ?? 'http://216.250.12.49:8000/';
-      } else {
-        ipAddress.value = 'http://216.250.12.49:8000/';
-      }
-    } catch (e) {
-      ipAddress.value = 'http://216.250.12.49:8000/';
-    }
-  }
+  // Future<void> fetchIpAddress() async {
+  //   try {
+  //     // final DocumentSnapshot snapshot = await db.collection('server').doc('server_ip').get();
+  //     if (snapshot.exists && snapshot.data() != null) {
+  //       final data = snapshot.data() as Map<String, dynamic>;
+  //       ipAddress.value = data['ip'] ?? 'http://216.250.12.49:8000/';
+  //     } else {
+  //       ipAddress.value = 'http://216.250.12.49:8000/';
+  //     }
+  //   } catch (e) {
+  //     ipAddress.value = 'http://216.250.12.49:8000/';
+  //   }
+  // }
 
   Future<void> handleAuthAction({required String phoneController, required String usernameController}) async {
     final HomeController homeController = Get.find();

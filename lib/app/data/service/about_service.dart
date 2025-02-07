@@ -11,7 +11,7 @@ class AboutService {
   final String _apiEndpoint = '/mobile/about/';
 
   Future<AboutModel> fetchAboutData() async {
-    final response = await http.get(Uri.parse(authController.ipAddress + _apiEndpoint));
+    final response = await http.get(Uri.parse(authController.ipAddress.value + _apiEndpoint));
 
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes); // Force UTF-8 decoding

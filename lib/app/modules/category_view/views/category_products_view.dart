@@ -96,7 +96,7 @@ class _CategoryProductViewState extends State<CategoryProductView> {
       child: SizedBox(
         height: Get.size.height * 0.80,
         child: CachedNetworkImage(
-          imageUrl: '${authController.ipAddress}${widget.categoryModel.logo}',
+          imageUrl: '${authController.ipAddress.value}${widget.categoryModel.logo}',
           fit: BoxFit.cover,
           placeholder: (context, url) => EmptyStates().loadingData(),
           errorWidget: (context, url, error) => EmptyStates().noMiniCategoryImage(),
@@ -113,7 +113,7 @@ class _CategoryProductViewState extends State<CategoryProductView> {
         child: ClipRRect(
           borderRadius: BorderRadii.borderRadius30,
           child: CachedNetworkImage(
-            imageUrl: '${authController.ipAddress}${widget.categoryModel.logo}',
+            imageUrl: '${authController.ipAddress.value}${widget.categoryModel.logo}',
             fit: BoxFit.cover,
             placeholder: (context, url) => EmptyStates().loadingData(),
             errorWidget: (context, url, error) => EmptyStates().noMiniCategoryImage(),

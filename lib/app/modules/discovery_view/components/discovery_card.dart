@@ -44,7 +44,7 @@ class DiscoveryCard extends StatelessWidget {
             children: [
               Positioned.fill(
                 child: CachedNetworkImage(
-                  imageUrl: authController.ipAddress + productModel.img,
+                  imageUrl: authController.ipAddress.value + productModel.img,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => EmptyStates().loadingData(),
                   errorWidget: (context, url, error) => EmptyStates().noMiniCategoryImage(),

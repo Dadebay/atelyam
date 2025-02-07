@@ -51,7 +51,7 @@ class BusinessUsersCardView extends StatelessWidget {
               borderRadius: BorderRadii.borderRadius99,
               child: CachedNetworkImage(
                 fadeInCurve: Curves.ease,
-                imageUrl: authController.ipAddress + category.backPhoto,
+                imageUrl: authController.ipAddress.value + category.backPhoto,
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadii.borderRadius10,

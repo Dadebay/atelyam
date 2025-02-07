@@ -14,7 +14,7 @@ class HashtagService {
   final AuthController authController = Get.find();
 
   Future<List<HashtagModel>> fetchHashtags() async {
-    final String url = '${authController.ipAddress}/mobile/hashtags/';
+    final String url = '${authController.ipAddress.value}/mobile/hashtags/';
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -41,7 +41,7 @@ class HashtagService {
     String filter = 'last',
   }) async {
     try {
-      final Uri uri = Uri.parse('${authController.ipAddress}/mobile/getProductByHashtag/$hashtagId/').replace(
+      final Uri uri = Uri.parse('${authController.ipAddress.value}/mobile/getProductByHashtag/$hashtagId/').replace(
         queryParameters: {
           'page': page.toString(),
           'size': size.toString(),

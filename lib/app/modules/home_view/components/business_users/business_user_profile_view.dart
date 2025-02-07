@@ -263,7 +263,7 @@ class _BusinessUserProfileViewState extends State<BusinessUserProfileView> {
                       borderRadius: BorderRadii.borderRadius30,
                       child: CachedNetworkImage(
                         fadeInCurve: Curves.ease,
-                        imageUrl: authController.ipAddress + _homeController.businessUser.value!.backPhoto,
+                        imageUrl: authController.ipAddress.value + _homeController.businessUser.value!.backPhoto,
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadii.borderRadius10,

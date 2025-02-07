@@ -145,7 +145,7 @@ class BrendCard extends StatelessWidget {
                 borderRadius: BorderRadii.borderRadius30,
                 child: CachedNetworkImage(
                   fadeInCurve: Curves.ease,
-                  imageUrl: authController.ipAddress + businessUserModel.backPhoto,
+                  imageUrl: authController.ipAddress.value + businessUserModel.backPhoto,
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadii.borderRadius10,

@@ -136,7 +136,7 @@ class WidgetsMine {
     final AuthController authController = Get.find();
 
     return CachedNetworkImage(
-      imageUrl: authController.ipAddress + image,
+      imageUrl: authController.ipAddress.value + image,
       fit: BoxFit.cover,
       fadeInCurve: Curves.ease,
       height: Get.size.height,

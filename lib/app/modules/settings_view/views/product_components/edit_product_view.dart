@@ -90,7 +90,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
               return ClipRRect(
                 borderRadius: BorderRadii.borderRadius20,
                 child: CachedNetworkImage(
-                  imageUrl: '${controller.authController.ipAddress}${widget.product.img}',
+                  imageUrl: '${controller.authController.ipAddress.value}${widget.product.img}',
                   fit: BoxFit.cover,
                 ),
               );

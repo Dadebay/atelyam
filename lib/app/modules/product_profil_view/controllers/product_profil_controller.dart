@@ -24,10 +24,10 @@ class ProductProfilController extends GetxController {
       productImages.clear();
       final imageModel = await _imageService.fetchImageByProductID(id);
       if (imageModel != null) {
-        productImages.value = imageModel.images.where((img) => img != null).map((img) => authController.ipAddress + img!).toList();
-        productImages.insert(0, authController.ipAddress + mainImage);
+        productImages.value = imageModel.images.where((img) => img != null).map((img) => authController.ipAddress.value + img!).toList();
+        productImages.insert(0, authController.ipAddress.value + mainImage);
       } else {
-        productImages.insert(0, authController.ipAddress + mainImage);
+        productImages.insert(0, authController.ipAddress.value + mainImage);
       }
       isLoading.value = false;
     } catch (e) {
