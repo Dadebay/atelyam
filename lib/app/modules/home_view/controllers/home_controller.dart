@@ -1,5 +1,3 @@
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/banner_model.dart';
 import 'package:atelyam/app/data/models/business_category_model.dart';
 import 'package:atelyam/app/data/models/hashtag_model.dart';
@@ -7,6 +5,8 @@ import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/data/service/banner_service.dart';
 import 'package:atelyam/app/data/service/business_category_service.dart';
 import 'package:atelyam/app/data/service/hashtag_service.dart';
+import 'package:atelyam/app/product/custom_widgets/widgets.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -58,7 +58,7 @@ class HomeController extends GetxController {
         allProducts.addAll(products);
       }
     } catch (e) {
-      showSnackBar('Hata', 'Bir hata oluştu: $e', AppColors.redColor); // Hata mesajı göster
+      showSnackBar('Hata', 'Bir hata oluştu: $e', ColorConstants.redColor); // Hata mesajı göster
     } finally {
       isLoadingProducts.value = false;
       refreshController.loadComplete();
@@ -84,8 +84,16 @@ class HomeController extends GetxController {
   }
 
   Future<void> refreshBanners() async {
-    bannersFuture = _bannerService.fetchBanners().obs;
-    categoriesFuture = _categoryService.fetchCategories().obs;
-    hashtagsFuture = _hashtagService.fetchHashtags().obs;
+    bannersFuture.value = Future.value([]);
+    categoriesFuture.value = Future.value([]);
+    hashtagsFuture.value = Future.value([]);
+
+    // await Future.delayed(Duration(milliseconds: 300)); // UI'da boş görüntülenmesi için kısa gecikme
+
+    bannersFuture.value = _bannerService.fetchBanners();
+    categoriesFuture.value = _categoryService.fetchCategories();
+    hashtagsFuture.value = _hashtagService.fetchHashtags();
+
+    refreshController.refreshCompleted();
   }
 }

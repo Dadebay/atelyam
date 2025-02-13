@@ -4,16 +4,17 @@ publish_to: none
 description: A new Flutter project.
 environment:
   sdk: ">=3.3.3 <4.0.0"
+  # flutter: 3.24.0
 
 dependencies:
   cupertino_icons: ^1.0.6
   get: ^4.6.6
-  flutter_lints: ^2.0.1  # Adding a version for flutter_lints
   iconly: 
   flutter_svg:
-  firebase_messaging:
+  firebase_messaging: ^15.2.2
+  firebase_core:
   awesome_notifications:
-  firebase_core_platform_interface: 4.5.1
+  firebase_core_platform_interface: ^5.3.1
   lottie: ^3.1.0
   get_storage: ^2.0.0  # Added version for get_storage
   image_picker: ^0.8.5+3  # Added version for image_picker
@@ -23,7 +24,6 @@ dependencies:
   carousel_slider: 
   path_provider:
   animate_do: ^3.3.4
-  font_awesome_flutter: 
   gal: ^2.3.1
   url_launcher:
   pull_to_refresh:
@@ -36,6 +36,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  very_good_analysis: ^7.0.0  
+  flutter_lints: ^4.0.0
 
 flutter:
   assets:

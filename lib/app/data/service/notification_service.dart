@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class FCMConfig {
@@ -36,6 +37,18 @@ class FCMConfig {
   }
 
   Future<void> requestPermission() async {
+    final FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
     await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
         AwesomeNotifications().requestPermissionToSendNotifications();

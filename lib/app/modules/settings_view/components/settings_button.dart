@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:atelyam/app/core/theme/theme.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -25,7 +26,7 @@ class SettingsButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: ListTile(
         onTap: onTap,
-        tileColor: AppColors.whiteMainColor,
+        tileColor: ColorConstants.whiteMainColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadii.borderRadius15,
         ),
@@ -41,7 +42,7 @@ class SettingsButton extends StatelessWidget {
         leading: _buildLeadingIcon(),
         trailing: const Icon(
           IconlyLight.arrow_right_circle,
-          color: AppColors.kPrimaryColor,
+          color: ColorConstants.kPrimaryColor,
         ),
       ),
     );
@@ -80,9 +81,9 @@ class SettingsButton extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(1),
       decoration: BoxDecoration(
-        color: AppColors.kThirdColor.withOpacity(0.2),
+        color: ColorConstants.kThirdColor.withOpacity(0.2),
         border: Border.all(
-          color: AppColors.kSecondaryColor.withOpacity(0.4),
+          color: ColorConstants.kSecondaryColor.withOpacity(0.4),
           width: 1,
         ),
         borderRadius: BorderRadii.borderRadius18,
@@ -104,9 +105,9 @@ class SettingsButton extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: AppColors.kThirdColor.withOpacity(0.2),
+        color: ColorConstants.kThirdColor.withOpacity(0.2),
         border: Border.all(
-          color: AppColors.kSecondaryColor.withOpacity(0.3),
+          color: ColorConstants.kSecondaryColor.withOpacity(0.3),
           width: 1,
         ),
         borderRadius: BorderRadii.borderRadius18,

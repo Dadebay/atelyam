@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/category_model.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
+import 'package:atelyam/app/product/custom_widgets/widgets.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,7 +21,7 @@ class CategoryService {
       final List<CategoryModel> categories = jsonData.map((item) => CategoryModel.fromJson(item)).toList();
       return categories;
     } else {
-      showSnackBar('networkError'.tr, 'noInternet'.tr, AppColors.redColor);
+      showSnackBar('networkError'.tr, 'noInternet'.tr, ColorConstants.redColor);
       return [];
     }
   }

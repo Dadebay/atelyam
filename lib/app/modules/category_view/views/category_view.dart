@@ -1,10 +1,11 @@
-import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/category_model.dart';
 import 'package:atelyam/app/data/service/category_service.dart';
 import 'package:atelyam/app/modules/category_view/components/category_card.dart';
 import 'package:atelyam/app/modules/category_view/views/category_products_view.dart';
+import 'package:atelyam/app/product/custom_widgets/background_pattern.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -41,7 +42,7 @@ class _CategoryViewState extends State<CategoryView> {
                   title: Text(
                     'categories'.tr,
                     style: TextStyle(
-                      color: AppColors.whiteMainColor,
+                      color: ColorConstants.whiteMainColor,
                       fontWeight: FontWeight.bold,
                       fontSize: AppFontSizes.fontSize24,
                     ),

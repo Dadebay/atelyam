@@ -1,6 +1,7 @@
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
+import 'package:atelyam/app/product/custom_widgets/widgets.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -16,7 +17,7 @@ class MyProductCard extends StatelessWidget {
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: AppColors.whiteMainColor, // Pasif hesap rengi
+        color: ColorConstants.whiteMainColor, // Pasif hesap rengi
         borderRadius: BorderRadii.borderRadius20, // Köşe yuvarlaklığı
         boxShadow: [
           BoxShadow(
@@ -31,7 +32,7 @@ class MyProductCard extends StatelessWidget {
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
-                color: productModel.status.toString().toLowerCase() == 'true' ? Colors.grey.shade500 : AppColors.whiteMainColor, // Pasif hesap rengi
+                color: productModel.status.toString().toLowerCase() == 'true' ? Colors.grey.shade500 : ColorConstants.whiteMainColor, // Pasif hesap rengi
                 borderRadius: BorderRadii.borderRadius20, // Köşe yuvarlaklığı
               ),
             ),
@@ -44,7 +45,7 @@ class MyProductCard extends StatelessWidget {
                   height: 80,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadii.borderRadius18,
-                    border: Border.all(color: AppColors.kSecondaryColor, width: 1),
+                    border: Border.all(color: ColorConstants.kSecondaryColor, width: 1),
                   ),
                   margin: EdgeInsets.only(right: 20),
                   child: ClipRRect(
@@ -71,7 +72,7 @@ class MyProductCard extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: AppColors.kPrimaryColor,
+                                color: ColorConstants.kPrimaryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: AppFontSizes.getFontSize(4.5),
                               ),
@@ -81,7 +82,7 @@ class MyProductCard extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: AppColors.kPrimaryColor,
+                                color: ColorConstants.kPrimaryColor,
                                 fontWeight: FontWeight.w400,
                                 fontSize: AppFontSizes.getFontSize(4),
                               ),
@@ -111,7 +112,7 @@ class MyProductCard extends StatelessWidget {
           Text(
             'wait'.tr,
             style: TextStyle(
-              color: AppColors.kPrimaryColor,
+              color: ColorConstants.kPrimaryColor,
               fontWeight: FontWeight.bold,
               fontSize: AppFontSizes.getFontSize(4.5),
             ),
@@ -122,7 +123,7 @@ class MyProductCard extends StatelessWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: AppColors.kPrimaryColor,
+              color: ColorConstants.kPrimaryColor,
               fontWeight: FontWeight.w400,
               fontSize: AppFontSizes.getFontSize(3.5),
             ),
@@ -141,7 +142,7 @@ class MyProductCard extends StatelessWidget {
           Text(
             'inactive'.tr,
             style: TextStyle(
-              color: AppColors.kPrimaryColor,
+              color: ColorConstants.kPrimaryColor,
               fontWeight: FontWeight.bold,
               fontSize: AppFontSizes.getFontSize(4.5),
             ),
@@ -152,7 +153,7 @@ class MyProductCard extends StatelessWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: AppColors.kPrimaryColor,
+              color: ColorConstants.kPrimaryColor,
               fontWeight: FontWeight.w400,
               fontSize: AppFontSizes.getFontSize(3.5),
             ),

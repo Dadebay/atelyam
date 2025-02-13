@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/service/image_service.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
+import 'package:atelyam/app/product/custom_widgets/widgets.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
 import 'package:dio/dio.dart';
 import 'package:gal/gal.dart';
 import 'package:get/get.dart';
@@ -32,7 +32,6 @@ class ProductProfilController extends GetxController {
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;
-      showSnackBar('error', '${'image_download_error'} $e', AppColors.redColor);
     }
   }
 
@@ -43,7 +42,7 @@ class ProductProfilController extends GetxController {
         viewCount.value = businessUser.viewCount;
       }
     } catch (e) {
-      showSnackBar('error', '${'image_download_error'} $e', AppColors.redColor);
+      showSnackBar('error', 'image_download_error'.tr, ColorConstants.redColor);
     }
   }
 
@@ -63,10 +62,10 @@ class ProductProfilController extends GetxController {
     final bool isPermanentlyDenied = statusStorage == PermissionStatus.permanentlyDenied || statusPhotos == PermissionStatus.permanentlyDenied;
 
     if (isPermanentlyDenied) {
-      showSnackBar('warning', 'storage_permission_denied', AppColors.redColor);
+      showSnackBar('warning', 'storage_permission_denied', ColorConstants.redColor);
     } else {
       try {
-        showSnackBar('downloading', 'download_started', AppColors.greenColor);
+        showSnackBar('downloading', 'download_started', ColorConstants.greenColor);
 
         final Dio dio = Dio();
         final Directory? downloadsDir = await getExternalStorageDirectory();
@@ -80,9 +79,9 @@ class ProductProfilController extends GetxController {
         await dio.download(imageURL, fullPath);
         await Gal.putImage(fullPath);
 
-        showSnackBar('success', 'downloaded', AppColors.kSecondaryColor);
+        showSnackBar('success', 'downloaded', ColorConstants.kSecondaryColor);
       } catch (e) {
-        showSnackBar('error', '${'image_download_error'} $e', AppColors.redColor);
+        showSnackBar('error', 'image_download_error'.tr, ColorConstants.redColor);
       }
     }
   }

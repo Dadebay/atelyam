@@ -1,13 +1,11 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
-import 'package:atelyam/app/core/custom_widgets/back_button.dart';
-import 'package:atelyam/app/core/custom_widgets/custom_text_field.dart';
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_category_model.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
 import 'package:atelyam/app/modules/settings_view/controllers/product_controller.dart';
+import 'package:atelyam/app/product/custom_widgets/index.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -17,16 +15,16 @@ class CreateBusinessAccountView extends StatelessWidget {
   final ProductController controller = Get.put<ProductController>(ProductController());
   AppBar _appBar(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.kSecondaryColor,
+      backgroundColor: ColorConstants.kSecondaryColor,
       title: Text(
         'new_business_account'.tr, // Başlık metni
         style: TextStyle(
-          color: AppColors.whiteMainColor,
+          color: ColorConstants.whiteMainColor,
           fontSize: AppFontSizes.fontSize16 + 2,
           fontWeight: FontWeight.bold,
         ),
       ),
-      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: AppColors.kSecondaryColor),
+      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: ColorConstants.kSecondaryColor),
       leading: BackButtonMine(
         miniButton: true,
       ),
@@ -39,7 +37,7 @@ class CreateBusinessAccountView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteMainColor,
+      backgroundColor: ColorConstants.whiteMainColor,
       appBar: _appBar(context),
       body: ListView(
         children: [
@@ -59,7 +57,7 @@ class CreateBusinessAccountView extends StatelessWidget {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadii.borderRadius20,
-                    borderSide: BorderSide(color: AppColors.kSecondaryColor, width: 2),
+                    borderSide: BorderSide(color: ColorConstants.kSecondaryColor, width: 2),
                   ),
                 ),
                 value: controller.selectedCategory.value,
@@ -85,7 +83,7 @@ class CreateBusinessAccountView extends StatelessWidget {
             controller: textEditingControllers[0],
             borderRadius: true,
             showLabel: true,
-            customColor: AppColors.kPrimaryColor.withOpacity(.2),
+            customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
             focusNode: focusNodes[0],
             requestfocusNode: focusNodes[1],
           ),
@@ -103,7 +101,7 @@ class CreateBusinessAccountView extends StatelessWidget {
             borderRadius: true,
             showLabel: true,
             maxLine: 5,
-            customColor: AppColors.kPrimaryColor.withOpacity(.2),
+            customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
             focusNode: focusNodes[2],
             requestfocusNode: focusNodes[3],
           ),
@@ -115,7 +113,7 @@ class CreateBusinessAccountView extends StatelessWidget {
               borderRadius: true,
               showLabel: true,
               maxLine: 5,
-              customColor: AppColors.kPrimaryColor.withOpacity(.2),
+              customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
               focusNode: focusNodes[3],
               requestfocusNode: focusNodes[4],
             ),
@@ -125,7 +123,7 @@ class CreateBusinessAccountView extends StatelessWidget {
             controller: textEditingControllers[4],
             borderRadius: true,
             showLabel: true,
-            customColor: AppColors.kPrimaryColor.withOpacity(.2),
+            customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
             focusNode: focusNodes[4],
             requestfocusNode: focusNodes[5],
           ),
@@ -136,7 +134,7 @@ class CreateBusinessAccountView extends StatelessWidget {
               controller: textEditingControllers[5],
               borderRadius: true,
               showLabel: true,
-              customColor: AppColors.kPrimaryColor.withOpacity(.2),
+              customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
               focusNode: focusNodes[5],
               requestfocusNode: focusNodes[6],
             ),
@@ -146,7 +144,7 @@ class CreateBusinessAccountView extends StatelessWidget {
             controller: textEditingControllers[6],
             borderRadius: true,
             showLabel: true,
-            customColor: AppColors.kPrimaryColor.withOpacity(.2),
+            customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
             focusNode: focusNodes[6],
             requestfocusNode: focusNodes[7],
           ),
@@ -157,7 +155,7 @@ class CreateBusinessAccountView extends StatelessWidget {
               controller: textEditingControllers[7],
               borderRadius: true,
               showLabel: true,
-              customColor: AppColors.kPrimaryColor.withOpacity(.2),
+              customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
               focusNode: focusNodes[7],
               requestfocusNode: focusNodes[0],
             ),
@@ -172,7 +170,7 @@ class CreateBusinessAccountView extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.grey.shade100,
                   borderRadius: BorderRadii.borderRadius25,
-                  border: Border.all(color: AppColors.kSecondaryColor, width: 2),
+                  border: Border.all(color: ColorConstants.kSecondaryColor, width: 2),
                 ),
                 child: Obx(
                   () => controller.selectedImage.value != null
@@ -222,7 +220,7 @@ class CreateBusinessAccountView extends StatelessWidget {
                       ),
                     );
                   } else {
-                    showSnackBar('error', 'fill_all_fields', AppColors.redColor);
+                    showSnackBar('error', 'fill_all_fields', ColorConstants.redColor);
                   }
                 },
                 text: 'add_account'.tr,

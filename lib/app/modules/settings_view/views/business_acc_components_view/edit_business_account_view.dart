@@ -1,12 +1,10 @@
-import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
-import 'package:atelyam/app/core/custom_widgets/custom_text_field.dart';
-import 'package:atelyam/app/core/custom_widgets/dialogs.dart';
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
 import 'package:atelyam/app/modules/settings_view/controllers/product_controller.dart';
+import 'package:atelyam/app/product/custom_widgets/index.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,7 +43,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteMainColor,
+      backgroundColor: ColorConstants.whiteMainColor,
       appBar: _appBar(context),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -60,7 +58,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                 controller: textEditingControllers[0],
                 borderRadius: true,
                 showLabel: true,
-                customColor: AppColors.kPrimaryColor.withOpacity(.2),
+                customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
                 focusNode: focusNodes[0],
                 requestfocusNode: focusNodes[1],
               ),
@@ -78,7 +76,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                 borderRadius: true,
                 showLabel: true,
                 maxLine: 5,
-                customColor: AppColors.kPrimaryColor.withOpacity(.2),
+                customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
                 focusNode: focusNodes[2],
                 requestfocusNode: focusNodes[3],
               ),
@@ -90,7 +88,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                   borderRadius: true,
                   showLabel: true,
                   maxLine: 5,
-                  customColor: AppColors.kPrimaryColor.withOpacity(.2),
+                  customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
                   focusNode: focusNodes[3],
                   requestfocusNode: focusNodes[4],
                 ),
@@ -100,7 +98,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                 controller: textEditingControllers[4],
                 borderRadius: true,
                 showLabel: true,
-                customColor: AppColors.kPrimaryColor.withOpacity(.2),
+                customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
                 focusNode: focusNodes[4],
                 requestfocusNode: focusNodes[5],
               ),
@@ -111,7 +109,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                   controller: textEditingControllers[5],
                   borderRadius: true,
                   showLabel: true,
-                  customColor: AppColors.kPrimaryColor.withOpacity(.2),
+                  customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
                   focusNode: focusNodes[5],
                   requestfocusNode: focusNodes[6],
                 ),
@@ -121,7 +119,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                 controller: textEditingControllers[6],
                 borderRadius: true,
                 showLabel: true,
-                customColor: AppColors.kPrimaryColor.withOpacity(.2),
+                customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
                 focusNode: focusNodes[6],
                 requestfocusNode: focusNodes[7],
               ),
@@ -132,7 +130,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                   controller: textEditingControllers[7],
                   borderRadius: true,
                   showLabel: true,
-                  customColor: AppColors.kPrimaryColor.withOpacity(.2),
+                  customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
                   focusNode: focusNodes[7],
                   requestfocusNode: focusNodes[0],
                 ),
@@ -147,7 +145,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
                     decoration: BoxDecoration(
                       color: Colors.grey.shade100,
                       borderRadius: BorderRadii.borderRadius25,
-                      border: Border.all(color: AppColors.kSecondaryColor, width: 2),
+                      border: Border.all(color: ColorConstants.kSecondaryColor, width: 2),
                     ),
                     child: Obx(
                       () => controller.selectedImage.value != null
@@ -208,11 +206,11 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
 
   AppBar _appBar(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.kSecondaryColor,
+      backgroundColor: ColorConstants.kSecondaryColor,
       title: Text(
         'update_business_account'.tr, // Başlık metni
         style: TextStyle(
-          color: AppColors.whiteMainColor,
+          color: ColorConstants.whiteMainColor,
           fontSize: AppFontSizes.fontSize16 + 2,
           fontWeight: FontWeight.bold,
         ),
@@ -225,7 +223,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
           },
         ),
       ],
-      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: AppColors.kSecondaryColor),
+      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: ColorConstants.kSecondaryColor),
       leading: GestureDetector(
         onTap: () {
           Get.back();
@@ -234,7 +232,7 @@ class _EditBusinessAccountViewState extends State<EditBusinessAccountView> {
           padding: const EdgeInsets.all(8.0),
           child: Icon(
             IconlyLight.arrow_left_circle,
-            color: AppColors.warmWhiteColor,
+            color: ColorConstants.warmWhiteColor,
             size: AppFontSizes.getFontSize(8),
           ),
         ),

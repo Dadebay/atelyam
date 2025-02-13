@@ -1,6 +1,6 @@
-import 'package:atelyam/app/core/custom_widgets/dialogs.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
+import 'package:atelyam/app/product/custom_widgets/dialogs.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';

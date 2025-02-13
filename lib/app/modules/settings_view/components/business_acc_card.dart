@@ -1,6 +1,7 @@
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
+import 'package:atelyam/app/product/custom_widgets/widgets.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -15,7 +16,7 @@ class BusinessAccCard extends StatelessWidget {
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: AppColors.whiteMainColor, // Pasif hesap rengi
+        color: ColorConstants.whiteMainColor, // Pasif hesap rengi
         borderRadius: BorderRadii.borderRadius20, // Köşe yuvarlaklığı
         boxShadow: [
           BoxShadow(
@@ -31,10 +32,10 @@ class BusinessAccCard extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: businessUser.status.toString().toLowerCase() == 'inactive'
-                    ? AppColors.redColor.withOpacity(.8)
+                    ? ColorConstants.redColor.withOpacity(.8)
                     : businessUser.status.toString().toLowerCase() == 'pending'
                         ? Colors.grey.shade500
-                        : AppColors.whiteMainColor, // Pasif hesap rengi
+                        : ColorConstants.whiteMainColor, // Pasif hesap rengi
                 borderRadius: BorderRadii.borderRadius20, // Köşe yuvarlaklığı
               ),
             ),
@@ -48,7 +49,7 @@ class BusinessAccCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadii.borderRadius20,
                     color: Colors.white,
-                    border: businessUser.backPhoto == null ? Border.all(color: AppColors.kSecondaryColor, width: 1) : Border.all(),
+                    border: businessUser.backPhoto == null ? Border.all(color: ColorConstants.kSecondaryColor, width: 1) : Border.all(),
                   ),
                   margin: EdgeInsets.only(right: 20),
                   child: ClipRRect(
@@ -72,7 +73,7 @@ class BusinessAccCard extends StatelessWidget {
                             Text(
                               'inactive'.tr,
                               style: TextStyle(
-                                color: AppColors.kPrimaryColor,
+                                color: ColorConstants.kPrimaryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: AppFontSizes.getFontSize(4.5),
                               ),
@@ -83,7 +84,7 @@ class BusinessAccCard extends StatelessWidget {
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: AppColors.kPrimaryColor,
+                                color: ColorConstants.kPrimaryColor,
                                 fontWeight: FontWeight.w400,
                                 fontSize: AppFontSizes.getFontSize(3.5),
                               ),
@@ -100,7 +101,7 @@ class BusinessAccCard extends StatelessWidget {
                                 Text(
                                   'wait'.tr,
                                   style: TextStyle(
-                                    color: AppColors.kPrimaryColor,
+                                    color: ColorConstants.kPrimaryColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: AppFontSizes.getFontSize(4.5),
                                   ),
@@ -111,7 +112,7 @@ class BusinessAccCard extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    color: AppColors.kPrimaryColor,
+                                    color: ColorConstants.kPrimaryColor,
                                     fontWeight: FontWeight.w400,
                                     fontSize: AppFontSizes.getFontSize(3.5),
                                   ),
@@ -129,7 +130,7 @@ class BusinessAccCard extends StatelessWidget {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    color: AppColors.kPrimaryColor,
+                                    color: ColorConstants.kPrimaryColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: AppFontSizes.getFontSize(4.5),
                                   ),
@@ -139,7 +140,7 @@ class BusinessAccCard extends StatelessWidget {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    color: AppColors.kPrimaryColor,
+                                    color: ColorConstants.kPrimaryColor,
                                     fontWeight: FontWeight.w400,
                                     fontSize: AppFontSizes.getFontSize(4),
                                   ),

@@ -1,10 +1,4 @@
-import 'dart:developer';
-
 import 'package:animate_do/animate_do.dart';
-import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/data/service/business_user_service.dart';
@@ -12,6 +6,10 @@ import 'package:atelyam/app/modules/home_view/components/business_users/business
 import 'package:atelyam/app/modules/product_profil_view/controllers/product_profil_controller.dart';
 import 'package:atelyam/app/modules/product_profil_view/views/photo_view_page.dart';
 import 'package:atelyam/app/modules/settings_view/components/fav_button.dart';
+import 'package:atelyam/app/product/custom_widgets/index.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,11 +36,14 @@ class _ProductProfilViewState extends State<ProductProfilView> {
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
+    final String phoneNumberText = phoneNumber.contains('+993') ? phoneNumber : '+993${phoneNumber}';
+
+    final Uri launchUri = Uri(scheme: 'tel', path: phoneNumberText);
+
     if (await canLaunchUrl(launchUri)) {
       await launchUrl(launchUri);
     } else {
-      showSnackBar('error', 'phone_call_error' + launchUri.toString(), AppColors.redColor);
+      showSnackBar('error', 'phone_call_error' + launchUri.toString(), ColorConstants.redColor);
       throw 'Could not launch $launchUri';
     }
   }
@@ -50,19 +51,17 @@ class _ProductProfilViewState extends State<ProductProfilView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteMainColor,
+      backgroundColor: ColorConstants.whiteMainColor,
       bottomSheet: FadeInUp(
         duration: const Duration(milliseconds: 500),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: AgreeButton(
             onTap: () {
-              print(outSideBusinessuserModel!.address);
-              // print(businessUserModel!.businessPhone);
               if (outSideBusinessuserModel != null) {
                 _makePhoneCall('+${outSideBusinessuserModel!.businessPhone}');
               } else {
-                showSnackBar('error', 'phone_call_error', AppColors.redColor);
+                showSnackBar('error', 'phone_call_error', ColorConstants.redColor);
               }
             },
             text: 'call'.tr,
@@ -88,7 +87,7 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: const BoxDecoration(
-                          color: AppColors.kSecondaryColor,
+                          color: ColorConstants.kSecondaryColor,
                           borderRadius: BorderRadii.borderRadius15,
                         ),
                         child: Text(
@@ -97,7 +96,7 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: AppColors.whiteMainColor,
+                            color: ColorConstants.whiteMainColor,
                             fontWeight: FontWeight.bold,
                             fontSize: AppFontSizes.fontSize20,
                           ),
@@ -110,20 +109,22 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: AppColors.darkMainColor,
+                            color: ColorConstants.darkMainColor,
                             fontWeight: FontWeight.w600,
                             fontSize: AppFontSizes.fontSize20,
                           ),
                         ),
                       ),
                       brendData(snapshot.data!),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Text(
-                          'info_product'.tr,
-                          style: TextStyle(color: Colors.black, fontSize: AppFontSizes.fontSize20, fontWeight: FontWeight.w600),
-                        ),
-                      ),
+                      widget.productModel.description.isEmpty
+                          ? SizedBox.shrink()
+                          : Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Text(
+                                'info_product'.tr,
+                                style: TextStyle(color: Colors.black, fontSize: AppFontSizes.fontSize20, fontWeight: FontWeight.w600),
+                              ),
+                            ),
                       Text(
                         widget.productModel.description,
                         style: TextStyle(color: Colors.grey, fontSize: AppFontSizes.fontSize16 - 2, fontWeight: FontWeight.w400),
@@ -163,16 +164,16 @@ class _ProductProfilViewState extends State<ProductProfilView> {
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
-          color: AppColors.whiteMainColor,
+          color: ColorConstants.whiteMainColor,
           borderRadius: BorderRadii.borderRadius25,
           boxShadow: [
             BoxShadow(
-              color: AppColors.kThirdColor.withOpacity(0.4),
+              color: ColorConstants.kThirdColor.withOpacity(0.4),
               blurRadius: 5,
               spreadRadius: 1,
             ),
           ],
-          border: Border.all(color: AppColors.kPrimaryColor.withOpacity(.2)),
+          border: Border.all(color: ColorConstants.kPrimaryColor.withOpacity(.2)),
         ),
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
         child: Row(
@@ -194,16 +195,16 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                     businessUserModel.businessName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: AppColors.darkMainColor, fontWeight: FontWeight.bold, fontSize: AppFontSizes.fontSize20 - 2),
+                    style: TextStyle(color: ColorConstants.darkMainColor, fontWeight: FontWeight.bold, fontSize: AppFontSizes.fontSize20 - 2),
                   ),
                   const SizedBox(
                     height: 6,
                   ),
                   Text(
                     businessUserModel.address.toString(),
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: AppColors.darkMainColor.withOpacity(.6), fontWeight: FontWeight.w600, fontSize: AppFontSizes.fontSize14 - 2),
+                    style: TextStyle(color: ColorConstants.darkMainColor.withOpacity(.6), fontWeight: FontWeight.w600, fontSize: AppFontSizes.fontSize16),
                   ),
                 ],
               ),
@@ -219,16 +220,16 @@ class _ProductProfilViewState extends State<ProductProfilView> {
       expandedHeight: 500.0,
       pinned: true,
       scrolledUnderElevation: 0.0,
-      backgroundColor: AppColors.whiteMainColor,
+      backgroundColor: ColorConstants.whiteMainColor,
       leading: FadeInLeft(
         duration: const Duration(milliseconds: 500),
         child: Padding(
           padding: const EdgeInsets.only(left: 12, bottom: 6, top: 6),
           child: IconButton(
-            style: IconButton.styleFrom(shape: const RoundedRectangleBorder(borderRadius: BorderRadii.borderRadius18), backgroundColor: AppColors.whiteMainColor),
+            style: IconButton.styleFrom(shape: const RoundedRectangleBorder(borderRadius: BorderRadii.borderRadius18), backgroundColor: ColorConstants.whiteMainColor),
             icon: Icon(
               IconlyLight.arrow_left_circle,
-              color: AppColors.darkMainColor,
+              color: ColorConstants.darkMainColor,
               size: AppFontSizes.fontSize24,
             ),
             onPressed: () {
@@ -241,18 +242,18 @@ class _ProductProfilViewState extends State<ProductProfilView> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           margin: EdgeInsets.only(right: 10),
-          decoration: BoxDecoration(color: AppColors.whiteMainColor, borderRadius: BorderRadii.borderRadius15),
+          decoration: BoxDecoration(color: ColorConstants.whiteMainColor, borderRadius: BorderRadii.borderRadius15),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: Icon(IconlyLight.show, color: AppColors.darkMainColor, size: AppFontSizes.fontSize20 - 2),
+                child: Icon(IconlyLight.show, color: ColorConstants.darkMainColor, size: AppFontSizes.fontSize20 - 2),
               ),
               Obx(
                 () => Text(
                   controller.viewCount.toString(),
-                  style: TextStyle(color: AppColors.darkMainColor, fontWeight: FontWeight.bold, fontSize: AppFontSizes.fontSize20 - 2),
+                  style: TextStyle(color: ColorConstants.darkMainColor, fontWeight: FontWeight.bold, fontSize: AppFontSizes.fontSize20 - 2),
                 ),
               ),
             ],
@@ -270,10 +271,10 @@ class _ProductProfilViewState extends State<ProductProfilView> {
           child: Padding(
             padding: const EdgeInsets.only(right: 8),
             child: IconButton(
-              style: IconButton.styleFrom(shape: const RoundedRectangleBorder(borderRadius: BorderRadii.borderRadius15), backgroundColor: AppColors.whiteMainColor),
+              style: IconButton.styleFrom(shape: const RoundedRectangleBorder(borderRadius: BorderRadii.borderRadius15), backgroundColor: ColorConstants.whiteMainColor),
               icon: Icon(
                 IconlyLight.download,
-                color: AppColors.darkMainColor,
+                color: ColorConstants.darkMainColor,
                 size: AppFontSizes.fontSize24,
               ),
               onPressed: () {
@@ -323,16 +324,15 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                 margin: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
-                decoration: BoxDecoration(color: AppColors.whiteMainColor.withOpacity(0), borderRadius: BorderRadii.borderRadius20),
+                decoration: BoxDecoration(color: ColorConstants.whiteMainColor.withOpacity(0), borderRadius: BorderRadii.borderRadius20),
                 child: Obx(() {
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: controller.productImages.length,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return FadeInUp(
-                        duration: Duration(milliseconds: 500 * index),
-                        child: GestureDetector(
+                      return WidgetsMine().buildAnimatedWidget(
+                        GestureDetector(
                           onTap: () {
                             controller.updateSelectedImageIndex(index);
                           },
@@ -344,14 +344,14 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                                 borderRadius: BorderRadii.borderRadius18,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: index == controller.selectedImageIndex.value ? AppColors.whiteMainColor.withOpacity(.6) : Colors.transparent,
+                                    color: index == controller.selectedImageIndex.value ? ColorConstants.whiteMainColor.withOpacity(.6) : Colors.transparent,
                                     blurRadius: 5,
                                     spreadRadius: 3,
                                   ),
                                 ],
                                 border: index == controller.selectedImageIndex.value
                                     ? Border.all(
-                                        color: AppColors.whiteMainColor,
+                                        color: ColorConstants.whiteMainColor,
                                         width: 2.0,
                                       )
                                     : null,
@@ -368,6 +368,7 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                             );
                           }),
                         ),
+                        500 * index,
                       );
                     },
                   );

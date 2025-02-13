@@ -1,10 +1,9 @@
-import 'package:animate_do/animate_do.dart';
-import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/modules/discovery_view/components/discovery_card.dart';
 import 'package:atelyam/app/modules/home_view/controllers/home_controller.dart';
+import 'package:atelyam/app/product/custom_widgets/index.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -42,7 +41,7 @@ class _AllProductsViewState extends State<AllProductsView> {
               EmptyStates().loadingData()
             else if (_homeController.allProducts.isEmpty)
               Positioned.fill(
-                child: EmptyStates().noDataAvailablePage(textColor: AppColors.whiteMainColor),
+                child: EmptyStates().noDataAvailablePage(textColor: ColorConstants.whiteMainColor),
               )
             else
               _buildProductGrid(),
@@ -73,13 +72,13 @@ class _AllProductsViewState extends State<AllProductsView> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadii.borderRadius15,
                   side: BorderSide(
-                    color: AppColors.whiteMainColor.withOpacity(0.2),
+                    color: ColorConstants.whiteMainColor.withOpacity(0.2),
                   ),
                 ),
               ),
               child: const Icon(
                 IconlyLight.arrow_left_2,
-                color: AppColors.warmWhiteColor,
+                color: ColorConstants.warmWhiteColor,
               ),
             ),
           ),
@@ -87,7 +86,7 @@ class _AllProductsViewState extends State<AllProductsView> {
             child: Text(
               widget.title.tr,
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.whiteMainColor, fontSize: AppFontSizes.fontSize20 + 2, fontWeight: FontWeight.bold),
+              style: TextStyle(color: ColorConstants.whiteMainColor, fontSize: AppFontSizes.fontSize20 + 2, fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
@@ -130,16 +129,15 @@ class _AllProductsViewState extends State<AllProductsView> {
                 );
               }
 
-              // Apply animation only to the first 10 items
-              return FadeInUp(
-                duration: Duration(milliseconds: 300 * index),
-                child: SizedBox(
+              return WidgetsMine().buildAnimatedWidget(
+                SizedBox(
                   height: index % 2 == 0 ? 250 : 220,
                   child: DiscoveryCard(
                     productModel: product,
                     homePageStyle: false,
                   ),
                 ),
+                200 * index,
               );
             },
           ),
@@ -162,7 +160,7 @@ class _AllProductsViewState extends State<AllProductsView> {
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             alignment: Alignment.topCenter,
             decoration: BoxDecoration(
-              color: AppColors.whiteMainColor,
+              color: ColorConstants.whiteMainColor,
               borderRadius: BorderRadii.borderRadius20,
             ),
             child: _homeController.isFilterExpanded.value
@@ -190,7 +188,7 @@ class _AllProductsViewState extends State<AllProductsView> {
                     child: Text(
                       'filter'.tr,
                       style: TextStyle(
-                        color: AppColors.darkMainColor,
+                        color: ColorConstants.darkMainColor,
                         fontSize: AppFontSizes.fontSize20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -209,7 +207,7 @@ class _AllProductsViewState extends State<AllProductsView> {
           text.tr,
           maxLines: 1,
           style: TextStyle(
-            color: AppColors.darkMainColor,
+            color: ColorConstants.darkMainColor,
             fontSize: AppFontSizes.fontSize16,
             fontWeight: _homeController.selectedFilter.value == value ? FontWeight.bold : FontWeight.w300,
           ),

@@ -1,10 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/banner_model.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
 import 'package:atelyam/app/modules/home_view/components/banners_view/banners_profile_view.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,7 +35,7 @@ class BannerCard extends StatelessWidget {
         borderRadius: BorderRadii.borderRadius30,
         boxShadow: [
           BoxShadow(
-            color: AppColors.kThirdColor.withOpacity(0.2),
+            color: ColorConstants.kThirdColor.withOpacity(0.2),
             blurRadius: 3,
             spreadRadius: 1,
           ),

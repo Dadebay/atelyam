@@ -1,16 +1,14 @@
 import 'dart:io';
 
-import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
-import 'package:atelyam/app/core/custom_widgets/custom_text_field.dart';
-import 'package:atelyam/app/core/custom_widgets/dialogs.dart';
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_category_model.dart';
 import 'package:atelyam/app/data/models/hashtag_model.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/data/service/image_service.dart';
 import 'package:atelyam/app/modules/settings_view/controllers/product_controller.dart';
+import 'package:atelyam/app/product/custom_widgets/index.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -98,7 +96,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(IconlyLight.image, color: AppColors.kPrimaryColor, size: 40),
+                  Icon(IconlyLight.image, color: ColorConstants.kPrimaryColor, size: 40),
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(
@@ -121,7 +119,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
       labelStyle: TextStyle(
         fontSize: AppFontSizes.getFontSize(5),
         fontWeight: FontWeight.bold,
-        color: AppColors.kPrimaryColor,
+        color: ColorConstants.kPrimaryColor,
       ),
       contentPadding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
       border: OutlineInputBorder(borderRadius: BorderRadii.borderRadius15),
@@ -131,7 +129,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadii.borderRadius20,
-        borderSide: BorderSide(color: AppColors.kPrimaryColor, width: 2),
+        borderSide: BorderSide(color: ColorConstants.kPrimaryColor, width: 2),
       ),
     );
   }
@@ -146,7 +144,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
             maxLines: 2,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: AppColors.kPrimaryColor,
+              color: ColorConstants.kPrimaryColor,
               fontSize: AppFontSizes.getFontSize(5),
               fontWeight: FontWeight.bold,
             ),
@@ -161,7 +159,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: AppColors.kPrimaryColor,
+                      color: ColorConstants.kPrimaryColor,
                       fontSize: AppFontSizes.getFontSize(4.5),
                       fontWeight: FontWeight.w400,
                     ),
@@ -192,7 +190,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
             maxLines: 2,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: AppColors.kPrimaryColor,
+              color: ColorConstants.kPrimaryColor,
               fontSize: AppFontSizes.getFontSize(5),
               fontWeight: FontWeight.bold,
             ),
@@ -207,7 +205,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: AppColors.kPrimaryColor,
+                      color: ColorConstants.kPrimaryColor,
                       fontSize: AppFontSizes.getFontSize(4.5),
                       fontWeight: FontWeight.w400,
                     ),
@@ -230,7 +228,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteMainColor,
+      backgroundColor: ColorConstants.whiteMainColor,
       appBar: WidgetsMine().appBar(
         appBarName: 'update_product'.tr,
         actions: [
@@ -238,7 +236,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
             onPressed: () {
               Dialogs().deleteProductDialog(productID: widget.product.id);
             },
-            icon: const Icon(IconlyLight.delete, color: AppColors.whiteMainColor),
+            icon: const Icon(IconlyLight.delete, color: ColorConstants.whiteMainColor),
           ),
         ],
       ),
@@ -274,7 +272,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
                     labelName: 'product_name'.tr,
                     controller: textControllers[0],
                     prefixIcon: IconlyBroken.edit,
-                    customColor: AppColors.kPrimaryColor.withOpacity(.2),
+                    customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
                     borderRadius: true,
                     showLabel: true,
                     focusNode: focusNodes[0],
@@ -282,7 +280,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
                   ),
                   CustomTextField(
                     labelName: 'price'.tr,
-                    customColor: AppColors.kPrimaryColor.withOpacity(.2),
+                    customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
                     borderRadius: true,
                     controller: textControllers[1],
                     prefixIcon: IconlyBroken.wallet,
@@ -295,7 +293,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
                     controller: textControllers[2],
                     maxLine: 6,
                     showLabel: true,
-                    customColor: AppColors.kPrimaryColor.withOpacity(.2),
+                    customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
                     borderRadius: true,
                     focusNode: focusNodes[2],
                     requestfocusNode: focusNodes[0],
@@ -309,7 +307,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
                         Text(
                           'upload_images'.tr + ' (Max 4)',
                           style: TextStyle(
-                            color: AppColors.kPrimaryColor,
+                            color: ColorConstants.kPrimaryColor,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
@@ -416,7 +414,7 @@ class _UpdateProductViewState extends State<UpdateProductView> {
               style: TextStyle(
                 fontSize: AppFontSizes.getFontSize(5),
                 fontWeight: FontWeight.bold,
-                color: AppColors.darkMainColor,
+                color: ColorConstants.darkMainColor,
               ),
             ),
           ),

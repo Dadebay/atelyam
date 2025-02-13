@@ -1,10 +1,11 @@
 // lib/app/modules/home_view/components/brend_card_2.dart
 
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
 import 'package:atelyam/app/modules/home_view/components/business_users/business_user_profile_view.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,7 +30,8 @@ class BusinessUsersCardView extends StatelessWidget {
         height: 300,
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(borderRadius: BorderRadii.borderRadius30, color: AppColors.whiteMainColor.withOpacity(.8), border: Border.all(color: AppColors.kPrimaryColor.withOpacity(.2))),
+        decoration:
+            BoxDecoration(borderRadius: BorderRadii.borderRadius30, color: ColorConstants.whiteMainColor.withOpacity(.8), border: Border.all(color: ColorConstants.kPrimaryColor.withOpacity(.2))),
         child: topPart(),
       ),
     );
@@ -85,7 +87,7 @@ class BusinessUsersCardView extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.w400, color: AppColors.darkMainColor.withOpacity(.8), fontSize: AppFontSizes.fontSize14),
+                  style: TextStyle(fontWeight: FontWeight.w400, color: ColorConstants.darkMainColor.withOpacity(.8), fontSize: AppFontSizes.fontSize14),
                 ),
               ),
             ],

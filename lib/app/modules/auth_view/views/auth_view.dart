@@ -1,10 +1,8 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
-import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
-import 'package:atelyam/app/core/custom_widgets/custom_text_field.dart';
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
+import 'package:atelyam/app/product/custom_widgets/index.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -80,7 +78,7 @@ class AuthView extends StatelessWidget {
             child: Text(
               Assets.appName.tr,
               style: TextStyle(
-                color: AppColors.whiteMainColor,
+                color: ColorConstants.whiteMainColor,
                 fontWeight: FontWeight.bold,
                 fontSize: AppFontSizes.getFontSize(7),
               ),
@@ -110,44 +108,43 @@ class AuthView extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        FadeInUp(
-          duration: const Duration(milliseconds: 800),
-          child: Padding(
+        WidgetsMine().buildAnimatedWidget(
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Text(
               'welcomeSubtitle'.tr,
               style: TextStyle(
-                color: AppColors.kPrimaryColor,
+                color: ColorConstants.kPrimaryColor,
                 fontWeight: FontWeight.w600,
                 fontSize: AppFontSizes.getFontSize(4.5),
               ),
             ),
           ),
+          800,
         ),
-        FadeInUp(
-          duration: const Duration(milliseconds: 800),
-          child: CustomTextField(
+        WidgetsMine().buildAnimatedWidget(
+          CustomTextField(
             labelName: 'name',
             controller: usernameController,
             focusNode: usernameFocusNode,
             requestfocusNode: phoneFocusNode,
             borderRadius: true,
             showLabel: false,
-            customColor: AppColors.kPrimaryColor.withOpacity(.2),
+            customColor: ColorConstants.kPrimaryColor.withOpacity(.2),
             prefixIcon: IconlyLight.profile,
           ),
+          800,
         ),
-        FadeInUp(
-          duration: const Duration(milliseconds: 900),
-          child: PhoneNumberTextField(
+        WidgetsMine().buildAnimatedWidget(
+          PhoneNumberTextField(
             controller: phoneController,
             focusNode: phoneFocusNode,
             requestfocusNode: usernameFocusNode,
           ),
+          900,
         ),
-        FadeInUp(
-          duration: const Duration(milliseconds: 1000),
-          child: Padding(
+        WidgetsMine().buildAnimatedWidget(
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: AgreeButton(
               onTap: () {
@@ -156,6 +153,7 @@ class AuthView extends StatelessWidget {
               text: 'login',
             ),
           ),
+          1000,
         ),
       ],
     );

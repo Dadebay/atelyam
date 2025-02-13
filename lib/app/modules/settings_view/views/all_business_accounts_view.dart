@@ -1,8 +1,4 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
-import 'package:atelyam/app/core/custom_widgets/back_button.dart';
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/data/service/business_user_service.dart';
@@ -13,6 +9,10 @@ import 'package:atelyam/app/modules/settings_view/views/business_acc_components_
 import 'package:atelyam/app/modules/settings_view/views/business_acc_components_view/edit_business_account_view.dart';
 import 'package:atelyam/app/modules/settings_view/views/product_components/create_product.view.dart';
 import 'package:atelyam/app/modules/settings_view/views/product_components/edit_product_view.dart';
+import 'package:atelyam/app/product/custom_widgets/index.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -30,7 +30,7 @@ class _AllBusinessAccountsViewState extends State<AllBusinessAccountsView> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: AppColors.whiteMainColor,
+        backgroundColor: ColorConstants.whiteMainColor,
         appBar: _appBar(),
         body: TabBarView(
           children: [
@@ -44,16 +44,16 @@ class _AllBusinessAccountsViewState extends State<AllBusinessAccountsView> {
 
   AppBar _appBar() {
     return AppBar(
-      backgroundColor: AppColors.kSecondaryColor,
+      backgroundColor: ColorConstants.kSecondaryColor,
       title: Text(
         'all_business_accounts'.tr, // Başlık metni
         style: TextStyle(
-          color: AppColors.whiteMainColor,
+          color: ColorConstants.whiteMainColor,
           fontSize: AppFontSizes.getFontSize(5),
           fontWeight: FontWeight.bold,
         ),
       ),
-      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: AppColors.kSecondaryColor),
+      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: ColorConstants.kSecondaryColor),
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BackButtonMine(
@@ -61,12 +61,12 @@ class _AllBusinessAccountsViewState extends State<AllBusinessAccountsView> {
         ),
       ),
       bottom: TabBar(
-        labelColor: AppColors.whiteMainColor,
-        indicatorColor: AppColors.whiteMainColor,
+        labelColor: ColorConstants.whiteMainColor,
+        indicatorColor: ColorConstants.whiteMainColor,
         labelStyle: TextStyle(
           fontWeight: FontWeight.bold,
           fontFamily: Fonts.plusJakartaSans,
-          color: AppColors.whiteMainColor,
+          color: ColorConstants.whiteMainColor,
           fontSize: AppFontSizes.getFontSize(4),
         ),
         unselectedLabelStyle: TextStyle(
@@ -97,7 +97,7 @@ class _AllBusinessAccountsViewState extends State<AllBusinessAccountsView> {
           if (snapshot.data!.isEmpty) {
             return Column(
               children: [
-                Expanded(child: EmptyStates().noDataAvailablePage(textColor: AppColors.kPrimaryColor)),
+                Expanded(child: EmptyStates().noDataAvailablePage(textColor: ColorConstants.kPrimaryColor)),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: AgreeButton(
@@ -168,7 +168,7 @@ class _AllBusinessAccountsViewState extends State<AllBusinessAccountsView> {
           if (snapshot.data!.isEmpty) {
             return Column(
               children: [
-                Expanded(child: EmptyStates().noDataAvailablePage(textColor: AppColors.kPrimaryColor)),
+                Expanded(child: EmptyStates().noDataAvailablePage(textColor: ColorConstants.kPrimaryColor)),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: AgreeButton(

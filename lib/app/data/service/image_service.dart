@@ -2,11 +2,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/images_model.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
+import 'package:atelyam/app/product/custom_widgets/index.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,22 +33,31 @@ class ImageService {
         return null;
       }
     } on SocketException {
-      showSnackBar('networkError'.tr, 'noInternet'.tr, AppColors.redColor);
+      showSnackBar('networkError'.tr, 'noInternet'.tr, ColorConstants.redColor);
       return null;
     } catch (e) {
-      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, AppColors.redColor);
+      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, ColorConstants.redColor);
       return null;
     }
   }
 
   Future<ProductModel?> fetchProductById(int productId) async {
     String? deviceToken = '';
-    await FirebaseMessaging.instance.getToken().then((token) {
-      deviceToken = token;
-    });
+    if (Platform.isIOS) {
+      deviceToken = await FirebaseMessaging.instance.getAPNSToken();
+    } else if (Platform.isAndroid) {
+      deviceToken = await FirebaseMessaging.instance.getToken();
+    } else {}
+
+    if (deviceToken == null || deviceToken.isEmpty) {
+      debugPrint('Failed to get device token.');
+      deviceToken = 'unknown_device'; // Or provide a default value.
+    }
     try {
       final response = await _client.get(
-        Uri.parse('${authController.ipAddress.value}/mobile/product/$productId?device=$deviceToken'),
+        Uri.parse(
+          '${authController.ipAddress.value}/mobile/product/$productId?device=$deviceToken',
+        ),
       );
       if (response.statusCode == 200) {
         return ProductModel.fromJson(json.decode(response.body));

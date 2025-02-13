@@ -1,7 +1,8 @@
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/service/about_service.dart';
+import 'package:atelyam/app/product/custom_widgets/widgets.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart'; // flutter_widget_from_html paketini import et
 
@@ -11,7 +12,7 @@ class AboutUsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteMainColor,
+      backgroundColor: ColorConstants.whiteMainColor,
       appBar: WidgetsMine().appBar(appBarName: 'aboutUs', actions: []),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -29,12 +30,12 @@ class AboutUsView extends StatelessWidget {
                   snapshot.data!.description,
                   textStyle: TextStyle(
                     fontSize: AppFontSizes.fontSize16,
-                    color: AppColors.darkMainColor,
+                    color: ColorConstants.darkMainColor,
                   ),
                 ),
               );
             } else {
-              return EmptyStates().noDataAvailablePage(textColor: AppColors.kPrimaryColor);
+              return EmptyStates().noDataAvailablePage(textColor: ColorConstants.kPrimaryColor);
             }
           },
         ),

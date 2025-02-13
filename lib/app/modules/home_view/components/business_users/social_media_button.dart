@@ -1,13 +1,13 @@
-import 'package:animate_do/animate_do.dart';
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
+import 'package:atelyam/app/product/custom_widgets/widgets.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SocialMediaIcon extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final int index;
   final String name;
   final String userName;
@@ -47,7 +47,6 @@ class SocialMediaIcon extends StatelessWidget {
       urlToLaunch = userName;
       displayedUserName = Uri.parse(userName).host;
     } else if (userName.startsWith('+') || RegExp(r'^[0-9]+$').hasMatch(userName)) {
-      // Eğer userName bir telefon numarası ise
       urlToLaunch = 'tel:$userName';
       displayedUserName = userName;
     } else {
@@ -61,12 +60,11 @@ class SocialMediaIcon extends StatelessWidget {
         if (await canLaunchUrl(url)) {
           await launchUrl(url);
         } else {
-          showSnackBar('url_error', 'url_error_message', AppColors.darkMainColor);
+          showSnackBar('url_error', 'url_error_message', ColorConstants.darkMainColor);
         }
       },
-      child: FadeInUp(
-        duration: Duration(milliseconds: 300 * index),
-        child: Padding(
+      child: WidgetsMine().buildAnimatedWidget(
+        Padding(
           padding: const EdgeInsets.only(right: 10, bottom: 50),
           child: Row(
             children: [
@@ -76,12 +74,26 @@ class SocialMediaIcon extends StatelessWidget {
                 margin: EdgeInsets.only(right: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadii.borderRadius18,
-                  color: AppColors.kSecondaryColor,
+                  color: ColorConstants.kSecondaryColor,
                 ),
-                child: Icon(
-                  icon,
-                  color: AppColors.whiteMainColor,
-                  size: AppFontSizes.getFontSize(6),
+                child: ClipRRect(
+                  borderRadius: BorderRadii.borderRadius18,
+                  child: Center(
+                    child: Image.asset(
+                      icon,
+                      color: Colors.white,
+                      width: AppFontSizes.getFontSize(icon == Assets.tiktok
+                          ? 10
+                          : icon == Assets.address
+                              ? 10
+                              : 7),
+                      height: AppFontSizes.getFontSize(icon == Assets.tiktok
+                          ? 10
+                          : icon == Assets.address
+                              ? 10
+                              : 7),
+                    ),
+                  ),
                 ),
               ),
               Expanded(
@@ -96,7 +108,7 @@ class SocialMediaIcon extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: AppFontSizes.getFontSize(3.5),
-                        color: AppColors.darkMainColor.withOpacity(.6),
+                        color: ColorConstants.darkMainColor.withOpacity(.6),
                       ),
                     ),
                     Text(
@@ -107,7 +119,7 @@ class SocialMediaIcon extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: AppFontSizes.getFontSize(4.5),
-                        color: AppColors.kPrimaryColor,
+                        color: ColorConstants.kPrimaryColor,
                       ),
                     ),
                   ],
@@ -117,13 +129,14 @@ class SocialMediaIcon extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 15),
                 child: Icon(
                   IconlyLight.arrow_right_circle,
-                  color: AppColors.kPrimaryColor,
+                  color: ColorConstants.kPrimaryColor,
                   size: AppFontSizes.getFontSize(6),
                 ),
               ),
             ],
           ),
         ),
+        300 * index,
       ),
     );
   }

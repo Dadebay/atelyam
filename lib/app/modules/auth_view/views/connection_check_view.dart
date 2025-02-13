@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/service/auth_service.dart';
 import 'package:atelyam/app/modules/auth_view/components/connection_check_card.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -35,13 +34,6 @@ class _ConnectionCheckViewState extends State<ConnectionCheckView> {
     super.initState();
     startAutoScroll();
     SignInService().checkConnection();
-    FirebaseMessaging.instance.getToken().then((token) {
-      print('Token: $token');
-      print('Token: $token');
-      print('Token: $token');
-      print('Token: $token');
-      print('Token: $token');
-    });
     // authController.fetchIpAddress();
   }
 

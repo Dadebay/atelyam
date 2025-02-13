@@ -1,13 +1,12 @@
-import 'package:animate_do/animate_do.dart';
-import 'package:atelyam/app/core/custom_widgets/transparent_app_bar.dart';
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/category_model.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
 import 'package:atelyam/app/modules/category_view/controllers/category_controller.dart';
 import 'package:atelyam/app/modules/discovery_view/components/discovery_card.dart';
+import 'package:atelyam/app/product/custom_widgets/index.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -73,7 +72,7 @@ class _CategoryProductViewState extends State<CategoryProductView> {
                     if (_categoryController.isLoadingProducts.value) {
                       return EmptyStates().loadingData();
                     } else if (_categoryController.allProducts.isEmpty) {
-                      return EmptyStates().noDataAvailablePage(textColor: AppColors.darkMainColor);
+                      return EmptyStates().noDataAvailablePage(textColor: ColorConstants.darkMainColor);
                     } else {
                       return _buildProductGrid();
                     }
@@ -170,8 +169,8 @@ class _CategoryProductViewState extends State<CategoryProductView> {
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             alignment: Alignment.topCenter,
             decoration: BoxDecoration(
-              color: AppColors.whiteMainColor,
-              border: Border.all(color: AppColors.kSecondaryColor, width: 2),
+              color: ColorConstants.whiteMainColor,
+              border: Border.all(color: ColorConstants.kSecondaryColor, width: 2),
               borderRadius: BorderRadii.borderRadius20,
             ),
             child: _categoryController.isFilterExpanded.value
@@ -199,7 +198,7 @@ class _CategoryProductViewState extends State<CategoryProductView> {
                     child: Text(
                       'filter'.tr,
                       style: TextStyle(
-                        color: AppColors.darkMainColor,
+                        color: ColorConstants.darkMainColor,
                         fontSize: AppFontSizes.fontSize20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -218,7 +217,7 @@ class _CategoryProductViewState extends State<CategoryProductView> {
           text.tr,
           maxLines: 1,
           style: TextStyle(
-            color: AppColors.darkMainColor,
+            color: ColorConstants.darkMainColor,
             fontSize: AppFontSizes.fontSize16,
             fontWeight: _categoryController.selectedFilter.value == value ? FontWeight.bold : FontWeight.w300,
           ),
@@ -247,15 +246,15 @@ class _CategoryProductViewState extends State<CategoryProductView> {
         ),
       );
     } else {
-      return FadeInUp(
-        delay: Duration(milliseconds: 200 * index),
-        child: SizedBox(
+      return WidgetsMine().buildAnimatedWidget(
+        SizedBox(
           height: index % 2 == 0 ? 250 : 200,
           child: DiscoveryCard(
             homePageStyle: false,
             productModel: product,
           ),
         ),
+        200 * index,
       );
     }
   }

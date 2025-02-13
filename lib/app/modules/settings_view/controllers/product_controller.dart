@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_category_model.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
 import 'package:atelyam/app/data/models/hashtag_model.dart';
@@ -12,6 +10,8 @@ import 'package:atelyam/app/data/service/business_category_service.dart';
 import 'package:atelyam/app/data/service/hashtag_service.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
 import 'package:atelyam/app/modules/home_view/controllers/home_controller.dart';
+import 'package:atelyam/app/product/custom_widgets/widgets.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -70,7 +70,7 @@ class ProductController extends GetxController {
     );
     if (images.isNotEmpty) {
       if (selectedImages.length + images.length > maxImageCount) {
-        showSnackBar('error', 'max_4_images'.tr, AppColors.redColor);
+        showSnackBar('error', 'max_4_images'.tr, ColorConstants.redColor);
         return;
       }
       if (isEditProduct) {
@@ -83,7 +83,7 @@ class ProductController extends GetxController {
 
   Future<void> addProductToBackend({required String nameController, required String descriptionController, required String priceController}) async {
     if (selectedCategory.value == null || selectedHashtag.value == null) {
-      showSnackBar('error', 'fill_all_fields'.tr, AppColors.redColor);
+      showSnackBar('error', 'fill_all_fields'.tr, ColorConstants.redColor);
       return;
     }
 
@@ -130,13 +130,13 @@ class ProductController extends GetxController {
           await uploadProductImages(int.parse(responseData['id'].toString())); // Resimleri yükle
         } else {
           Get.back(result: true);
-          showSnackBar('success', 'product_upload_success'.tr, AppColors.greenColor);
+          showSnackBar('success', 'product_upload_success'.tr, ColorConstants.greenColor);
         }
       } else {
-        showSnackBar('error', 'product_creation_failed'.tr, AppColors.redColor);
+        showSnackBar('error', 'product_creation_failed'.tr, ColorConstants.redColor);
       }
     } catch (e) {
-      showSnackBar('error', 'error_occured'.tr, AppColors.redColor);
+      showSnackBar('error', 'error_occured'.tr, ColorConstants.redColor);
     } finally {
       homeController.agreeButton.toggle();
     }
@@ -201,14 +201,14 @@ class ProductController extends GetxController {
 
         if (response.statusCode == 200) {
           Get.back(result: true);
-          showSnackBar('success', 'product_upload_success'.tr, AppColors.greenColor);
+          showSnackBar('success', 'product_upload_success'.tr, ColorConstants.greenColor);
         } else {
-          showSnackBar('error', 'image_upload_failed'.tr, AppColors.redColor);
+          showSnackBar('error', 'image_upload_failed'.tr, ColorConstants.redColor);
         }
       }
     } catch (e) {
       print('Error occurred: $e');
-      showSnackBar('error', 'error_occured'.tr, AppColors.redColor);
+      showSnackBar('error', 'error_occured'.tr, ColorConstants.redColor);
     }
   }
 
@@ -236,19 +236,19 @@ class ProductController extends GetxController {
       print('Response Body: $responseBody');
 
       if (response.statusCode == 200) {
-        showSnackBar('success', 'image_deleted'.tr, AppColors.greenColor);
+        showSnackBar('success', 'image_deleted'.tr, ColorConstants.greenColor);
       } else {
-        showSnackBar('error', 'image_upload_failed'.tr, AppColors.redColor);
+        showSnackBar('error', 'image_upload_failed'.tr, ColorConstants.redColor);
       }
     } catch (e) {
       print('Error occurred: $e');
-      showSnackBar('error', 'error_occured'.tr, AppColors.redColor);
+      showSnackBar('error', 'error_occured'.tr, ColorConstants.redColor);
     }
   }
 
   Future<void> updateProduct({required int productId, required String nameController, required String descriptionController, required String priceController}) async {
     if (selectedCategory.value == null || selectedHashtag.value == null) {
-      showSnackBar('error', 'fill_all_fields'.tr, AppColors.redColor);
+      showSnackBar('error', 'fill_all_fields'.tr, ColorConstants.redColor);
       return;
     }
     homeController.agreeButton.toggle();
@@ -285,12 +285,12 @@ class ProductController extends GetxController {
 
       if (response.statusCode == 200) {
         Get.back(result: true);
-        showSnackBar('success', 'product_updated'.tr, AppColors.greenColor);
+        showSnackBar('success', 'product_updated'.tr, ColorConstants.greenColor);
       } else {
-        showSnackBar('error', 'update_failed'.tr, AppColors.redColor);
+        showSnackBar('error', 'update_failed'.tr, ColorConstants.redColor);
       }
     } catch (e) {
-      showSnackBar('error', 'error_occurred'.tr, AppColors.redColor);
+      showSnackBar('error', 'error_occurred'.tr, ColorConstants.redColor);
     } finally {
       homeController.agreeButton.toggle();
     }
@@ -309,23 +309,23 @@ class ProductController extends GetxController {
       if (response.statusCode == 200) {
         Get.back(result: true);
         Get.back(result: true);
-        showSnackBar('success', 'product_deleted'.tr, AppColors.greenColor);
+        showSnackBar('success', 'product_deleted'.tr, ColorConstants.greenColor);
       } else {
-        showSnackBar('error', 'anErrorOccurred'.tr + '${response.reasonPhrase}', AppColors.redColor);
+        showSnackBar('error', 'anErrorOccurred'.tr + '${response.reasonPhrase}', ColorConstants.redColor);
       }
     } catch (e) {
       Get.back(result: true);
-      showSnackBar('error', 'anErrorOccurred'.tr + '$e', AppColors.redColor);
+      showSnackBar('error', 'anErrorOccurred'.tr + '$e', ColorConstants.redColor);
     }
   }
 
   Future<void> submitBusinessAccount(GetMyStatusModel businessUser) async {
     if (selectedCategory.value == null) {
-      showSnackBar('error', 'fill_all_fields', AppColors.redColor);
+      showSnackBar('error', 'fill_all_fields', ColorConstants.redColor);
       return;
     }
     if (selectedImage.value == null) {
-      showSnackBar('error', 'logo_upload', AppColors.redColor);
+      showSnackBar('error', 'logo_upload', ColorConstants.redColor);
       return;
     }
 
@@ -360,13 +360,13 @@ class ProductController extends GetxController {
       if (response.statusCode == 201) {
         Get.back(result: true);
       } else if (response.statusCode == 400) {
-        showSnackBar('error', 'account_already_exist', AppColors.redColor);
+        showSnackBar('error', 'account_already_exist', ColorConstants.redColor);
       } else {
-        showSnackBar('error', '${'account_create_failed'} ${response.reasonPhrase}', AppColors.redColor);
+        showSnackBar('error', '${'account_create_failed'} ${response.reasonPhrase}', ColorConstants.redColor);
       }
     } catch (e) {
       Get.back(result: true);
-      showSnackBar('error', '${'anErrorOccurred'} $e', AppColors.redColor);
+      showSnackBar('error', '${'anErrorOccurred'} $e', ColorConstants.redColor);
     }
   }
 
@@ -405,13 +405,13 @@ class ProductController extends GetxController {
       );
       if (response.statusCode == 200) {
         Get.back(result: true);
-        showSnackBar('success', 'business_account_updated', AppColors.greenColor);
+        showSnackBar('success', 'business_account_updated', ColorConstants.greenColor);
       } else {
-        showSnackBar('error', '${'business_account_not_updated'} ${response.statusMessage}', AppColors.redColor);
+        showSnackBar('error', '${'business_account_not_updated'} ${response.statusMessage}', ColorConstants.redColor);
       }
     } on dio.DioError catch (e) {
       Get.back(result: true);
-      showSnackBar('error', '${'anErrorOccurred'} $e', AppColors.redColor);
+      showSnackBar('error', '${'anErrorOccurred'} $e', ColorConstants.redColor);
     } finally {
       homeController.agreeButton.toggle();
     }
@@ -430,13 +430,13 @@ class ProductController extends GetxController {
       if (response.statusCode == 200) {
         Get.back(result: true);
         Get.back(result: true);
-        showSnackBar('success', 'deleted_success', AppColors.greenColor);
+        showSnackBar('success', 'deleted_success', ColorConstants.greenColor);
       } else {
-        showSnackBar('error', 'anErrorOccurred'.tr + '${response.reasonPhrase}', AppColors.redColor);
+        showSnackBar('error', 'anErrorOccurred'.tr + '${response.reasonPhrase}', ColorConstants.redColor);
       }
     } catch (e) {
       Get.back(result: true);
-      showSnackBar('error', '${'anErrorOccurred'} $e', AppColors.redColor);
+      showSnackBar('error', '${'anErrorOccurred'} $e', ColorConstants.redColor);
     } finally {}
   }
 

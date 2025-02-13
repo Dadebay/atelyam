@@ -1,7 +1,8 @@
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/banner_model.dart';
 import 'package:atelyam/app/modules/home_view/components/banners_view/banner_card.dart';
+import 'package:atelyam/app/product/custom_widgets/widgets.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +12,7 @@ class BannersProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteMainColor,
+      backgroundColor: ColorConstants.whiteMainColor,
       appBar: WidgetsMine().appBar(appBarName: 'banners_profile', actions: []),
       body: ListView(
         children: [
@@ -25,7 +26,7 @@ class BannersProfile extends StatelessWidget {
             padding: const EdgeInsets.all(15.0),
             child: Text(
               banner.description,
-              style: TextStyle(color: AppColors.kPrimaryColor, fontWeight: FontWeight.w400, fontSize: AppFontSizes.fontSize16),
+              style: TextStyle(color: ColorConstants.kPrimaryColor, fontWeight: FontWeight.w400, fontSize: AppFontSizes.fontSize16),
             ),
           ),
         ],

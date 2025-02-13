@@ -1,8 +1,7 @@
-import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
-import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
-import 'package:atelyam/app/core/custom_widgets/transparent_app_bar.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
+import 'package:atelyam/app/product/custom_widgets/index.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -74,7 +73,7 @@ class OTPView extends StatelessWidget {
       height: Get.size.height / 1.2,
       padding: EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
-        color: AppColors.whiteMainColor,
+        color: ColorConstants.whiteMainColor,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       ),
       child: Column(
@@ -115,11 +114,10 @@ class OTPView extends StatelessWidget {
           width: 55,
           child: TextField(
             autofocus: index == 0, // İlk alana otomatik odaklan
-            style: TextStyle(color: AppColors.darkMainColor, fontWeight: FontWeight.bold, fontSize: 20),
+            style: TextStyle(color: ColorConstants.darkMainColor, fontWeight: FontWeight.bold, fontSize: 20),
             controller: _otpControllers[index],
             focusNode: _otpFocusNodes[index],
             textAlign: TextAlign.center,
-            keyboardType: TextInputType.number, // Sayısal klavye
             maxLength: 1,
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -129,11 +127,11 @@ class OTPView extends StatelessWidget {
               counterText: '',
               border: OutlineInputBorder(
                 borderRadius: BorderRadii.borderRadius15,
-                borderSide: const BorderSide(color: AppColors.warmWhiteColor),
+                borderSide: const BorderSide(color: ColorConstants.warmWhiteColor),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadii.borderRadius20,
-                borderSide: BorderSide(color: AppColors.kPrimaryColor, width: 2),
+                borderSide: BorderSide(color: ColorConstants.kPrimaryColor, width: 2),
               ),
             ),
             onChanged: (value) {

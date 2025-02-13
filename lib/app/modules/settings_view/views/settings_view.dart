@@ -1,12 +1,11 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
-import 'package:atelyam/app/core/custom_widgets/dialogs.dart';
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/service/auth_service.dart';
 import 'package:atelyam/app/modules/home_view/views/bottom_nav_bar_view.dart';
 import 'package:atelyam/app/modules/settings_view/components/settings_button.dart';
+import 'package:atelyam/app/product/custom_widgets/index.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -21,14 +20,14 @@ class SettingsView extends StatelessWidget {
       builder: (BuildContext context, constraints) {
         final scrolled = constraints.scrollOffset > 310;
         return SliverAppBar(
-          expandedHeight: 300,
+          expandedHeight: Get.size.width >= 800 ? 450 : 300,
           floating: false,
           pinned: true,
           backgroundColor: scrolled ? Colors.transparent.withOpacity(0.6) : Colors.transparent,
           title: Text(
             'profil'.tr,
           ),
-          titleTextStyle: TextStyle(color: AppColors.whiteMainColor, fontFamily: Fonts.plusJakartaSans, fontSize: AppFontSizes.fontSize24, fontWeight: FontWeight.w600),
+          titleTextStyle: TextStyle(color: ColorConstants.whiteMainColor, fontFamily: Fonts.plusJakartaSans, fontSize: AppFontSizes.fontSize24, fontWeight: FontWeight.w600),
           flexibleSpace: FlexibleSpaceBar(
             background: GestureDetector(
               onTap: () => Dialogs().showAvatarDialog(),
@@ -61,7 +60,7 @@ class SettingsView extends StatelessWidget {
                             settingsController.username.value.isEmpty ? 'Ulanyjy 007 ' : settingsController.username.value,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: AppColors.whiteMainColor, fontWeight: FontWeight.bold, fontSize: AppFontSizes.fontSize20 + 2),
+                            style: TextStyle(color: ColorConstants.whiteMainColor, fontWeight: FontWeight.bold, fontSize: AppFontSizes.fontSize20 + 2),
                           ),
                         ),
                       ),
@@ -71,7 +70,7 @@ class SettingsView extends StatelessWidget {
                           settingsController.phoneNumber.value.isEmpty ? ' +993-60-00-00-00' : '+993-${formatPhoneNumber(settingsController.phoneNumber.value)}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: AppColors.warmWhiteColor, fontSize: AppFontSizes.fontSize16),
+                          style: TextStyle(color: ColorConstants.warmWhiteColor, fontSize: AppFontSizes.fontSize16),
                         ),
                       ),
                       const SizedBox(height: 30),
@@ -125,9 +124,8 @@ class SettingsView extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final item = currentSettingsViews[index];
                   return token != null && token.isNotEmpty && item['name'] == 'login'
-                      ? FadeInUp(
-                          duration: Duration(milliseconds: 500 * index),
-                          child: SettingsButton(
+                      ? WidgetsMine().buildAnimatedWidget(
+                          SettingsButton(
                             name: 'logout'.tr,
                             lang: false,
                             onTap: () {
@@ -143,12 +141,12 @@ class SettingsView extends StatelessWidget {
                                 ),
                               );
                             },
-                            icon: Icon(IconlyLight.logout, color: AppColors.kSecondaryColor),
+                            icon: Icon(IconlyLight.logout, color: ColorConstants.kSecondaryColor),
                           ),
+                          500 * index,
                         )
-                      : FadeInUp(
-                          duration: Duration(milliseconds: 500 * index),
-                          child: SettingsButton(
+                      : WidgetsMine().buildAnimatedWidget(
+                          SettingsButton(
                             name: "${item['name']}".tr,
                             lang: item['name'] == 'lang',
                             onTap: () {
@@ -158,8 +156,9 @@ class SettingsView extends StatelessWidget {
                                 Get.to(item['page']);
                               }
                             },
-                            icon: Icon(item['icon'], color: AppColors.kSecondaryColor),
+                            icon: Icon(item['icon'], color: ColorConstants.kSecondaryColor),
                           ),
+                          500 * index,
                         );
                 },
               ),
@@ -174,7 +173,7 @@ class SettingsView extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Container(
         color: Colors.white,
-        height: Get.size.height / 4,
+        height: Get.size.width >= 800 ? Get.size.height / 2 : Get.size.height / 4,
       ),
     );
   }

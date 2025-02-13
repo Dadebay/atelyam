@@ -1,9 +1,10 @@
 //lib/app/modules/home_view/components/banner/banners.dart
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/banner_model.dart';
 import 'package:atelyam/app/modules/home_view/components/banners_view/banner_card.dart';
 import 'package:atelyam/app/modules/home_view/controllers/home_controller.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,9 +31,10 @@ class Banners extends StatelessWidget {
                 return EmptyStates().errorData(snapshot.hasError.toString());
               } else if (snapshot.hasData) {
                 if (snapshot.data!.isEmpty) {
-                  return EmptyStates().noBannersAvailable();
+                  return emptyBanner(size);
+                  ;
                 }
-                return _buildCarousel(snapshot.data!);
+                return _buildCarousel(snapshot.data!, sizeValue);
               } else {
                 return EmptyStates().noBannersAvailable();
               }
@@ -44,7 +46,28 @@ class Banners extends StatelessWidget {
     );
   }
 
-  Widget _buildCarousel(List<BannerModel> banners) {
+  Container emptyBanner(Size size) {
+    return Container(
+      margin: const EdgeInsets.all(15),
+      width: size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadii.borderRadius30,
+        boxShadow: [
+          BoxShadow(
+            color: ColorConstants.kThirdColor.withOpacity(0.2),
+            blurRadius: 3,
+            spreadRadius: 1,
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadii.borderRadius30,
+        child: Image.asset(Assets.backgorundPattern2, height: size.width >= 800 ? 400 : 220, fit: BoxFit.cover),
+      ),
+    );
+  }
+
+  Widget _buildCarousel(List<BannerModel> banners, bool sizeValue) {
     return CarouselSlider.builder(
       itemCount: banners.length,
       itemBuilder: (context, index, count) {
@@ -54,7 +77,7 @@ class Banners extends StatelessWidget {
         onPageChanged: (index, CarouselPageChangedReason a) {
           controller.carouselSelectedIndex.value = index;
         },
-        height: 250,
+        height: sizeValue ? 400 : 230,
         viewportFraction: 1.0,
         autoPlay: true,
         scrollPhysics: const BouncingScrollPhysics(),
@@ -104,9 +127,9 @@ class Banners extends StatelessWidget {
         height: controller.carouselSelectedIndex.value == index ? (sizeValue ? 22 : 16) : (sizeValue ? 16 : 10),
         width: controller.carouselSelectedIndex.value == index ? (sizeValue ? 21 : 15) : (sizeValue ? 16 : 10),
         decoration: BoxDecoration(
-          color: controller.carouselSelectedIndex.value == index ? Colors.transparent : AppColors.kSecondaryColor,
+          color: controller.carouselSelectedIndex.value == index ? Colors.transparent : ColorConstants.kSecondaryColor,
           shape: BoxShape.circle,
-          border: controller.carouselSelectedIndex.value == index ? Border.all(color: AppColors.kPrimaryColor, width: 3) : Border.all(color: Colors.white),
+          border: controller.carouselSelectedIndex.value == index ? Border.all(color: ColorConstants.kPrimaryColor, width: 3) : Border.all(color: Colors.white),
         ),
       ),
     );

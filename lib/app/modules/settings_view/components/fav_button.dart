@@ -1,8 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/modules/settings_view/controllers/settings_controller.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -41,10 +42,10 @@ class _FavButtonState extends State<FavButton> {
           margin: EdgeInsets.only(right: widget.productProfilStyle ? 8 : 0),
           decoration: BoxDecoration(
             color: widget.productProfilStyle
-                ? AppColors.whiteMainColor
+                ? ColorConstants.whiteMainColor
                 : isFavorited
                     ? Colors.white
-                    : AppColors.kThirdColor.withOpacity(0.6),
+                    : ColorConstants.kThirdColor.withOpacity(0.6),
             borderRadius: BorderRadii.borderRadius15,
           ),
           child: Icon(
@@ -53,8 +54,8 @@ class _FavButtonState extends State<FavButton> {
             color: isFavorited
                 ? Colors.red
                 : widget.productProfilStyle
-                    ? AppColors.darkMainColor
-                    : AppColors.whiteMainColor,
+                    ? ColorConstants.darkMainColor
+                    : ColorConstants.whiteMainColor,
           ),
         ),
       );

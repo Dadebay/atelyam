@@ -2,10 +2,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_category_model.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
+import 'package:atelyam/app/product/custom_widgets/widgets.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -30,10 +30,10 @@ class BusinessCategoryService {
         return null;
       }
     } on SocketException {
-      showSnackBar('networkError'.tr, 'noInternet'.tr, AppColors.redColor);
+      showSnackBar('networkError'.tr, 'noInternet'.tr, ColorConstants.redColor);
       return null;
     } catch (e) {
-      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, AppColors.redColor);
+      showSnackBar('unknownError'.tr, 'anErrorOccurred'.tr, ColorConstants.redColor);
       return null;
     }
   }

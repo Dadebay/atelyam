@@ -1,10 +1,9 @@
-import 'package:atelyam/app/core/custom_widgets/agree_button.dart';
-import 'package:atelyam/app/core/custom_widgets/custom_text_field.dart';
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_category_model.dart';
 import 'package:atelyam/app/data/models/hashtag_model.dart';
 import 'package:atelyam/app/modules/settings_view/controllers/product_controller.dart';
+import 'package:atelyam/app/product/custom_widgets/index.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -19,7 +18,7 @@ class CreateProductView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteMainColor,
+      backgroundColor: ColorConstants.whiteMainColor,
       appBar: WidgetsMine().appBar(
         appBarName: 'create_product'.tr,
         actions: [],
@@ -43,7 +42,7 @@ class CreateProductView extends StatelessWidget {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadii.borderRadius20,
-                    borderSide: BorderSide(color: AppColors.kPrimaryColor, width: 2),
+                    borderSide: BorderSide(color: ColorConstants.kPrimaryColor, width: 2),
                   ),
                 ),
                 value: controller.selectedCategory.value,
@@ -82,7 +81,7 @@ class CreateProductView extends StatelessWidget {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadii.borderRadius20,
-                    borderSide: BorderSide(color: AppColors.kPrimaryColor, width: 2),
+                    borderSide: BorderSide(color: ColorConstants.kPrimaryColor, width: 2),
                   ),
                 ),
                 value: controller.selectedHashtag.value,
@@ -186,7 +185,7 @@ class CreateProductView extends StatelessWidget {
                 Text(
                   'upload_images'.tr + ' (Max 4)',
                   style: TextStyle(
-                    color: AppColors.kPrimaryColor,
+                    color: ColorConstants.kPrimaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),

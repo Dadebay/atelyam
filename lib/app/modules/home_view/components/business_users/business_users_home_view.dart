@@ -1,8 +1,8 @@
-import 'package:atelyam/app/core/custom_widgets/listview_top_name_and_icon.dart';
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
 import 'package:atelyam/app/data/service/business_user_service.dart';
 import 'package:atelyam/app/modules/home_view/components/business_users/brend_card.dart';
+import 'package:atelyam/app/product/custom_widgets/listview_top_name_and_icon.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
 import 'package:flutter/material.dart';
 
 class BusinessUsersHomeView extends StatelessWidget {

@@ -1,8 +1,3 @@
-import 'package:atelyam/app/core/custom_widgets/background_pattern.dart';
-import 'package:atelyam/app/core/custom_widgets/listview_top_name_and_icon.dart';
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/hashtag_model.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/modules/discovery_view/components/discovery_card.dart';
@@ -11,6 +6,9 @@ import 'package:atelyam/app/modules/home_view/components/banners_view/banners_ho
 import 'package:atelyam/app/modules/home_view/components/business_category_view/business_category_view.dart';
 import 'package:atelyam/app/modules/home_view/components/business_users/business_users_home_view.dart';
 import 'package:atelyam/app/modules/home_view/controllers/home_controller.dart';
+import 'package:atelyam/app/product/custom_widgets/index.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -57,7 +55,7 @@ class _HomeViewState extends State<HomeView> {
     return SliverAppBar(
       floating: false,
       pinned: false,
-      toolbarHeight: screenHeight * 0.06,
+      toolbarHeight: screenHeight * 0.04,
       backgroundColor: Colors.transparent,
       title: Padding(
         padding: const EdgeInsets.only(bottom: 15),
@@ -87,7 +85,10 @@ class _HomeViewState extends State<HomeView> {
           borderRadius: BorderRadii.borderRadius40,
           child: Column(
             children: [
-              WidgetsMine().buildAnimatedWidget(Banners(), 400),
+              WidgetsMine().buildAnimatedWidget(
+                Banners(),
+                screenWidth >= 800 ? 400 : 220,
+              ),
               WidgetsMine().buildAnimatedWidget(
                 BusinessCategoryView(
                   screenWidth: screenWidth,

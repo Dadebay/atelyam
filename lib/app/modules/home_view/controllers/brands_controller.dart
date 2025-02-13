@@ -1,9 +1,9 @@
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/business_user_model.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/data/service/business_user_service.dart';
 import 'package:atelyam/app/data/service/product_service.dart';
+import 'package:atelyam/app/product/custom_widgets/widgets.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -28,21 +28,20 @@ class BrandsController extends GetxController {
         productsFuture.value = _productService.fetchProducts(categoryID, businessUser.value!.user);
       }
     } catch (e) {
-      showSnackBar('error', 'anErrorOccurred' + '$e', AppColors.redColor);
+      showSnackBar('error', 'anErrorOccurred' + '$e', ColorConstants.redColor);
     } finally {
       isLoadingBrandsProfile.value = false;
     }
   }
 
   Future<void> makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
+    print(phoneNumber);
+    final Uri launchUri = Uri.parse('tel:$phoneNumber');
+
     if (await canLaunchUrl(launchUri)) {
       await launchUrl(launchUri);
     } else {
-      showSnackBar('error', 'phone_call_error' + '$launchUri', AppColors.redColor);
+      showSnackBar('error', 'phone_call_error'.tr, ColorConstants.redColor);
     }
   }
 }

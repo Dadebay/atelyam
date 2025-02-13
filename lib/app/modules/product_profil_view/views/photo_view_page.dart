@@ -1,6 +1,6 @@
 // ignore_for_file: file_names, void_checks, always_use_package_imports
 
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

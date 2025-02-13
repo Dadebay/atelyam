@@ -1,11 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/modules/category_view/views/category_view.dart';
 import 'package:atelyam/app/modules/discovery_view/views/discovery_view.dart';
 import 'package:atelyam/app/modules/home_view/controllers/home_controller.dart';
 import 'package:atelyam/app/modules/home_view/views/home_view.dart';
 import 'package:atelyam/app/modules/settings_view/views/settings_view.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
@@ -65,11 +66,11 @@ class CustomBottomNavBar extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 25, left: 30, right: 30),
       height: 60,
       decoration: BoxDecoration(
-        color: AppColors.kSecondaryColor,
+        color: ColorConstants.kSecondaryColor,
         borderRadius: BorderRadii.borderRadius30,
         boxShadow: [
           BoxShadow(
-            color: AppColors.kThirdColor.withOpacity(0.1),
+            color: ColorConstants.kThirdColor.withOpacity(0.1),
             spreadRadius: 5,
             blurRadius: 10,
           ),
@@ -84,8 +85,8 @@ class CustomBottomNavBar extends StatelessWidget {
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             builder: (context, value, child) {
-              const selectedColor = AppColors.kThirdColor;
-              const unselectedColor = AppColors.whiteMainColor;
+              const selectedColor = ColorConstants.kThirdColor;
+              const unselectedColor = ColorConstants.whiteMainColor;
               return GestureDetector(
                 onTap: () => onTap(index),
                 child: Column(

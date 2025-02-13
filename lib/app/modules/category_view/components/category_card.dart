@@ -1,7 +1,8 @@
-import 'package:atelyam/app/core/empty_states/empty_states.dart';
-import 'package:atelyam/app/core/theme/theme.dart';
 import 'package:atelyam/app/data/models/category_model.dart';
 import 'package:atelyam/app/modules/auth_view/controllers/auth_controller.dart';
+import 'package:atelyam/app/product/empty_states/empty_states.dart';
+import 'package:atelyam/app/product/theme/color_constants.dart';
+import 'package:atelyam/app/product/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,79 +27,82 @@ class CategoryCard extends StatelessWidget {
         tag: categoryModel.name,
         child: Container(
           margin: const EdgeInsets.only(top: 20, left: 15, right: 15),
-          height: 220,
+          height: Get.size.width >= 800 ? 350 : 220,
           decoration: BoxDecoration(
             borderRadius: BorderRadii.borderRadius40,
             color: Colors.transparent,
             boxShadow: [
               BoxShadow(
-                color: AppColors.kThirdColor.withOpacity(0.4),
+                color: ColorConstants.kThirdColor.withOpacity(0.4),
                 blurRadius: 5,
                 spreadRadius: 4,
               ),
             ],
           ),
-          child: ClipRRect(
+          child: Material(
             borderRadius: BorderRadii.borderRadius40,
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: categoryModel.logo == null
-                      ? const SizedBox.shrink()
-                      : Flow(
-                          delegate: ParallaxFlowDelegate(
-                            scrollable: scrollableState,
-                            itemContext: context,
-                            keyImage: keyImage,
-                          ),
-                          children: [
-                            CachedNetworkImage(
-                              imageUrl: '${authController.ipAddress.value}${categoryModel.logo!}',
-                              fit: BoxFit.cover,
-                              key: keyImage,
-                              placeholder: (context, url) => EmptyStates().loadingData(),
-                              errorWidget: (context, url, error) => EmptyStates().noMiniCategoryImage(),
+            child: ClipRRect(
+              borderRadius: BorderRadii.borderRadius40,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: categoryModel.logo == null
+                        ? const SizedBox.shrink()
+                        : Flow(
+                            delegate: ParallaxFlowDelegate(
+                              scrollable: scrollableState,
+                              itemContext: context,
+                              keyImage: keyImage,
                             ),
-                          ],
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl: '${authController.ipAddress.value}${categoryModel.logo!}',
+                                fit: BoxFit.cover,
+                                key: keyImage,
+                                placeholder: (context, url) => EmptyStates().loadingData(),
+                                errorWidget: (context, url, error) => EmptyStates().noMiniCategoryImage(),
+                              ),
+                            ],
+                          ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.8),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 20,
+                    left: 20,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          categoryModel.name,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: AppFontSizes.fontSize24,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        Colors.black.withOpacity(0.8),
-                        Colors.transparent,
+                        Text(
+                          "${categoryModel.count} ${"count".tr}",
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 16,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                ),
-                Positioned(
-                  bottom: 20,
-                  left: 20,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        categoryModel.name,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: AppFontSizes.fontSize24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "${categoryModel.count} ${"count".tr}",
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

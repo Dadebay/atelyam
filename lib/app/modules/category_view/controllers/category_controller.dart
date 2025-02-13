@@ -1,6 +1,6 @@
-import 'package:atelyam/app/core/custom_widgets/widgets.dart';
 import 'package:atelyam/app/data/models/product_model.dart';
 import 'package:atelyam/app/data/service/hashtag_service.dart';
+import 'package:atelyam/app/product/custom_widgets/widgets.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
