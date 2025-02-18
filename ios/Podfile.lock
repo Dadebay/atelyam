@@ -4,8 +4,6 @@ PODS:
   - awesome_notifications (0.10.0):
     - Flutter
     - IosAwnCore (~> 0.10.0)
-  - device_info (0.0.1):
-    - Flutter
   - Firebase/CoreOnly (11.7.0):
     - FirebaseCore (~> 11.7.0)
   - Firebase/Messaging (11.7.0):
@@ -87,8 +85,6 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.3.0):
     - Flutter
-  - platform_device_id (0.0.1):
-    - Flutter
   - PromisesObjC (2.4.0)
   - sqflite_darwin (0.0.4):
     - Flutter
@@ -107,7 +103,6 @@ PODS:
 DEPENDENCIES:
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
-  - device_info (from `.symlinks/plugins/device_info/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
@@ -117,7 +112,6 @@ DEPENDENCIES:
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
-  - platform_device_id (from `.symlinks/plugins/platform_device_id/ios`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
@@ -142,8 +136,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/audio_session/ios"
   awesome_notifications:
     :path: ".symlinks/plugins/awesome_notifications/ios"
-  device_info:
-    :path: ".symlinks/plugins/device_info/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_messaging:
@@ -162,8 +154,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
-  platform_device_id:
-    :path: ".symlinks/plugins/platform_device_id/ios"
   sqflite_darwin:
     :path: ".symlinks/plugins/sqflite_darwin/darwin"
   url_launcher_ios:
@@ -178,7 +168,6 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   audio_session: 9bb7f6c970f21241b19f5a3658097ae459681ba0
   awesome_notifications: 0f432b28098d193920b11a44cfa9d2d9313a3888
-  device_info: 52e8c0c9c61def8d0a92bf175f5f500abbea04bc
   Firebase: a64bf6a8546e6eab54f1c715cd6151f39d2329f4
   firebase_core: 3d36094af9b47c46bfb965943413a39eebaca4db
   firebase_messaging: 5881ea6744fe41f0759bc52844c530d64f3c37e3
@@ -197,7 +186,6 @@ SPEC CHECKSUMS:
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
-  platform_device_id: e6c0710badeccbc647da332ebf14cd41a8dd6762
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
